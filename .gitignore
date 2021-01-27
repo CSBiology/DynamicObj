@@ -192,3 +192,4 @@ docs/
 /tests/FSharp.Stats.Tests/coverage.xml
 
 .ionide
+pkg
