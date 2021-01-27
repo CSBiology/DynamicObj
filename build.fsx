@@ -92,6 +92,20 @@ let mutable isPrerelease = false
 
 let pkgDir          = "pkg"
 
+
+let authors         = "Timo Muehlhaus"
+let title           = "DynamicObj"
+let owners          = "Timo Muehlhaus"
+let description     = "F# library supporting Dynamic Objects including inheritance in functional style."
+let licenseUrl      = "https://github.com/CSBiology/DynamicObj/blob/main/LICENSE"
+let projectUrl      = "https://github.com/CSBiology/DynamicObj"
+
+let tags            = "F# FSharp dotnet dynamic object"
+
+let repositoryUrl   = "https://github.com/CSBiology/DynamicObj"
+
+
+
 let setPrereleaseTag = BuildTask.create "SetPrereleaseTag" [] {
     printfn "Please enter pre-release package suffix"
     let suffix = System.Console.ReadLine()
@@ -110,6 +124,16 @@ let pack = BuildTask.create "Pack" [clean; build; copyBinaries] {
                         Properties = ([
                             "Version",stableVersionTag
                             "PackageReleaseNotes",  (release.Notes |> String.concat "\r\n")
+                            
+                            "Authors",              authors
+                            "Title",                title
+                            "Owners",               owners
+                            "Description",          description
+                            "PackageLicenseUrl",    licenseUrl
+                            "PackageProjectUrl",    projectUrl
+                            "PackageTags",          tags
+                            "RepositoryUrl",        repositoryUrl
+                            "RepositoryType",       "git"
                         ] @ p.MSBuildParams.Properties)
                     }
                 {
@@ -146,6 +170,6 @@ let packPrerelease = BuildTask.create "PackPrerelease" [setPrereleaseTag; clean;
 }
 
 
-let _all = BuildTask.createEmpty "All" [clean; build]
+let _all = BuildTask.createEmpty "All" [clean; build; pack]
 
-BuildTask.runOrDefault _all
+BuildTask.runOrDefaultWithArguments _all
