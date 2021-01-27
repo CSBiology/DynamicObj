@@ -190,3 +190,5 @@ docs/
 
 /codeCov.xml
 /tests/FSharp.Stats.Tests/coverage.xml
+
+.ionide
