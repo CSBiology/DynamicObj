@@ -109,6 +109,7 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
     member this.CopyDynamicProperties() =
         let target = DynamicObj()
         this.CopyDynamicPropertiesTo(target)
+        target
 
     static member GetValue (lookup:DynamicObj,name) =
         lookup.TryGetValue(name).Value
