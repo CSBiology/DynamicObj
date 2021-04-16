@@ -67,11 +67,13 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
         | Some value -> result <- value; true
         | None -> false
 
+
     override this.TrySetMember(binder:SetMemberBinder, value:obj) =        
         this.SetValue(binder.Name,value)
         true
 
-    /// Returns and the properties of
+    /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
+    /// Properties are returned as a key value pair of the member names and the boxed values
     member this.GetProperties includeInstanceProperties =        
         seq [
             if includeInstanceProperties then                
@@ -81,17 +83,33 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
                new KeyValuePair<string, obj>(key, properties.[key]);
         ]
 
-    /// Return both instance and dynamic names.
+    /// Returns both instance and dynamic member names.
     /// Important to return both so JSON serialization with Json.NET works.
     override this.GetDynamicMemberNames() =
         this.GetProperties(true) |> Seq.map (fun pair -> pair.Key)
 
+    /// Operator to access a dynamic member by name
     static member (?) (lookup:#DynamicObj,name:string) =
         match lookup.TryGetValue name with
         | Some(value) -> value
         | None -> raise <| System.MemberAccessException()        
+
+    /// Operator to set a dynamic member
     static member (?<-) (lookup:#DynamicObj,name:string,value:'v) =
         lookup.SetValue (name,value)
+    
+    /// Copies all dynamic members of the DynamicObj to the target DynamicObj.
+    member this.CopyDynamicPropertiesTo(target:#DynamicObj) =
+        this.GetProperties(false)
+        |> Seq.iter (fun kv ->
+            target?(kv.Key) <- kv.Value
+        )
+
+    /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    member this.CopyDynamicProperties() =
+        let target = DynamicObj()
+        this.CopyDynamicPropertiesTo(target)
+        target
 
     static member GetValue (lookup:DynamicObj,name) =
         lookup.TryGetValue(name).Value

@@ -47,7 +47,7 @@ module DynObj =
     //let rec combine<'t when 't :> DynamicObj > (first:'t) (second:'t) =
     
 
-    /// Merges two DynamicObj (Warning: In case of dublicate property names the second member override the first)
+    /// Merges two DynamicObj (Warning: In case of duplicate property names the members of the second object override those of the first)
     let rec combine (first:DynamicObj) (second:DynamicObj) =
         //printfn "Type %A" (first.GetType())
         /// Consider deep-copy of first
