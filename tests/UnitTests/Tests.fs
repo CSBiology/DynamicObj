@@ -56,6 +56,19 @@ let ``Equality test 4`` () =
     Assert.Equal(a'.GetHashCode(), b'.GetHashCode())
 
 
+[<Fact>]
+let ``Equality test 5`` () =
+    let a = DynamicObj ()
+    a.SetValue("bvbb", 5)
+    let b = DynamicObj ()
+    b.SetValue("aaa", 5)
+
+    a.SetValue("aaa", 5)
+    a.Remove "bvbb" |> ignore
+
+    Assert.Equal(a, b)
+    Assert.Equal(a.GetHashCode(), b.GetHashCode())
+
 // different objects do NOT have to have different hash
 // codes, so here we rely on our luckiness.
 
