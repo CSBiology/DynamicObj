@@ -10,6 +10,8 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
     
     let properties = dict//new Dictionary<string, obj>()
 
+    member private this.Properties = properties
+
     /// 
     new () = DynamicObj(new Dictionary<string, obj>())
 
@@ -116,3 +118,21 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
 
     static member Remove (lookup:DynamicObj,name) =
         lookup.Remove(name)
+
+    override this.Equals o =
+        match o with
+        | :? DynamicObj as other ->
+            let subdictOf (super : Dictionary<'a, 'b>) (dict : Dictionary<'a, 'b>) =
+                dict
+                |> Seq.forall (fun pair ->
+                    let (contains, value) = super.TryGetValue pair.Key
+                    contains && value.Equals(pair.Value))
+            subdictOf this.Properties other.Properties
+        | _ -> false
+
+    override this.GetHashCode () =
+        this.Properties
+        |> List.ofSeq
+        |> List.sortBy (fun pair -> pair.Key)
+        |> List.map (fun pair -> struct (pair.Key, pair.Value))
+        |> (fun l -> l.GetHashCode())
