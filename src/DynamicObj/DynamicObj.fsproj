@@ -4,13 +4,7 @@
     <TargetFrameworks>netstandard2.0; net5.0</TargetFrameworks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="ReflectionUtils.fs" />
-    <Compile Include="DynamicObj.fs" />
-    <Compile Include="DynObj.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
+  <PropertyGroup>
     <Authors>Timo Mühlhaus, F# open source contributors</Authors>
     <Description>F# library supporting Dynamic Objects including inheritance in functional style.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -20,6 +14,13 @@
     <RepositoryType>git</RepositoryType>
     <FsDocsLicenseLink>https://github.com/CSBiology/DynamicObj/blob/main/LICENSE</FsDocsLicenseLink>
     <FsDocsReleaseNotesLink>https://github.com/CSBiology/DynamicObj/blob/main/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="ReflectionUtils.fs" />
+    <Compile Include="DynamicObj.fs" />
+    <Compile Include="DynObj.fs" />
   </ItemGroup>
+
   
 </Project>
