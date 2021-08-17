@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DynamicObj
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Timo Mühlhaus, F# open source contributors">
+
+    <!--Opengraph properties (https://ogp.me/)-->
+    <meta property="og:title" content="DynamicObj
+" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DynamicObj" />
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://github.com/CSBiology/DynamicObj//img/favicon.ico">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="https://github.com/CSBiology/DynamicObj/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="https://github.com/CSBiology/DynamicObj/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="https://github.com/CSBiology/DynamicObj/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+    
+</head>
+
+<body>
+    <div class="columns is-fullheight m-0">
+        <div id="fsdocs-menu" class="column is-2 is-paddingless">
+            <aside class="menu">
+                <div class="container is-paddingless is-marginless has-background-dark">
+                    <a href="https://github.com/CSBiology/DynamicObj/">
+                        <figure class="image is-128x128 container">
+                            <img src="https://github.com/CSBiology/DynamicObj/img/logo.png">
+                        </figure>
+                    </a>
+                    <h2 class="title has-text-centered has-text-white">DynamicObj</h2>
+                    <h5 class="has-text-centered has-text-white pb-4">Documentation for 0.1.0</h5>
+                </div>
+                <div class="content">
+                    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+                    <div id="header">
+                        <div class="searchbox" id="fsdocs-searchbox">
+                            <label for="search-by">
+                                <i class="fas fa-search"></i>
+                            </label>
+                            <input data-search-input="" id="search-by" type="search" placeholder="Search..." class="input" />
+                            <span data-search-clear="">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- END SEARCH BOX: this adds support for the search box -->
+                    <ul class="navbar-nav">
+                        <li class="nav-header">Links</li>
+                        <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/blob/main/LICENSE">License (MIT)</a></li>
+                        <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/blob/main/RELEASE_NOTES.md">Release Notes</a></li>
+                        <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/">Source Repository</a></li>
+                        
+                        <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="https://github.com/CSBiology/DynamicObj/reference/index.html">
+    All Namespaces
+  </a>
+</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+        <div class="column is-10 is-paddingless">
+            <div class="section pt-4">
+                <div class="container" id="fsdocs-content">
+                    <p><a href="https://mybinder.org/v2/gh/CSBiology/DynamicObj/gh-pages?filepath=index.ipynb"><img src="https://github.com/CSBiology/DynamicObj/img/badge-binder.svg" alt="Binder" /></a>&emsp;
+<a href="https://github.com/CSBiology/DynamicObj/index.fsx"><img src="https://github.com/CSBiology/DynamicObj/img/badge-script.svg" alt="Script" /></a>&emsp;
+<a href="https://github.com/CSBiology/DynamicObj/index.ipynb"><img src="https://github.com/CSBiology/DynamicObj/img/badge-notebook.svg" alt="Notebook" /></a></p>
+<h1><a name="DynamicObj" class="anchor" href="#DynamicObj">DynamicObj</a></h1>
+<p>F# library supporting Dynamic Objects including inheritance in functional style. It builds on ´System.Dynamic´ but adds object inheritance.</p>
+<p>One main use case of this library is the dynamic generation of JSON objects - especially nested objects with optional properties - aimed to be used from javascript wuith the init/style pattern:</p>
+<p>Use it for your custom types via inheritance:</p>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;nuget: Newtonsoft.JSON, 12.0.3&quot;</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">Newtonsoft</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">Json</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">DynamicObj</span>
+
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="rt">A</span><span class="pn">(</span><span class="pn">)</span> <span class="o">=</span> 
+    <span class="k">inherit</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="rt">DynamicObj</span><span class="pn">(</span><span class="pn">)</span>
+
+    <span class="k">static</span> <span class="k">member</span> <span class="id">init</span>
+        <span class="pn">(</span>
+            <span class="o">?</span><span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="fn">SomeProp</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="vt">int</span>
+        <span class="pn">)</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="fn">A</span><span class="pn">(</span><span class="pn">)</span>
+            <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="rt">A</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="id">style</span>
+                <span class="pn">(</span>
+                    <span class="o">?</span><span onmouseout="hideTip(event, 'fs6', 11)" onmouseover="showTip(event, 'fs6', 11)" class="fn">SomeProp</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 12)" onmouseover="showTip(event, 'fs6', 12)" class="fn">SomeProp</span>
+                <span class="pn">)</span>
+
+    <span class="k">static</span> <span class="k">member</span> <span class="id">style</span>
+        <span class="pn">(</span>
+            <span class="o">?</span><span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="fn">SomeProp</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 14)" onmouseover="showTip(event, 'fs7', 14)" class="vt">int</span>
+        <span class="pn">)</span> <span class="o">=</span>
+            <span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="fn">a</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs4', 16)" onmouseover="showTip(event, 'fs4', 16)" class="rt">A</span><span class="pn">)</span> <span class="k">-&gt;</span>
+
+                <span onmouseout="hideTip(event, 'fs6', 17)" onmouseover="showTip(event, 'fs6', 17)" class="fn">SomeProp</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="m">DynObj</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 19)" onmouseover="showTip(event, 'fs12', 19)" class="id">setValueOpt</span> <span onmouseout="hideTip(event, 'fs10', 20)" onmouseover="showTip(event, 'fs10', 20)" class="fn">a</span> <span class="s">&quot;some_prop&quot;</span>
+
+                <span onmouseout="hideTip(event, 'fs10', 21)" onmouseover="showTip(event, 'fs10', 21)" class="fn">a</span>
+
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="id">aSerialized</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs4', 23)" onmouseover="showTip(event, 'fs4', 23)" class="rt">A</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 24)" onmouseover="showTip(event, 'fs14', 24)" class="id">init</span><span class="pn">(</span><span class="n">42</span><span class="pn">)</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 25)" onmouseover="showTip(event, 'fs15', 25)" class="rt">JsonConvert</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 26)" onmouseover="showTip(event, 'fs16', 26)" class="id">SerializeObject</span>
+</code></pre>
+<table class="pre"><tr><td><pre><code>"{"some_prop":42}"</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="rt">MyComplexJSONType</span><span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
+    <span class="k">inherit</span> <span onmouseout="hideTip(event, 'fs5', 28)" onmouseover="showTip(event, 'fs5', 28)" class="rt">DynamicObj</span><span class="pn">(</span><span class="pn">)</span>
+
+    <span class="k">static</span> <span class="k">member</span> <span class="id">init</span>
+        <span class="pn">(</span>
+            <span class="o">?</span><span onmouseout="hideTip(event, 'fs18', 29)" onmouseover="showTip(event, 'fs18', 29)" class="fn">PropA</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 30)" onmouseover="showTip(event, 'fs7', 30)" class="vt">int</span> <span class="pn">[</span><span class="pn">]</span><span class="pn">,</span>
+            <span class="o">?</span><span onmouseout="hideTip(event, 'fs19', 31)" onmouseover="showTip(event, 'fs19', 31)" class="fn">PropB</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs4', 32)" onmouseover="showTip(event, 'fs4', 32)" class="rt">A</span>
+        <span class="pn">)</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="fn">MyComplexJSONType</span><span class="pn">(</span><span class="pn">)</span>
+            <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs17', 34)" onmouseover="showTip(event, 'fs17', 34)" class="rt">MyComplexJSONType</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 35)" onmouseover="showTip(event, 'fs20', 35)" class="id">style</span>
+                <span class="pn">(</span>
+                    <span class="o">?</span><span onmouseout="hideTip(event, 'fs18', 36)" onmouseover="showTip(event, 'fs18', 36)" class="fn">PropA</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs18', 37)" onmouseover="showTip(event, 'fs18', 37)" class="fn">PropA</span><span class="pn">,</span>
+                    <span class="o">?</span><span onmouseout="hideTip(event, 'fs19', 38)" onmouseover="showTip(event, 'fs19', 38)" class="fn">PropB</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs19', 39)" onmouseover="showTip(event, 'fs19', 39)" class="fn">PropB</span>
+                <span class="pn">)</span>
+
+    <span class="k">static</span> <span class="k">member</span> <span class="id">style</span>
+        <span class="pn">(</span>
+            <span class="o">?</span><span onmouseout="hideTip(event, 'fs18', 40)" onmouseover="showTip(event, 'fs18', 40)" class="fn">PropA</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 41)" onmouseover="showTip(event, 'fs7', 41)" class="vt">int</span> <span class="pn">[</span><span class="pn">]</span><span class="pn">,</span>
+            <span class="o">?</span><span onmouseout="hideTip(event, 'fs19', 42)" onmouseover="showTip(event, 'fs19', 42)" class="fn">PropB</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs4', 43)" onmouseover="showTip(event, 'fs4', 43)" class="rt">A</span>
+        <span class="pn">)</span> <span class="o">=</span>
+            <span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs21', 44)" onmouseover="showTip(event, 'fs21', 44)" class="fn">t</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs17', 45)" onmouseover="showTip(event, 'fs17', 45)" class="rt">MyComplexJSONType</span><span class="pn">)</span> <span class="k">-&gt;</span>
+
+                <span onmouseout="hideTip(event, 'fs18', 46)" onmouseover="showTip(event, 'fs18', 46)" class="fn">PropA</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 47)" onmouseover="showTip(event, 'fs11', 47)" class="m">DynObj</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 48)" onmouseover="showTip(event, 'fs12', 48)" class="id">setValueOpt</span> <span onmouseout="hideTip(event, 'fs21', 49)" onmouseover="showTip(event, 'fs21', 49)" class="fn">t</span> <span class="s">&quot;prop_a&quot;</span>
+                <span onmouseout="hideTip(event, 'fs19', 50)" onmouseover="showTip(event, 'fs19', 50)" class="fn">PropB</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 51)" onmouseover="showTip(event, 'fs11', 51)" class="m">DynObj</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 52)" onmouseover="showTip(event, 'fs12', 52)" class="id">setValueOpt</span> <span onmouseout="hideTip(event, 'fs21', 53)" onmouseover="showTip(event, 'fs21', 53)" class="fn">t</span> <span class="s">&quot;prop_b&quot;</span>
+
+                <span onmouseout="hideTip(event, 'fs21', 54)" onmouseover="showTip(event, 'fs21', 54)" class="fn">t</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 55)" onmouseover="showTip(event, 'fs22', 55)" class="id">complexSerialized</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs17', 56)" onmouseover="showTip(event, 'fs17', 56)" class="rt">MyComplexJSONType</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs23', 57)" onmouseover="showTip(event, 'fs23', 57)" class="id">init</span><span class="pn">(</span>
+        <span class="fn">PropA</span> <span class="o">=</span> <span class="pn">[|</span><span class="n">42</span><span class="pn">;</span><span class="n">1337</span><span class="pn">|]</span><span class="pn">,</span>
+        <span class="fn">PropB</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 58)" onmouseover="showTip(event, 'fs4', 58)" class="rt">A</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 59)" onmouseover="showTip(event, 'fs14', 59)" class="id">init</span><span class="pn">(</span><span class="n">68</span><span class="pn">)</span> <span class="c">// nested dynamic objects</span>
+    <span class="pn">)</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 60)" onmouseover="showTip(event, 'fs15', 60)" class="rt">JsonConvert</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 61)" onmouseover="showTip(event, 'fs16', 61)" class="id">SerializeObject</span>
+</code></pre>
+<table class="pre"><tr><td><pre><code>"{"prop_a":[42,1337],"prop_b":{"some_prop":68}}"</code></pre></td></tr></table>
+
+                </div>
+            </div>
+        </div>
+        <div class="fsdocs-tip" id="fs1">namespace Newtonsoft</div>
+<div class="fsdocs-tip" id="fs2">namespace Newtonsoft.Json</div>
+<div class="fsdocs-tip" id="fs3">namespace DynamicObj</div>
+<div class="fsdocs-tip" id="fs4">type A =
+  inherit DynamicObj
+  new : unit -&gt; A
+  static member init : ?SomeProp:int -&gt; A
+  static member style : ?SomeProp:int -&gt; (A -&gt; A)</div>
+<div class="fsdocs-tip" id="fs5">Multiple items<br />namespace DynamicObj<br /><br />--------------------<br />type DynamicObj =
+  inherit DynamicObject
+  private new : dict:Dictionary&lt;string,obj&gt; -&gt; DynamicObj + 1 overload
+  member CopyDynamicProperties : unit -&gt; DynamicObj
+  member CopyDynamicPropertiesTo : target:DynamicObj -&gt; unit
+  override Equals : o:obj -&gt; bool
+  override GetDynamicMemberNames : unit -&gt; IEnumerable&lt;string&gt;
+  override GetHashCode : unit -&gt; int
+  member GetProperties : includeInstanceProperties:bool -&gt; seq&lt;KeyValuePair&lt;string,obj&gt;&gt;
+  member Remove : name:string -&gt; bool + 1 overload
+  member SetValue : name:string * value:&#39;a -&gt; unit
+  ...<br /><br />--------------------<br />new : unit -&gt; DynamicObj</div>
+<div class="fsdocs-tip" id="fs6">val SomeProp : int option</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
+ of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to 
+ &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">new : unit -&gt; A</div>
+<div class="fsdocs-tip" id="fs9">static member A.style : ?SomeProp:int -&gt; (A -&gt; A)</div>
+<div class="fsdocs-tip" id="fs10">val a : A</div>
+<div class="fsdocs-tip" id="fs11">module DynObj
+
+from DynamicObj</div>
+<div class="fsdocs-tip" id="fs12">val setValueOpt : dyn:DynamicObj -&gt; propName:string -&gt; _arg1:&#39;a option -&gt; unit</div>
+<div class="fsdocs-tip" id="fs13">val aSerialized : string</div>
+<div class="fsdocs-tip" id="fs14">static member A.init : ?SomeProp:int -&gt; A</div>
+<div class="fsdocs-tip" id="fs15">type JsonConvert =
+  static member DeserializeAnonymousType&lt;&#39;T&gt; : value: string * anonymousTypeObject: &#39;T -&gt; &#39;T + 1 overload
+  static member DeserializeObject : value: string -&gt; obj + 7 overloads
+  static member DeserializeXNode : value: string -&gt; XDocument + 3 overloads
+  static member DeserializeXmlNode : value: string -&gt; XmlDocument + 3 overloads
+  static member EnsureDecimalPlace : value: float * text: string -&gt; string + 1 overload
+  static member EnsureFloatFormat : value: float * text: string * floatFormatHandling: FloatFormatHandling * quoteChar: char * nullable: bool -&gt; string
+  static member PopulateObject : value: string * target: obj -&gt; unit + 1 overload
+  static member SerializeObject : value: obj -&gt; string + 7 overloads
+  static member SerializeObjectInternal : value: obj * type: Type * jsonSerializer: JsonSerializer -&gt; string
+  static member SerializeXNode : node: XObject -&gt; string + 2 overloads
+  ...<br /><em>&lt;summary&gt;
+            Provides methods for converting between .NET types and JSON types.
+            &lt;/summary&gt;<br />&lt;example&gt;&lt;code lang=&quot;cs&quot; source=&quot;..\Src\Newtonsoft.Json.Tests\Documentation\SerializationTests.cs&quot; region=&quot;SerializeObject&quot; title=&quot;Serializing and Deserializing JSON with JsonConvert&quot; /&gt;&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs16">JsonConvert.SerializeObject(value: obj) : string<br />JsonConvert.SerializeObject(value: obj, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, [&lt;System.ParamArray&gt;] converters: JsonConverter []) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, type: System.Type, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting, [&lt;System.ParamArray&gt;] converters: JsonConverter []) : string<br />JsonConvert.SerializeObject(value: obj, type: System.Type, formatting: Formatting, settings: JsonSerializerSettings) : string</div>
+<div class="fsdocs-tip" id="fs17">Multiple items<br />type MyComplexJSONType =
+  inherit DynamicObj
+  new : unit -&gt; MyComplexJSONType
+  static member init : ?PropA:int [] * ?PropB:A -&gt; MyComplexJSONType
+  static member style : ?PropA:int [] * ?PropB:A -&gt; (MyComplexJSONType -&gt; MyComplexJSONType)<br /><br />--------------------<br />new : unit -&gt; MyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs18">val PropA : int [] option</div>
+<div class="fsdocs-tip" id="fs19">val PropB : A option</div>
+<div class="fsdocs-tip" id="fs20">static member MyComplexJSONType.style : ?PropA:int [] * ?PropB:A -&gt; (MyComplexJSONType -&gt; MyComplexJSONType)</div>
+<div class="fsdocs-tip" id="fs21">val t : MyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs22">val complexSerialized : string</div>
+<div class="fsdocs-tip" id="fs23">static member MyComplexJSONType.init : ?PropA:int [] * ?PropB:A -&gt; MyComplexJSONType</div>
+
+    </div>
+
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <script type="text/javascript">var fsdocs_search_baseurl = 'https://github.com/CSBiology/DynamicObj/'</script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+    <script type="text/javascript" src="https://github.com/CSBiology/DynamicObj/content/fsdocs-search.js"></script>
+    <!-- END SEARCH BOX: this adds support for the search box -->
+</body>
+
+</html>
