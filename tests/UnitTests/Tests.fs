@@ -68,6 +68,21 @@ let ``Equality test 5`` () =
 
     Assert.Equal(a, b)
     Assert.Equal(a.GetHashCode(), b.GetHashCode())
+    
+[<Fact>]
+let ``Equality test 6`` () =
+    //nesting
+    let a = DynamicObj ()
+    let b = DynamicObj ()
+    b.SetValue("a", 5)
+    a.SetValue("inner",b)
+    let c = DynamicObj ()
+    let d = DynamicObj ()
+    d.SetValue("a", 5)
+    c.SetValue("inner",d)
+
+    Assert.Equal(a, c)
+    Assert.Equal(a.GetHashCode(), c.GetHashCode())
 
 // different objects do NOT have to have different hash
 // codes, so here we rely on our luckiness.
