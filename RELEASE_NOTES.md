@@ -1,6 +1,7 @@
 ### 0.1.0 - 08/17/2021
 - target netstandard2.0 and .net5.0
 - add custom Equality and GetHashcode (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
+- publish symbols
 
 ### 0.0.3 
 - target netstandard2.0
