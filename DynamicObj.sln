@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31521.260
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "DynamicObj", "src\DynamicObj\DynamicObj.fsproj", "{B8BF1554-AAC3-434E-9502-FC83B43F3704}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "UnitTests", "tests\UnitTests\UnitTests.fsproj", "{D009964D-9408-4344-B610-B73F54FE2A86}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "UnitTests", "tests\UnitTests\UnitTests.fsproj", "{D009964D-9408-4344-B610-B73F54FE2A86}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{39AA72A1-A628-481B-A2B5-94E2BD163061}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+		build.fsx.lock = build.fsx.lock
+		fake.cmd = fake.cmd
+		fake.sh = fake.sh
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

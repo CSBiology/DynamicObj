@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0; net5.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,5 +9,14 @@
     <Compile Include="DynamicObj.fs" />
     <Compile Include="DynObj.fs" />
   </ItemGroup>
+  <!--let authors         = "Timo Muehlhaus"
+  let title           = "DynamicObj"
+  let owners          = "Timo Muehlhaus"
+  let description     = "F# library supporting Dynamic Objects including inheritance in functional style."
+  let licenseUrl      = "https://github.com/CSBiology/DynamicObj/blob/main/LICENSE"
+  let projectUrl      = "https://github.com/CSBiology/DynamicObj"
 
+  let tags            = "F# FSharp dotnet dynamic object"
+
+  let repositoryUrl   = "https://github.com/CSBiology/DynamicObj"-->
 </Project>
