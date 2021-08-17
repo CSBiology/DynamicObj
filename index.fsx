@@ -1,7 +1,7 @@
 (**
-[![Binder](https://github.com/CSBiology/DynamicObj/img/badge-binder.svg)](https://mybinder.org/v2/gh/CSBiology/DynamicObj/gh-pages?filepath=index.ipynb)&emsp;
-[![Script](https://github.com/CSBiology/DynamicObj/img/badge-script.svg)](https://github.com/CSBiology/DynamicObj/index.fsx)&emsp;
-[![Notebook](https://github.com/CSBiology/DynamicObj/img/badge-notebook.svg)](https://github.com/CSBiology/DynamicObj/index.ipynb)
+[![Binder](https://csbiology.github.io/DynamicObj/img/badge-binder.svg)](https://mybinder.org/v2/gh/CSBiology/DynamicObj/gh-pages?filepath=index.ipynb)&emsp;
+[![Script](https://csbiology.github.io/DynamicObj/img/badge-script.svg)](https://csbiology.github.io/DynamicObj/index.fsx)&emsp;
+[![Notebook](https://csbiology.github.io/DynamicObj/img/badge-notebook.svg)](https://csbiology.github.io/DynamicObj/index.ipynb)
 
 # DynamicObj
 
@@ -10,7 +10,6 @@ F# library supporting Dynamic Objects including inheritance in functional style.
 One main use case of this library is the dynamic generation of JSON objects - especially nested objects with optional properties - aimed to be used from javascript wuith the init/style pattern:
 
 Use it for your custom types via inheritance:
-
 
 *)
 #r "nuget: Newtonsoft.JSON, 12.0.3"
