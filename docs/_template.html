@@ -6,6 +6,12 @@
     <title>{{fsdocs-page-title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="{{fsdocs-authors}}">
+
+    <!--Opengraph properties (https://ogp.me/)-->
+    <meta property="og:title" content="{{fsdocs-page-title}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DynamicObj" />
+
     <link rel="shortcut icon" type="image/x-icon" href="{{root}}/img/favicon.ico">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -22,7 +28,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
     <!-- END SEARCH BOX: this adds support for the search box -->
     {{fsdocs-watch-script}}
-</head> 
+</head>
 
 <body>
     <div class="columns is-fullheight m-0">
@@ -34,7 +40,8 @@
                             <img src="{{fsdocs-logo-src}}">
                         </figure>
                     </a>
-                    <h2 class="title has-text-centered has-text-white pb-4">{{fsdocs-collection-name}}</h2>
+                    <h2 class="title has-text-centered has-text-white">{{fsdocs-collection-name}}</h2>
+                    <h5 class="has-text-centered has-text-white pb-4">Documentation for {{fsdocs-package-version}}</h5>
                 </div>
                 <div class="content">
                     <!-- BEGIN SEARCH BOX: this adds support for the search box -->
@@ -43,7 +50,7 @@
                             <label for="search-by">
                                 <i class="fas fa-search"></i>
                             </label>
-                            <input data-search-input="" id="search-by" type="search" placeholder="Search..." class="input"/>
+                            <input data-search-input="" id="search-by" type="search" placeholder="Search..." class="input" />
                             <span data-search-clear="">
                                 <i class="fas fa-times"></i>
                             </span>

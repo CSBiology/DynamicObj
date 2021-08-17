@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{39AA72
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{F82A6F26-517C-4D5E-BD4F-BFC45B5867FE}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-deploy-docs.yml = .github\workflows\build-and-deploy-docs.yml
 		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
 	EndProjectSection
 EndProject
@@ -26,6 +27,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".proj", ".proj", "{C3CF2F15
 		LICENSE = LICENSE
 		README.md = README.md
 		RELEASE_NOTES.md = RELEASE_NOTES.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{42AA66FC-8928-4029-BF41-52C1B49DEEDF}"
+	ProjectSection(SolutionItems) = preProject
+		docs\_template.fsx = docs\_template.fsx
+		docs\_template.html = docs\_template.html
+		docs\_template.ipynb = docs\_template.ipynb
+		docs\content\fsdocs-custom.css = docs\content\fsdocs-custom.css
+		docs\index.fsx = docs\index.fsx
 	EndProjectSection
 EndProject
 Global
