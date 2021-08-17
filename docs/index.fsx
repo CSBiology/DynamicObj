@@ -3,9 +3,7 @@
 
 (*** condition: ipynb ***)
 #if IPYNB
-#r "nuget: Plotly.NET, {{fsdocs-package-version}}"
-#r "nuget: Plotly.NET.Interactive, {{fsdocs-package-version}}"
-#r "nuget: Plotly.NET.ImageExport, {{fsdocs-package-version}}"
+#r "nuget: DynamicObj, {{fsdocs-package-version}}"
 #endif // IPYNB
 
 
