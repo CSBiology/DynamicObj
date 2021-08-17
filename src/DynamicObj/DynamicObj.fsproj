@@ -13,7 +13,7 @@
     <Authors>Timo Mühlhaus, F# open source contributors</Authors>
     <Description>F# library supporting Dynamic Objects including inheritance in functional style.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/CSBiology/DynamicObj</PackageProjectUrl>
+    <PackageProjectUrl>https://csbiology.github.io/DynamicObj/</PackageProjectUrl>
     <PackageTags>F# FSharp dotnet dynamic object</PackageTags>
     <RepositoryUrl>https://github.com/CSBiology/DynamicObj</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
