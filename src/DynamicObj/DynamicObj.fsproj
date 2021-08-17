@@ -9,14 +9,17 @@
     <Compile Include="DynamicObj.fs" />
     <Compile Include="DynObj.fs" />
   </ItemGroup>
-  <!--let authors         = "Timo Muehlhaus"
-  let title           = "DynamicObj"
-  let owners          = "Timo Muehlhaus"
-  let description     = "F# library supporting Dynamic Objects including inheritance in functional style."
-  let licenseUrl      = "https://github.com/CSBiology/DynamicObj/blob/main/LICENSE"
-  let projectUrl      = "https://github.com/CSBiology/DynamicObj"
 
-  let tags            = "F# FSharp dotnet dynamic object"
-
-  let repositoryUrl   = "https://github.com/CSBiology/DynamicObj"-->
+  <ItemGroup>
+    <Authors>Timo Mühlhaus, F# open source contributors</Authors>
+    <Description>F# library supporting Dynamic Objects including inheritance in functional style.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/CSBiology/DynamicObj</PackageProjectUrl>
+    <PackageTags>F# FSharp dotnet dynamic object</PackageTags>
+    <RepositoryUrl>https://github.com/CSBiology/DynamicObj</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <FsDocsLicenseLink>https://github.com/CSBiology/DynamicObj/blob/main/LICENSE</FsDocsLicenseLink>
+    <FsDocsReleaseNotesLink>https://github.com/CSBiology/DynamicObj/blob/main/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+  </ItemGroup>
+  
 </Project>
