@@ -103,3 +103,28 @@ let ``Hashcode inequality 2`` () =
     a'.SetValue("quack!", [1; 2; 3])
     b'.SetValue("quack!1", [1; 2; 3])
     Assert.NotEqual(a'.GetHashCode(), b'.GetHashCode())
+
+[<Fact>]
+let ``Format string 1`` () =
+
+    let foo = DynamicObj()
+    foo?bar <- [1;2;3;4]
+
+    let expected = "?bar: [1; 2; 3; ... ]"
+
+    Assert.Equal(expected, (foo |> DynObj.format))
+
+let ``Format string 2`` () =
+
+    // nested
+    let foo = DynamicObj()
+    foo?corgi <- "corgi"
+    let inner = DynamicObj()
+    inner?bar <- "baz"
+    foo?foo <- inner
+
+    let expected = """?corgi: corgi
+?foo:
+    ?bar: baz"""
+
+    Assert.Equal(expected, (foo |> DynObj.format))

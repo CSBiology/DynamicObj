@@ -25,7 +25,10 @@
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="DynamicObj.fs" />
     <Compile Include="DynObj.fs" />
+    <None Include="Playground.fsx" />
   </ItemGroup>
+  
+  <ItemGroup />
 
   
 </Project>

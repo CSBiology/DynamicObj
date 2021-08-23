@@ -85,3 +85,25 @@ module DynObj =
 
     let remove (dyn:DynamicObj) propName = 
         DynamicObj.Remove (dyn, propName) |> ignore
+
+    let format (d:DynamicObj) =
+    
+        let members = d.GetDynamicMemberNames() |> Seq.cast<string> |> List.ofSeq
+
+        let rec loop (object:DynamicObj) (identationLevel:int) (membersLeft:string list) (acc:string list) =
+            let ident = [for i in 0 .. identationLevel-1 do yield "    "] |> String.concat ""
+            match membersLeft with
+            | [] -> acc |> List.rev |> String.concat "\r\n"
+            | m::rest ->
+                let item = object?(``m``)
+                match item with
+                | :? DynamicObj as item -> 
+                    let innerMembers = item.GetDynamicMemberNames() |> Seq.cast<string> |> List.ofSeq
+                    let innerPrint = (loop item (identationLevel + 1) innerMembers [])
+                    loop object identationLevel rest ($"{ident}?{m}:\r\n{innerPrint}" :: acc)
+                | _ -> 
+                    loop d identationLevel rest ($"{ident}?{m}: {item}"::acc)
+    
+        loop d 0 members []
+
+    let print (d:DynamicObj) = printfn "%s" (d |> format)
