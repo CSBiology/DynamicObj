@@ -1,26 +1,62 @@
 ﻿module ImmutableDynamicObj
 
+open DynamicObj
+
+/// Represents an DynamicObj's counterpart
+/// with immutability enabled only.
 type ImmutableDynamicObj (map : Map<string, obj>) = 
     
     let properties = map
     
     member private this.Properties = properties
 
+    member private this.NewIfNeeded map =
+        if obj.ReferenceEquals(map, this.Properties) then
+            this
+        else
+            ImmutableDynamicObj map
+
+    /// Empty instance
     new () = ImmutableDynamicObj Map.empty
 
+    /// Indexes ; if no key found, throws
     member this.Item
         with get(index) =
             this.Properties.[index]
 
+    /// Returns an instance with:
+    /// 1. this property added if it wasn't present
+    /// 2. this property updated otherwise
     static member With name newValue (object : ImmutableDynamicObj) =
-        match Map.tryFind name object.Properties with
-        | Some(value) when value = newValue -> object
-        | _ -> ImmutableDynamicObj (Map.add name newValue object.Properties)
+        object.Properties
+        |> Map.add name newValue
+        |> object.NewIfNeeded
 
+    /// Returns an instance:
+    /// 1. the same if there was no requested property
+    /// 2. without the requested property if there was
+    static member Without name (object : ImmutableDynamicObj) =
+        object.Properties
+        |> Map.remove name
+        |> object.NewIfNeeded
+
+    /// Returns an instance with:
+    /// 1. this property added if it wasn't present
+    /// 2. this property updated otherwise
     static member (+=) (object, (name, newValue)) = ImmutableDynamicObj.With name newValue object
 
+    /// Returns an instance:
+    /// 1. the same if there was no requested property
+    /// 2. without the requested property if there was
+    static member (-=) (object, name) = ImmutableDynamicObj.Without name object
+
+    member this.TryGetValue name = 
+        match properties.TryGetValue name with
+        | true, value ->  Some value
+        | _ -> ReflectionUtils.tryGetPropertyValue this name
+
     member this.TryGetTypedValue<'a> name = 
-        match (this.Properties.TryFind name) with
+        match this.TryGetValue name with
         | None -> None
         | Some o -> 
             match o with
