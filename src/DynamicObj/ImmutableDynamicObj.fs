@@ -4,6 +4,9 @@ open DynamicObj
 open System
 open System.Runtime.CompilerServices
 
+[<InternalsVisibleToAttribute("UnitTests")>]
+do()
+
 /// Represents an DynamicObj's counterpart
 /// with immutability enabled only.
 type ImmutableDynamicObj (map : Map<string, obj>) = 
@@ -39,7 +42,7 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     /// 1. this property added if it wasn't present
     /// 2. this property updated otherwise
     /// Use With from F#. This one is only for non-F# code.
-    static member WithCLSCompliant name newValue (object : 'a when 'a :> ImmutableDynamicObj) =
+    static member internal WithCLSCompliant name newValue (object : 'a when 'a :> ImmutableDynamicObj) =
         object.Properties
         |> Map.add name newValue
         |> ImmutableDynamicObj.NewIfNeededCLSCompliant object
@@ -56,7 +59,7 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     /// 1. the same if there was no requested property
     /// 2. without the requested property if there was
     /// Use Without from F#. This one is only for non-F# code.
-    static member WithoutCLSCompliant name (object : 'a when 'a :> ImmutableDynamicObj) =
+    static member internal WithoutCLSCompliant name (object : 'a when 'a :> ImmutableDynamicObj) =
         object.Properties
         |> Map.remove name
         |> ImmutableDynamicObj.NewIfNeededCLSCompliant object
