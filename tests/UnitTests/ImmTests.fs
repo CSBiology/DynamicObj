@@ -98,3 +98,22 @@ let ``Non-equal test 1`` () =
         += ("quack", 5)
 
     Assert.NotEqual(obj1, obj2)
+
+type Quack () =
+    inherit ImmutableDynamicObj ()
+
+[<Fact>]
+let ``Type preserved 1`` () =
+    let obj1 =
+        Quack ()
+        += ("aaa", 5)
+    Assert.IsType<Quack>(obj1)
+
+[<Fact>]
+let ``Type preserved 2`` () =
+    let obj1 =
+        Quack ()
+        += ("aaa", 5)
+        -= "aaa"
+        += ("bbb", 5)
+    Assert.IsType<Quack>(obj1)
