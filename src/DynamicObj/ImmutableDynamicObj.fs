@@ -11,27 +11,24 @@ do()
 /// with immutability enabled only.
 type ImmutableDynamicObj (map : Map<string, obj>) = 
     
-    let properties = map
+    let mutable properties = map
     
-    member this.Properties = properties
+    member private this.Properties = properties
+    member private this.MutateSetMap newMap =
+        properties <- newMap
     
-    static member private NewIfNeededCLSCompliant (object : 'a when 'a :> ImmutableDynamicObj) map : 'a =
+    static member private NewIfNeeded (object : 'a when 'a :> ImmutableDynamicObj) map : 'a =
         if obj.ReferenceEquals(map, object.Properties) then
             object
         else
-            Activator.CreateInstance(typeof<'a>, [| map :> obj |]) :?> 'a
-
-    static member inline NewIfNeeded (object : ^T when ^T :> ImmutableDynamicObj) map : ^T =
-        if obj.ReferenceEquals(map, object.Properties) then
-            object
-        else
-            (^T: (new: Map<string, obj> -> ^T) map)
-            
+            let res = new 'a()
+            res.MutateSetMap map
+            res
 
     /// Empty instance
     new () = ImmutableDynamicObj Map.empty
 
-
+    static member empty = ImmutableDynamicObj ()
 
     /// Indexes ; if no key found, throws
     member this.Item
@@ -41,16 +38,7 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     /// Returns an instance with:
     /// 1. this property added if it wasn't present
     /// 2. this property updated otherwise
-    /// Use With from F#. This one is only for non-F# code.
-    static member internal WithCLSCompliant name newValue (object : 'a when 'a :> ImmutableDynamicObj) =
-        object.Properties
-        |> Map.add name newValue
-        |> ImmutableDynamicObj.NewIfNeededCLSCompliant object
-
-    /// Returns an instance with:
-    /// 1. this property added if it wasn't present
-    /// 2. this property updated otherwise
-    static member inline With name newValue (object : ^T when ^T :> ImmutableDynamicObj) : ^T =
+    static member With name newValue (object : #ImmutableDynamicObj) =
         object.Properties
         |> Map.add name newValue
         |> ImmutableDynamicObj.NewIfNeeded object
@@ -58,16 +46,7 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     /// Returns an instance:
     /// 1. the same if there was no requested property
     /// 2. without the requested property if there was
-    /// Use Without from F#. This one is only for non-F# code.
-    static member internal WithoutCLSCompliant name (object : 'a when 'a :> ImmutableDynamicObj) =
-        object.Properties
-        |> Map.remove name
-        |> ImmutableDynamicObj.NewIfNeededCLSCompliant object
-
-    /// Returns an instance:
-    /// 1. the same if there was no requested property
-    /// 2. without the requested property if there was
-    static member inline Without name (object : ^T when ^T :> ImmutableDynamicObj) =
+    static member Without name (object : #ImmutableDynamicObj) =
         object.Properties
         |> Map.remove name
         |> ImmutableDynamicObj.NewIfNeeded object
@@ -75,15 +54,15 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     /// Returns an instance with:
     /// 1. this property added if it wasn't present
     /// 2. this property updated otherwise
-    static member inline (++) (object, (name, newValue)) = ImmutableDynamicObj.With name newValue object
+    static member (++) (object, (name, newValue)) = ImmutableDynamicObj.With name newValue object
 
     /// Returns an instance:
     /// 1. the same if there was no requested property
     /// 2. without the requested property if there was
-    static member inline (--) (object, name) = ImmutableDynamicObj.Without name object
+    static member (--) (object, name) = ImmutableDynamicObj.Without name object
 
     member this.TryGetValue name = 
-        match properties.TryGetValue name with
+        match this.Properties.TryGetValue name with
         | true, value ->  Some value
         | _ -> ReflectionUtils.tryGetPropertyValue this name
 
@@ -110,13 +89,13 @@ type ImmutableDynamicObjExtensions =
     /// 2. this property updated otherwise
     /// use this one only from C#
     [<Extension>]
-    static member With (this : 'a when 'a :> ImmutableDynamicObj) (name, newValue) =
-        ImmutableDynamicObj.WithCLSCompliant name newValue this
+    static member With (this, name, newValue) =
+        ImmutableDynamicObj.With name newValue this
 
     /// Returns an instance:
     /// 1. the same if there was no requested property
     /// 2. without the requested property if there was
     /// use this one only from C#
     [<Extension>]
-    static member Without (this : 'a when 'a :> ImmutableDynamicObj, name) =
-        ImmutableDynamicObj.WithoutCLSCompliant name this
+    static member Without (this, name) =
+        ImmutableDynamicObj.Without name this

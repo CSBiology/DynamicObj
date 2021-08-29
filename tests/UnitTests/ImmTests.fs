@@ -4,6 +4,33 @@ open Xunit
 open DynamicObj
 
 [<Fact>]
+let ``Value test 1`` () =
+    let obj1 = 
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 5)
+    Assert.Equal(obj1.["aaa"], 5);
+
+[<Fact>]
+let ``Value test 2`` () =
+    let obj1 = 
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 5)
+        ++ ("bbb", "quack")
+    Assert.Equal(obj1.["aaa"], 5);
+    Assert.Equal(obj1.["bbb"], "quack");
+   
+[<Fact>]
+let ``Value test 3`` () =
+    let obj1 =
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 5)
+        -- "aaa"
+    match obj1.TryGetValue "aaa" with
+    | Some(value) -> Assert.False(true, "Should return None")
+    | _ -> ()
+
+
+[<Fact>]
 let ``No mutation test 1`` () =
     let obj1 =
         ImmutableDynamicObj ()
@@ -120,49 +147,3 @@ let ``Type preserved F# 2`` () =
         -- "aaa"
         ++ ("bbb", 5)
     Assert.IsType<Quack>(obj1)
-
-[<Fact>]
-let ``Type preserved CLS Compliant 1`` () =
-    let obj1 =
-        Quack ()
-        |> Quack.WithCLSCompliant "aaa" 5
-    Assert.IsType<Quack>(obj1)
-
-[<Fact>]
-let ``Type preserved CLS Compliant 2`` () =
-    let obj1 =
-        Quack ()
-        |> Quack.WithCLSCompliant "aaa" 5
-        |> Quack.WithoutCLSCompliant "aaa"
-        |> Quack.WithCLSCompliant "bbb" 5
-    Assert.IsType<Quack>(obj1)
-
-[<Fact>]
-let ``Type preserved CLS Compliant and F# the same thing 1`` () =
-    let obj1 =
-        Quack ()
-        |> Quack.WithCLSCompliant "aaa" 5
-        |> Quack.WithCLSCompliant "bbb" 5
-
-    let obj2 =
-        Quack ()
-        ++ ("aaa", 5)
-        ++ ("bbb", 5)
-
-    Assert.Equal(obj1, obj2)
-
-[<Fact>]
-let ``Type preserved CLS Compliant and F# the same thing 2`` () =
-    let obj1 =
-        Quack ()
-        |> Quack.WithCLSCompliant "aaa" 5
-        |> Quack.WithCLSCompliant "bbb" 5
-        |> Quack.WithoutCLSCompliant "aaa"
-
-    let obj2 =
-        Quack ()
-        ++ ("aaa", 5)
-        ++ ("bbb", 5)
-        -- "aaa"
-
-    Assert.Equal(obj1, obj2)
