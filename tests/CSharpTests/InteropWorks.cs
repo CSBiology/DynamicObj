@@ -27,8 +27,7 @@ namespace CSharpTests
 
         public class MyDynamicObject : ImmutableDynamicObj
         {
-            public MyDynamicObject(FSharpMap<string, object> map) : base(map) { }
-            public MyDynamicObject() : base(new(Enumerable.Empty<Tuple<string, object>>())) { }
+            
         }
 
         [Fact]

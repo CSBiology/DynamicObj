@@ -9,20 +9,22 @@ do()
 
 /// Represents an DynamicObj's counterpart
 /// with immutability enabled only.
-type ImmutableDynamicObj (map : Map<string, obj>) = 
+type ImmutableDynamicObj internal (map : Map<string, obj>) = 
     
     let mutable properties = map
     
-    member private this.Properties = properties
-    member private this.MutateSetMap newMap =
-        properties <- newMap
+    member private this.Properties 
+        with get () =
+            properties
+        and set value =
+            properties <- value
     
     static member private NewIfNeeded (object : 'a when 'a :> ImmutableDynamicObj) map : 'a =
         if obj.ReferenceEquals(map, object.Properties) then
             object
         else
             let res = new 'a()
-            res.MutateSetMap map
+            res.Properties <- map
             res
 
     /// Empty instance
