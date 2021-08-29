@@ -8,8 +8,10 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     
     let mutable properties = map
     
-    member private this.Properties = properties
-    member private this.ForceReplaceMap map =
+    // they're public, but because they're inline,
+    // they won't be visible from other assemblies
+    member inline this.Properties = properties
+    member inline this.ForceReplaceMap map =
         properties <- map
 
     static member inline private NewIfNeeded (a : ^ImmutableDynamicObj) map : ^ImmutableDynamicObj =
@@ -49,7 +51,7 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     /// Returns an instance with:
     /// 1. this property added if it wasn't present
     /// 2. this property updated otherwise
-    static member inline (+=) (object, (name, newValue)) = ImmutableDynamicObj.With name newValue object
+    static member  (+=) (object, (name, newValue)) = ImmutableDynamicObj.With name newValue object
 
     /// Returns an instance:
     /// 1. the same if there was no requested property
