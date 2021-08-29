@@ -8,7 +8,7 @@ open System.Runtime.CompilerServices
 /// with immutability enabled only.
 type ImmutableDynamicObj (map : Map<string, obj>) = 
     
-    let mutable properties = map
+    let properties = map
     
     // they're public, but because they're inline,
     // they won't be visible from other assemblies
