@@ -21,5 +21,28 @@ let ``No mutation test 1`` () =
         |> ImmutableDynamicObj.With "bb" 10
     Assert.Equal(obj1, objA)
     Assert.Equal(obj2, objB)
+
+    Assert.True((obj1 = objA))
+    Assert.True((obj2 = objB))
+
+[<Fact>]
+let ``No mutation test 1 with operators`` () =
+    let obj1 =
+        ImmutableDynamicObj ()
+        += ("aa", 5)
+    let obj2 = 
+        ImmutableDynamicObj ()
+        += ("bb", 10)
+
+    let objBase = ImmutableDynamicObj ()
+    let objA = 
+        objBase
+        += ("aa", 5)
+    let objB = 
+        objBase
+        += ("bb", 10)
+    Assert.Equal(obj1, objA)
+    Assert.Equal(obj2, objB)
+
     Assert.True((obj1 = objA))
     Assert.True((obj2 = objB))

@@ -17,6 +17,16 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
         | Some(value) when value = newValue -> object
         | _ -> ImmutableDynamicObj (Map.add name newValue object.Properties)
 
+    static member (+=) (object, (name, newValue)) = ImmutableDynamicObj.With name newValue object
+
+    member this.TryGetTypedValue<'a> name = 
+        match (this.Properties.TryFind name) with
+        | None -> None
+        | Some o -> 
+            match o with
+            | :? 'a as o -> o |> Some
+            | _ -> None
+
     override this.Equals o =
         match o with
         | :? ImmutableDynamicObj as other -> other.Properties = this.Properties
