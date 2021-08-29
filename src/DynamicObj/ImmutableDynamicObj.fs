@@ -10,8 +10,6 @@ type ImmutableDynamicObj (map : Map<string, obj>) =
     
     let properties = map
     
-    // they're public, but because they're inline,
-    // they won't be visible from other assemblies
     member this.Properties = properties
     
     static member private NewIfNeededCLSCompliant (object : 'a when 'a :> ImmutableDynamicObj) map : 'a =
