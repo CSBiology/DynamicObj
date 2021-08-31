@@ -34,18 +34,18 @@ let ``Value test 3`` () =
 let ``No mutation test 1`` () =
     let obj1 =
         ImmutableDynamicObj ()
-        |> ImmutableDynamicObj.With "aa" 5
+        |> ImmutableDynamicObj.add "aa" 5
     let obj2 = 
         ImmutableDynamicObj ()
-        |> ImmutableDynamicObj.With "bb" 10
+        |> ImmutableDynamicObj.add "bb" 10
 
     let objBase = ImmutableDynamicObj ()
     let objA = 
         objBase
-        |> ImmutableDynamicObj.With "aa" 5
+        |> ImmutableDynamicObj.add "aa" 5
     let objB = 
         objBase
-        |> ImmutableDynamicObj.With "bb" 10
+        |> ImmutableDynamicObj.add "bb" 10
     Assert.Equal(obj1, objA)
     Assert.Equal(obj2, objB)
 

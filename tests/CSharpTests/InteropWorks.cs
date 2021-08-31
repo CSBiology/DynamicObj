@@ -14,13 +14,13 @@ namespace CSharpTests
         {
             var obj1 =
                 new ImmutableDynamicObj()
-                .With("aa", 4)
-                .With("bb", 10)
-                .Without("aa")
+                .AddItem("aa", 4)
+                .AddItem("bb", 10)
+                .RemoveItem("aa")
                 ;
             var obj2 = 
                 new ImmutableDynamicObj()
-                .With("bb", 10)
+                .AddItem("bb", 10)
                 ;
             Assert.Equal(obj1, obj2);
         }
@@ -35,7 +35,7 @@ namespace CSharpTests
         {
             var obj1 =
                 new MyDynamicObject()
-                .With("aaa", 5);
+                .AddItem("aaa", 5);
             Assert.IsType<MyDynamicObject>(obj1);
             Assert.Equal(5, obj1["aaa"]);
         }
@@ -50,8 +50,8 @@ namespace CSharpTests
         {
             var obj1 =
                 new MyDynamicObjectWithField() { Aaa = 100500 }
-                .With("aaa", 5)
-                .Without("aaa");
+                .AddItem("aaa", 5)
+                .RemoveItem("aaa");
             Assert.Equal(100500, obj1.Aaa);
         }
     }

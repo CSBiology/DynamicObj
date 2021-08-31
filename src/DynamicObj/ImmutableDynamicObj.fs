@@ -27,7 +27,7 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
             let fieldValue = fi.GetValue sourceObject
             fi.SetValue(destinationObject, fieldValue)
 
-    static member private NewIfNeeded (object : 'a when 'a :> ImmutableDynamicObj) map : 'a =
+    static member private newIfNeeded (object : 'a when 'a :> ImmutableDynamicObj) map : 'a =
         if obj.ReferenceEquals(map, object.Properties) then
             object
         else
@@ -52,28 +52,28 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
     /// Returns an instance with:
     /// 1. this property added if it wasn't present
     /// 2. this property updated otherwise
-    static member With name newValue (object : #ImmutableDynamicObj) =
+    static member add name newValue (object : #ImmutableDynamicObj) =
         object.Properties
         |> Map.add name newValue
-        |> ImmutableDynamicObj.NewIfNeeded object
+        |> ImmutableDynamicObj.newIfNeeded object
 
     /// Returns an instance:
     /// 1. the same if there was no requested property
     /// 2. without the requested property if there was
-    static member Without name (object : #ImmutableDynamicObj) =
+    static member remove name (object : #ImmutableDynamicObj) =
         object.Properties
         |> Map.remove name
-        |> ImmutableDynamicObj.NewIfNeeded object
+        |> ImmutableDynamicObj.newIfNeeded object
 
     /// Returns an instance with:
     /// 1. this property added if it wasn't present
     /// 2. this property updated otherwise
-    static member (++) (object, (name, newValue)) = ImmutableDynamicObj.With name newValue object
+    static member (++) (object, (name, newValue)) = ImmutableDynamicObj.add name newValue object
 
     /// Returns an instance:
     /// 1. the same if there was no requested property
     /// 2. without the requested property if there was
-    static member (--) (object, name) = ImmutableDynamicObj.Without name object
+    static member (--) (object, name) = ImmutableDynamicObj.remove name object
 
     member this.TryGetValue name = 
         match this.Properties.TryGetValue name with
@@ -103,13 +103,13 @@ type ImmutableDynamicObjExtensions =
     /// 2. this property updated otherwise
     /// use this one only from C#
     [<Extension>]
-    static member With (this, name, newValue) =
-        ImmutableDynamicObj.With name newValue this
+    static member AddItem (this, name, newValue) =
+        ImmutableDynamicObj.add name newValue this
 
     /// Returns an instance:
     /// 1. the same if there was no requested property
     /// 2. without the requested property if there was
     /// use this one only from C#
     [<Extension>]
-    static member Without (this, name) =
-        ImmutableDynamicObj.Without name this
+    static member RemoveItem (this, name) =
+        ImmutableDynamicObj.remove name this
