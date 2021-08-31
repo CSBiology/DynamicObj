@@ -147,3 +147,37 @@ let ``Type preserved F# 2`` () =
         -- "aaa"
         ++ ("bbb", 5)
     Assert.IsType<Quack>(obj1)
+
+
+type QuackWithField (map, field) =
+    inherit ImmutableDynamicObj (map)
+    let field = field
+    member _.Field = field
+
+    new() = QuackWithField (Map.empty, 5)
+
+
+[<Fact>]
+let ``Fields of the closest inheritor preserved 1`` () =
+    let obj1 =
+        QuackWithField (Map.empty, 100)
+        ++ ("aaa", 5)
+        -- "bbb"
+    Assert.Equal(100, obj1.Field);
+
+type FarQuackWithField (someOtherField) =
+    inherit QuackWithField (Map.empty, 55)
+    let otherField = someOtherField
+    member _.OtherField = otherField
+
+    new() = FarQuackWithField(3)
+
+[<Fact>]
+let ``Fields of a far inheritor preserved 1`` () =
+    let obj1 =
+        FarQuackWithField (1234)
+        ++ ("aaa", 5)
+        -- "bbb"
+    Assert.Equal(1234, obj1.OtherField);
+    Assert.Equal(55, obj1.Field);
+    Assert.Equal(5 :> obj, obj1.["aaa"]);

@@ -39,5 +39,20 @@ namespace CSharpTests
             Assert.IsType<MyDynamicObject>(obj1);
             Assert.Equal(5, obj1["aaa"]);
         }
+
+        public class MyDynamicObjectWithField : ImmutableDynamicObj
+        {
+            public int Aaa { get; init; }
+        }
+
+        [Fact]
+        public void TestFieldsPreservedForInheritor()
+        {
+            var obj1 =
+                new MyDynamicObjectWithField() { Aaa = 100500 }
+                .With("aaa", 5)
+                .Without("aaa");
+            Assert.Equal(100500, obj1.Aaa);
+        }
     }
 }

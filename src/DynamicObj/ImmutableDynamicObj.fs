@@ -1,7 +1,7 @@
 ﻿namespace DynamicObj
 
 open DynamicObj
-open System
+open System.Reflection
 open System.Runtime.CompilerServices
 
 [<InternalsVisibleToAttribute("UnitTests")>]
@@ -19,11 +19,23 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
         and set value =
             properties <- value
     
+    // Copies the fields of one object to the other one
+    // If their base is not ImmutableDynamicObj, then it
+    // will go over fields from the base instance
+    static member private copyMembers (ty : System.Type) sourceObject destinationObject =
+        for fi in ty.GetFields(BindingFlags.Instance ||| BindingFlags.NonPublic ||| BindingFlags.Public) do
+            let fieldValue = fi.GetValue sourceObject
+            fi.SetValue(destinationObject, fieldValue)
+
     static member private NewIfNeeded (object : 'a when 'a :> ImmutableDynamicObj) map : 'a =
         if obj.ReferenceEquals(map, object.Properties) then
             object
         else
+            // otherwise we create a new instance
             let res = new 'a()
+
+            // and then copy all current fields the new instance 
+            ImmutableDynamicObj.copyMembers (typeof<'a>) object res
             res.Properties <- map
             res
 
