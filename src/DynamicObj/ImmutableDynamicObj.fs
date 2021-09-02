@@ -65,16 +65,6 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
         |> Map.remove name
         |> ImmutableDynamicObj.newIfNeeded object
 
-    /// Returns an instance with:
-    /// 1. this property added if it wasn't present
-    /// 2. this property updated otherwise
-    static member (++) (object, (name, newValue)) = ImmutableDynamicObj.add name newValue object
-
-    /// Returns an instance:
-    /// 1. the same if there was no requested property
-    /// 2. without the requested property if there was
-    static member (--) (object, name) = ImmutableDynamicObj.remove name object
-
     member this.TryGetValue name = 
         match this.Properties.TryGetValue name with
         | true, value ->  Some value

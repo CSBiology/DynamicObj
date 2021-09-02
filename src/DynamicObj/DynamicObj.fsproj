@@ -26,6 +26,7 @@
     <Compile Include="ImmutableDynamicObj.fs" />
     <Compile Include="DynamicObj.fs" />
     <Compile Include="DynObj.fs" />
+    <Compile Include="Operators.fs" />
     <None Include="Playground.fsx" />
   </ItemGroup>
   

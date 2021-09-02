@@ -2,6 +2,7 @@
 
 open Xunit
 open DynamicObj
+open DynamicObj.Operators
 
 [<Fact>]
 let ``Value test 1`` () =
