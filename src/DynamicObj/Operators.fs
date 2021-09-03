@@ -17,13 +17,11 @@ let (--) object name = ImmutableDynamicObj.remove name object
 /// Acts as (++) if the value is Some,
 /// returns the same object otherwise
 let (++?) object (name, newValue) =
-    match newValue with
-    | Some(value) -> object ++ (name, value)
-    | None -> object
+    object
+    |> ImmutableDynamicObj.addOpt name newValue
 
 /// Acts as (++?) but maps the valid value 
 /// through the last argument
 let (++??) object (name, newValue, f) =
-    match newValue with
-    | Some(value) -> object ++ (name, f value)
-    | None -> object
+    object
+    |> ImmutableDynamicObj.addOptBy name newValue f

@@ -65,6 +65,25 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
         |> Map.remove name
         |> ImmutableDynamicObj.newIfNeeded object
 
+
+    
+        
+
+    /// Acts as add if the value is Some,
+    /// returns the same object otherwise
+    static member addOpt name newValue object =
+        match newValue with
+        | Some(value) -> object |> ImmutableDynamicObj.add name value
+        | None -> object
+
+
+    /// Acts as addOpt but maps the valid value 
+    /// through the last argument
+    static member addOptBy name newValue f object =
+        match newValue with
+        | Some(value) -> object |> ImmutableDynamicObj.add name (f value)
+        | None -> object
+
     member this.TryGetValue name = 
         match this.Properties.TryGetValue name with
         | true, value ->  Some value
