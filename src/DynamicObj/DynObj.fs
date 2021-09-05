@@ -93,14 +93,14 @@ module DynObj =
         let rec loop (object:DynamicObj) (identationLevel:int) (membersLeft:string list) (acc:string list) =
             let ident = [for i in 0 .. identationLevel-1 do yield "    "] |> String.concat ""
             match membersLeft with
-            | [] -> acc |> List.rev |> String.concat "\r\n"
+            | [] -> acc |> List.rev |> String.concat System.Environment.NewLine
             | m::rest ->
                 let item = object?(``m``)
                 match item with
                 | :? DynamicObj as item -> 
                     let innerMembers = item.GetDynamicMemberNames() |> Seq.cast<string> |> List.ofSeq
                     let innerPrint = (loop item (identationLevel + 1) innerMembers [])
-                    loop object identationLevel rest ($"{ident}?{m}:\r\n{innerPrint}" :: acc)
+                    loop object identationLevel rest ($"{ident}?{m}:{System.Environment.NewLine}{innerPrint}" :: acc)
                 | _ -> 
                     loop d identationLevel rest ($"{ident}?{m}: {item}"::acc)
     

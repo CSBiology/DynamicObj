@@ -114,6 +114,7 @@ let ``Format string 1`` () =
 
     Assert.Equal(expected, (foo |> DynObj.format))
 
+[<Fact>]
 let ``Format string 2`` () =
 
     // nested
@@ -123,8 +124,6 @@ let ``Format string 2`` () =
     inner?bar <- "baz"
     foo?foo <- inner
 
-    let expected = """?corgi: corgi
-?foo:
-    ?bar: baz"""
+    let expected = $"""?corgi: corgi{Environment.NewLine}?foo:{Environment.NewLine}    ?bar: baz"""
 
     Assert.Equal(expected, (foo |> DynObj.format))

@@ -66,9 +66,6 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
         |> ImmutableDynamicObj.newIfNeeded object
 
 
-    
-        
-
     /// Acts as add if the value is Some,
     /// returns the same object otherwise
     static member addOpt name newValue object =
@@ -84,10 +81,12 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
         | Some(value) -> object |> ImmutableDynamicObj.add name (f value)
         | None -> object
 
+
     member this.TryGetValue name = 
         match this.Properties.TryGetValue name with
         | true, value ->  Some value
         | _ -> ReflectionUtils.tryGetPropertyValue this name
+
 
     member this.TryGetTypedValue<'a> name = 
         match this.TryGetValue name with
@@ -96,6 +95,27 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
             match o with
             | :? 'a as o -> o |> Some
             | _ -> None
+
+    static member format (object : #ImmutableDynamicObj) =
+
+        let members = object.Properties |> Map.toList
+
+        let rec loop (identationLevel:int) (membersLeft:(string*obj) list) (acc:string list) =
+            let ident = [for i in 0 .. identationLevel-1 do yield "    "] |> String.concat ""
+            match membersLeft with
+            | [] -> acc |> List.rev |> String.concat System.Environment.NewLine
+            | (key,item)::rest ->
+                match item with
+                | :? ImmutableDynamicObj as item -> 
+                    let innerMembers = item.Properties |> Map.toList
+                    let innerPrint = (loop (identationLevel + 1) innerMembers [])
+                    loop identationLevel rest ($"{ident}?{key}:{System.Environment.NewLine}{innerPrint}" :: acc)
+                | _ -> 
+                    loop identationLevel rest ($"{ident}?{key}: {item}"::acc)
+    
+        loop 0 members []
+
+    static member print (object : #ImmutableDynamicObj) = printfn "%s" (object |> ImmutableDynamicObj.format)
 
     override this.Equals o =
         match o with
@@ -121,4 +141,12 @@ type ImmutableDynamicObjExtensions =
     /// use this one only from C#
     [<Extension>]
     static member RemoveItem (this, name) =
-        ImmutableDynamicObj.remove name this
+        ImmutableDynamicObj.remove name this    
+        
+    [<Extension>]
+    static member Format (this) =
+        ImmutableDynamicObj.format this        
+
+    [<Extension>]
+    static member Print (this) =
+        ImmutableDynamicObj.print this

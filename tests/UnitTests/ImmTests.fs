@@ -3,6 +3,7 @@
 open Xunit
 open DynamicObj
 open DynamicObj.Operators
+open System
 
 [<Fact>]
 let ``Value test 1`` () =
@@ -182,3 +183,31 @@ let ``Fields of a far inheritor preserved 1`` () =
     Assert.Equal(1234, obj1.OtherField);
     Assert.Equal(55, obj1.Field);
     Assert.Equal(5 :> obj, obj1.["aaa"]);
+
+[<Fact>]
+let ``Format string 1`` () =
+
+    let foo = 
+        ImmutableDynamicObj()
+        ++ ("bar", [1;2;3;4])
+
+    let expected = "?bar: [1; 2; 3; ... ]"
+
+    Assert.Equal(expected, (foo |> ImmutableDynamicObj.format))
+
+[<Fact>]
+let ``Format string 2`` () =
+
+    // nested
+    let inner = 
+        ImmutableDynamicObj()
+        ++ ("bar", "baz")
+
+    let foo = 
+        ImmutableDynamicObj()
+        ++ ("corgi", "corgi")
+        ++ ("foo", inner)
+
+    let expected = $"""?corgi: corgi{Environment.NewLine}?foo:{Environment.NewLine}    ?bar: baz"""
+
+    Assert.Equal(expected, (foo |> ImmutableDynamicObj.format))
