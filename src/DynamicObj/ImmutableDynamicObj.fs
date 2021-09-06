@@ -3,12 +3,16 @@
 open DynamicObj
 open System.Reflection
 open System.Runtime.CompilerServices
+open Newtonsoft.Json
+open System.Linq
+open System.Collections.Generic
 
 [<InternalsVisibleToAttribute("UnitTests")>]
 do()
 
 /// Represents an DynamicObj's counterpart
 /// with immutability enabled only.
+[<JsonConverter(typeof<ImmutableDynamicObjJsonConverter>)>]
 type ImmutableDynamicObj internal (map : Map<string, obj>) = 
     
     let mutable properties = map
@@ -123,6 +127,28 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
         | _ -> false
 
     override this.GetHashCode () = ~~~map.GetHashCode()
+
+    /// Returns the copy of this object but as a dictionary
+    member internal this.ToDictionary () =
+        let dict = this.Properties
+                    .Select(fun c -> c.Key, c.Value)
+                    .ToDictionary((fun (key, _) -> key), fun (_, value) -> value)
+        dict
+
+
+
+and ImmutableDynamicObjJsonConverter () =
+    inherit JsonConverter ()
+
+    override _.CanConvert(objectType) =       
+        objectType = typeof<ImmutableDynamicObj>
+
+    override _.ReadJson(reader, t, existingValue, serializer) =  
+        raise (System.NotImplementedException())
+
+    override _.WriteJson(writer, value, serializer) =
+        let ido = value :?> ImmutableDynamicObj
+        serializer.Serialize(writer, ido.ToDictionary())
 
 [<Extension>]
 type ImmutableDynamicObjExtensions =
