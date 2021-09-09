@@ -4,6 +4,7 @@ open Xunit
 open DynamicObj
 open DynamicObj.Operators
 open System
+open Newtonsoft.Json
 
 [<Fact>]
 let ``Value test 1`` () =
@@ -211,3 +212,14 @@ let ``Format string 2`` () =
     let expected = $"""?corgi: corgi{Environment.NewLine}?foo:{Environment.NewLine}    ?bar: baz"""
 
     Assert.Equal(expected, (foo |> ImmutableDynamicObj.format))
+
+[<Fact>]
+let ``Json serialization`` () =
+    let o =
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 5)
+        ++ ("ohno", 10)
+        ++ ("quack", "tt")
+        ++ ("hh", [1; 2; 3])
+    let actual = JsonConvert.SerializeObject o
+    Assert.Equal("{\"aaa\":5,\"hh\":[1,2,3],\"ohno\":10,\"quack\":\"tt\"}", actual)
