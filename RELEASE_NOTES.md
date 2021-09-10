@@ -1,6 +1,7 @@
-### 0.2.0 - 09/05/2021
+### 0.2.0 - 09/10/2021
 - [Add `ImmutableDynamicObj`](https://github.com/CSBiology/DynamicObj/pull/4) as the immutable counterpart of `DynamicObj` (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
 - Add print formatters for both `DynamicObj` and `ImmutableDynamicObj`
+- [Enable Json serialization for ImmutableDynamicObj](https://github.com/CSBiology/DynamicObj/commit/e7474d2658a234bb94299f12de30625e04f5f407) (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
 
 ### 0.1.0 - 08/17/2021
 - target netstandard2.0 and .net5.0
