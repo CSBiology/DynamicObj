@@ -1,9 +1,12 @@
-#load "ReflectionUtils.fs"
-#load "ImmutableDynamicObj.fs"
-#load "DynamicObj.fs"
-#load "DynObj.fs"
+#r "nuget: Newtonsoft.Json"
+#load "./ReflectionUtils.fs"
+#load "./ImmutableDynamicObj.fs"
+#load "./DynamicObj.fs"
+#load "./DynObj.fs"
+#load "./Operators.fs"
 
 open DynamicObj
+open DynamicObj.Operators
 
 
 let foo = DynamicObj()
@@ -18,3 +21,24 @@ let fooIDO =
     |> ImmutableDynamicObj.add "inner2" (ImmutableDynamicObj() |> ImmutableDynamicObj.add "innerinner" (ImmutableDynamicObj() |> ImmutableDynamicObj.add "innerinnerfoo" "innerinnerbar" ))
     
 printfn "%s" (fooIDO |> ImmutableDynamicObj.format)
+
+let o2 =
+    ImmutableDynamicObj.empty
+    ++ ("aaa", 5)
+    ++ ("ohno", 10)
+    ++ ("quack", "tt")
+    ++ ("hh", [1; 2; 3])
+    
+let o =
+    ImmutableDynamicObj.empty
+    ++ ("aaa", 5)
+    ++ ("ohno", 10)
+    ++ ("quack", "tt")
+    ++ ("hh", [1; 2; 3])
+    ++ ("inner", o2)
+
+open Newtonsoft.Json
+
+let actual = JsonConvert.SerializeObject o
+
+printfn "%s" actual

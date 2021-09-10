@@ -223,3 +223,22 @@ let ``Json serialization`` () =
         ++ ("hh", [1; 2; 3])
     let actual = JsonConvert.SerializeObject o
     Assert.Equal("{\"aaa\":5,\"hh\":[1,2,3],\"ohno\":10,\"quack\":\"tt\"}", actual)
+
+[<Fact>]
+let ``Json serialization nested`` () =
+    let o2 =
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 5)
+        ++ ("ohno", 10)
+        ++ ("quack", "tt")
+        ++ ("hh", [1; 2; 3])
+    let o =
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 5)
+        ++ ("ohno", 10)
+        ++ ("quack", "tt")
+        ++ ("hh", [1; 2; 3])
+        ++ ("inner", o2)
+    let actual = JsonConvert.SerializeObject o
+
+    Assert.Equal("""{"aaa":5,"hh":[1,2,3],"inner":{"aaa":5,"hh":[1,2,3],"ohno":10,"quack":"tt"},"ohno":10,"quack":"tt"}""", actual)
