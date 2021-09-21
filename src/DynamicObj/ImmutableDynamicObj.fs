@@ -135,6 +135,12 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
                     .ToDictionary((fun (key, _) -> key), fun (_, value) -> value)
         dict
 
+    static member absorb (first : 'T when 'T :> ImmutableDynamicObj) (second : ImmutableDynamicObj) =
+        let addProp (ido : 'T) (prop : KeyValuePair<string, obj>) =
+            ido
+            |> ImmutableDynamicObj.add prop.Key prop.Value
+        Seq.fold addProp first second.Properties
+
 
 
 and ImmutableDynamicObjJsonConverter () =

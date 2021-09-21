@@ -63,6 +63,9 @@ module DynObj =
             | _ -> first.SetValue(kv.Key,kv.Value)
         first
 
+    let ohnoMakeUpNamePlease (into : #ImmutableDynamicObj) (from : ImmutableDynamicObj) =
+        ImmutableDynamicObj.absorb into from
+
     let setValue (dyn:DynamicObj) propName o =
         dyn.SetValue(propName,o)
 

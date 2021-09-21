@@ -242,3 +242,18 @@ let ``Json serialization nested`` () =
     let actual = JsonConvert.SerializeObject o
 
     Assert.Equal("""{"aaa":5,"hh":[1,2,3],"inner":{"aaa":5,"hh":[1,2,3],"ohno":10,"quack":"tt"},"ohno":10,"quack":"tt"}""", actual)
+
+[<Fact>]
+let ``Merging two`` () =
+    let a =
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 5)
+        ++ ("bb", 10)
+    let b =
+        ImmutableDynamicObj.empty
+        ++ ("aaa", 11)
+
+    let merged = DynObj.ohnoMakeUpNamePlease a b
+
+    Assert.Equal(11 :> obj, merged.["aaa"])
+    Assert.Equal(10 :> obj, merged.["bb"])
