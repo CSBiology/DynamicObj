@@ -42,3 +42,23 @@ open Newtonsoft.Json
 let actual = JsonConvert.SerializeObject o
 
 printfn "%s" actual
+
+let target =
+    ImmutableDynamicObj.empty
+    ++ ("target-unique", 1337)
+    ++ ("will-be-overridden", -42)
+    ++ ("nested-will-be-combined", (ImmutableDynamicObj.empty ++ ("inner","I Am")))
+    ++ ("nested-will-be-overridden", (ImmutableDynamicObj.empty ++ ("inner","NOT_OVERRIDDEN")))
+
+let source =
+    ImmutableDynamicObj.empty
+    ++ ("source-unique", 69)
+    ++ ("will-be-overridden", "WAS_OVERRIDDEN")
+    ++ ("nested-will-be-combined", (ImmutableDynamicObj.empty ++ ("inner_combined","Complete")))
+    ++ ("nested-will-be-overridden", 2)
+
+let combined =
+    ImmutableDynamicObj.combine target source
+
+combined
+|> ImmutableDynamicObj.print
