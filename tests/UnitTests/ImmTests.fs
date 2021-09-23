@@ -253,7 +253,7 @@ let ``Merging two`` () =
         ImmutableDynamicObj.empty
         ++ ("aaa", 11)
 
-    let merged = DynObj.ohnoMakeUpNamePlease a b
+    let merged = ImmutableDynamicObj.combine a b
 
     Assert.Equal(11 :> obj, merged.["aaa"])
     Assert.Equal(10 :> obj, merged.["bb"])
