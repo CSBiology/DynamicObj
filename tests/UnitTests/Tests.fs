@@ -127,3 +127,61 @@ let ``Format string 2`` () =
     let expected = $"""?corgi: corgi{Environment.NewLine}?foo:{Environment.NewLine}    ?bar: baz"""
 
     Assert.Equal(expected, (foo |> DynObj.format))
+
+
+
+[<Fact>]
+let ``combine flat DOs``() = 
+    let target = DynamicObj()
+
+    target.SetValue("target-unique", [42])
+    target.SetValue("will-be-overridden", "WAS_NOT_OVERRIDDEN!")
+
+    let source = DynamicObj()
+
+    source.SetValue("source-unique", [|42|])
+    source.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
+
+    let combined = DynObj.combine target source
+
+    let expected = DynamicObj()
+
+    expected.SetValue("target-unique", [42])
+    expected.SetValue("source-unique", [|42|])
+    expected.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
+
+    Assert.Equal(expected, combined)
+
+[<Fact>]
+let ``combine nested DOs``() = 
+
+    let target = DynamicObj()
+
+    target.SetValue("target-unique", 1337)
+    target.SetValue("will-be-overridden", -42)
+    target.SetValue("nested-will-be-combined", (DynamicObj().SetValue("inner","I Am")))
+    target.SetValue("nested-will-be-overridden", (DynamicObj().SetValue("inner","NOT_OVERRIDDEN")))
+    
+    let source = DynamicObj()
+
+    source.SetValue("source-unique", 69)
+    source.SetValue("will-be-overridden", "WAS_OVERRIDDEN")
+    source.SetValue("nested-will-be-combined", (DynamicObj().SetValue("inner_combined","Complete")))
+    source.SetValue("nested-will-be-overridden", "WAS_OVERRIDDEN")
+    
+    let combined = DynObj.combine target source
+    
+    let expected = DynamicObj()
+
+    expected.SetValue("source-unique", 69)
+    expected.SetValue("target-unique", 1337)
+    expected.SetValue("will-be-overridden", "WAS_OVERRIDDEN")
+    expected.SetValue("nested-will-be-overridden", "WAS_OVERRIDDEN")
+    expected.SetValue("nested-will-be-combined", 
+        let inner = DynamicObj()
+        inner.SetValue("inner","I Am")
+        inner.SetValue("inner_combined","Complete")
+        inner
+        )
+
+    Assert.Equal(expected, combined)
