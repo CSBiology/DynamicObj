@@ -139,7 +139,7 @@ let ``combine flat DOs``() =
 
     let source = DynamicObj()
 
-    source.SetValue("source-unique", [|42|])
+    source.SetValue("source-unique", [42; 32])
     source.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
 
     let combined = DynObj.combine target source
@@ -147,7 +147,7 @@ let ``combine flat DOs``() =
     let expected = DynamicObj()
 
     expected.SetValue("target-unique", [42])
-    expected.SetValue("source-unique", [|42|])
+    expected.SetValue("source-unique", [42; 32])
     expected.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
 
     Assert.Equal(expected, combined)
@@ -159,14 +159,20 @@ let ``combine nested DOs``() =
 
     target.SetValue("target-unique", 1337)
     target.SetValue("will-be-overridden", -42)
-    target.SetValue("nested-will-be-combined", (DynamicObj().SetValue("inner","I Am")))
-    target.SetValue("nested-will-be-overridden", (DynamicObj().SetValue("inner","NOT_OVERRIDDEN")))
+    let something2BeCombined = DynamicObj()
+    something2BeCombined.SetValue("inner","I Am")
+    let something2BeOverriden = DynamicObj()
+    something2BeOverriden.SetValue("inner","NOT_OVERRIDDEN")
+    target.SetValue("nested-will-be-combined", something2BeCombined)
+    target.SetValue("nested-will-be-overridden", something2BeOverriden)
     
     let source = DynamicObj()
 
     source.SetValue("source-unique", 69)
     source.SetValue("will-be-overridden", "WAS_OVERRIDDEN")
-    source.SetValue("nested-will-be-combined", (DynamicObj().SetValue("inner_combined","Complete")))
+    let alsoSomething2BeCombined = DynamicObj()
+    alsoSomething2BeCombined.SetValue("inner_combined","Complete")
+    source.SetValue("nested-will-be-combined", alsoSomething2BeCombined)
     source.SetValue("nested-will-be-overridden", "WAS_OVERRIDDEN")
     
     let combined = DynObj.combine target source
