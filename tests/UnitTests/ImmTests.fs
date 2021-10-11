@@ -242,3 +242,57 @@ let ``Json serialization nested`` () =
     let actual = JsonConvert.SerializeObject o
 
     Assert.Equal("""{"aaa":5,"hh":[1,2,3],"inner":{"aaa":5,"hh":[1,2,3],"ohno":10,"quack":"tt"},"ohno":10,"quack":"tt"}""", actual)
+
+[<Fact>]
+let ``combine flat IDOs``() = 
+    let target =
+        ImmutableDynamicObj.empty
+        ++ ("target-unique", [42])
+        ++ ("will-be-overridden", "WAS_NOT_OVERRIDDEN!")    
+
+    let source =
+        ImmutableDynamicObj.empty
+        ++ ("source-unique", [|42|])
+        ++ ("will-be-overridden", "WAS_OVERRIDDEN =)")
+
+    let combined = ImmutableDynamicObj.combine target source
+
+    let expected = 
+        ImmutableDynamicObj.empty
+        ++ ("target-unique", [42])
+        ++ ("source-unique", [|42|])
+        ++ ("will-be-overridden", "WAS_OVERRIDDEN =)")
+
+    Assert.Equal(expected, combined)
+
+[<Fact>]
+let ``combine nested IDOs``() = 
+    let target =
+        ImmutableDynamicObj.empty
+        ++ ("target-unique", 1337)
+        ++ ("will-be-overridden", -42)
+        ++ ("nested-will-be-combined", (ImmutableDynamicObj.empty ++ ("inner","I Am")))
+        ++ ("nested-will-be-overridden", (ImmutableDynamicObj.empty ++ ("inner","NOT_OVERRIDDEN")))
+    
+    let source =
+        ImmutableDynamicObj.empty
+        ++ ("source-unique", 69)
+        ++ ("will-be-overridden", "WAS_OVERRIDDEN")
+        ++ ("nested-will-be-combined", (ImmutableDynamicObj.empty ++ ("inner_combined","Complete")))
+        ++ ("nested-will-be-overridden", "WAS_OVERRIDDEN")
+    
+    let combined =
+        ImmutableDynamicObj.combine target source
+    
+    let expected = 
+        ImmutableDynamicObj.empty
+        ++ ("source-unique", 69)
+        ++ ("target-unique", 1337)
+        ++ ("will-be-overridden", "WAS_OVERRIDDEN")
+        ++ ("nested-will-be-overridden", "WAS_OVERRIDDEN")
+        ++ ("nested-will-be-combined", 
+            ImmutableDynamicObj.empty 
+            ++ ("inner","I Am")
+            ++ ("inner_combined","Complete"))
+
+    Assert.Equal(expected, combined)

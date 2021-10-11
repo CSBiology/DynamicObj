@@ -8,6 +8,29 @@
 open DynamicObj
 open DynamicObj.Operators
 
+let target = DynamicObj()
+
+target.SetValue("target-unique", [42])
+target.SetValue("will-be-overridden", "WAS_NOT_OVERRIDDEN!")
+
+let source = DynamicObj()
+
+source.SetValue("source-unique", [|42|])
+source.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
+
+let combined = DynObj.combine target source
+
+let expected = DynamicObj()
+
+expected.SetValue("target-unique", [42])
+expected.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
+expected.SetValue("source-unique", [|42|])
+
+combined = expected
+
+combined |> DynObj.print
+expected |> DynObj.print
+
 
 let foo = DynamicObj()
 foo?bar <- [1;2;3;4]
