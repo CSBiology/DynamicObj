@@ -43,7 +43,7 @@
                         </figure>
                     </a>
                     <h2 class="title has-text-centered has-text-white">DynamicObj</h2>
-                    <h5 class="has-text-centered has-text-white pb-4">Documentation for 0.2.0</h5>
+                    <h5 class="has-text-centered has-text-white pb-4">Documentation for 0.2.1</h5>
                 </div>
                 <div class="content">
                     <!-- BEGIN SEARCH BOX: this adds support for the search box -->
@@ -359,7 +359,7 @@ from DynamicObj</div>
   static member add : name:string -&gt; newValue:obj -&gt; object:&#39;c -&gt; &#39;c (requires &#39;c :&gt; ImmutableDynamicObj and default constructor)
   static member addOpt : name:string -&gt; newValue:&#39;c option -&gt; object:&#39;d -&gt; &#39;d (requires &#39;d :&gt; ImmutableDynamicObj and default constructor)
   static member addOptBy : name:string -&gt; newValue:&#39;d option -&gt; f:(&#39;d -&gt; &#39;e) -&gt; object:&#39;f -&gt; &#39;f (requires &#39;f :&gt; ImmutableDynamicObj and default constructor)
-  static member private copyMembers : ty:Type -&gt; sourceObject:&#39;a0 -&gt; destinationObject:&#39;a1 -&gt; unit
+  static member combine : targetObject:#ImmutableDynamicObj -&gt; sourceObject:#ImmutableDynamicObj -&gt; ImmutableDynamicObj
   ...<br /><em>&lt;summary&gt;
  Represents an DynamicObj&#39;s counterpart
  with immutability enabled only.
