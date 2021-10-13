@@ -1,3 +1,6 @@
+### 0.2.1 - 10/13/2021
+- Add `combine` for IDO
+
 ### 0.2.0 - 09/10/2021
 - [Add `ImmutableDynamicObj`](https://github.com/CSBiology/DynamicObj/pull/4) as the immutable counterpart of `DynamicObj` (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
 - Add print formatters for both `DynamicObj` and `ImmutableDynamicObj`
