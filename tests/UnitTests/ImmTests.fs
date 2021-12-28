@@ -296,3 +296,21 @@ let ``combine nested IDOs``() =
             ++ ("inner_combined","Complete"))
 
     Assert.Equal(expected, combined)
+
+type Blabla() =
+    inherit ImmutableDynamicObj()
+    member _.quack = 4
+
+
+[<Fact>]
+let ``combine inheritors`` () =
+    let bla =
+        Blabla ()
+        ++ ("aaa", 5)
+    let another =
+        ImmutableDynamicObj ()
+        ++ ("bbb", 4)
+    let combined = ImmutableDynamicObj.combine bla another
+    Assert.Equal(combined, Blabla () ++ ("aaa", 5) ++ ("bbb", 4))
+    Assert.Equal(4, combined.quack)
+    
