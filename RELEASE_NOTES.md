@@ -1,3 +1,7 @@
+### 1.0.0 - 1/13/2022
+- [Rename IDO combine to `combineWith`, which now also preserves the type of the second IDO.](https://github.com/CSBiology/DynamicObj/pull/12/files) (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
+- Target .NET 6
+
 ### 0.2.1 - 10/13/2021
 - Add `combine` for IDO
 
