@@ -43,7 +43,7 @@
                         </figure>
                     </a>
                     <h2 class="title has-text-centered has-text-white">DynamicObj</h2>
-                    <h5 class="has-text-centered has-text-white pb-4">Documentation for 0.2.1</h5>
+                    <h5 class="has-text-centered has-text-white pb-4">Documentation for 1.0.0</h5>
                 </div>
                 <div class="content">
                     <!-- BEGIN SEARCH BOX: this adds support for the search box -->
@@ -137,13 +137,13 @@
 <p>You can use the <code>DynObj.print</code> function to look at the dynamic members of the object:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs4', 22)" onmouseover="showTip(event, 'fs4', 22)" class="rt">A</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs13', 23)" onmouseover="showTip(event, 'fs13', 23)" class="id">init</span><span class="pn">(</span><span class="n">42</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 24)" onmouseover="showTip(event, 'fs11', 24)" class="m">DynObj</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 25)" onmouseover="showTip(event, 'fs14', 25)" class="id">print</span>
 </code></pre>
-<table class="pre"><tr><td><pre><code>?some_prop: 42</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code></code></pre></td></tr></table>
 <p>And this is how the serialized JSON looks like:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 26)" onmouseover="showTip(event, 'fs15', 26)" class="id">aSerialized</span> <span class="o">=</span>
     <span onmouseout="hideTip(event, 'fs4', 27)" onmouseover="showTip(event, 'fs4', 27)" class="rt">A</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs13', 28)" onmouseover="showTip(event, 'fs13', 28)" class="id">init</span><span class="pn">(</span><span class="n">42</span><span class="pn">)</span>
     <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs16', 29)" onmouseover="showTip(event, 'fs16', 29)" class="rt">JsonConvert</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 30)" onmouseover="showTip(event, 'fs17', 30)" class="id">SerializeObject</span>
 </code></pre>
-<table class="pre"><tr><td><pre><code>"{"some_prop":42}"</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>No value returned by any evaluator</code></pre></td></tr></table>
 <h2><a name="Nesting-DynamicObjs" class="anchor" href="#Nesting-DynamicObjs">Nesting DynamicObjs</a></h2>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs18', 31)" onmouseover="showTip(event, 'fs18', 31)" class="rt">MyComplexJSONType</span><span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
     <span class="k">inherit</span> <span onmouseout="hideTip(event, 'fs5', 32)" onmouseover="showTip(event, 'fs5', 32)" class="rt">DynamicObj</span><span class="pn">(</span><span class="pn">)</span>
@@ -185,11 +185,9 @@
 <p>You can use the <code>DynObj.print</code> function to look at the dynamic members of the object:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs23', 133)" onmouseover="showTip(event, 'fs23', 133)" class="id">complex</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 134)" onmouseover="showTip(event, 'fs11', 134)" class="m">DynObj</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 135)" onmouseover="showTip(event, 'fs14', 135)" class="id">print</span>
 </code></pre>
-<table class="pre"><tr><td><pre><code>?prop_a: System.Int32[]
-?prop_b:
-    ?some_prop: 68</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code></code></pre></td></tr></table>
 <p>And this is how the serialized JSON looks like:</p>
-<table class="pre"><tr><td><pre><code>"{"prop_a":[42,1337],"prop_b":{"some_prop":68}}"</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>No value returned by any evaluator</code></pre></td></tr></table>
 <h2><a name="Simple-inheritance-pattern-for-ImmutableDynamicObj" class="anchor" href="#Simple-inheritance-pattern-for-ImmutableDynamicObj">Simple inheritance pattern for ImmutableDynamicObj</a></h2>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;nuget: Newtonsoft.JSON, 12.0.3&quot;</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 71)" onmouseover="showTip(event, 'fs1', 71)" class="id">Newtonsoft</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 72)" onmouseover="showTip(event, 'fs2', 72)" class="id">Json</span>
@@ -219,7 +217,7 @@
 <p>You can use the <code>ImmutableDynamicObj.print</code> function to look at the dynamic members of the object:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs26', 91)" onmouseover="showTip(event, 'fs26', 91)" class="rt">ImmutableA</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs31', 92)" onmouseover="showTip(event, 'fs31', 92)" class="id">init</span><span class="pn">(</span><span class="n">42</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs27', 93)" onmouseover="showTip(event, 'fs27', 93)" class="rt">ImmutableDynamicObj</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs32', 94)" onmouseover="showTip(event, 'fs32', 94)" class="id">print</span>
 </code></pre>
-<table class="pre"><tr><td><pre><code>?some_prop: 42</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code></code></pre></td></tr></table>
 <p>And this is how the serialized JSON looks like:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs33', 95)" onmouseover="showTip(event, 'fs33', 95)" class="id">immutableASerialized</span> <span class="o">=</span>
     <span onmouseout="hideTip(event, 'fs26', 96)" onmouseover="showTip(event, 'fs26', 96)" class="rt">ImmutableA</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs31', 97)" onmouseover="showTip(event, 'fs31', 97)" class="id">init</span><span class="pn">(</span><span class="n">42</span><span class="pn">)</span>
@@ -268,11 +266,9 @@
 <p>You can use the <code>DynObj.print</code> function to look at the dynamic members of the object:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs23', 133)" onmouseover="showTip(event, 'fs23', 133)" class="id">complex</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 134)" onmouseover="showTip(event, 'fs11', 134)" class="m">DynObj</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 135)" onmouseover="showTip(event, 'fs14', 135)" class="id">print</span>
 </code></pre>
-<table class="pre"><tr><td><pre><code>?prop_a: System.Int32[]
-?prop_b:
-    ?some_prop: 68</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code></code></pre></td></tr></table>
 <p>And this is how the serialized JSON looks like:</p>
-<table class="pre"><tr><td><pre><code>"{"prop_a":[42,1337],"prop_b":{"some_prop":68}}"</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>No value returned by any evaluator</code></pre></td></tr></table>
 
                 </div>
             </div>
@@ -359,7 +355,7 @@ from DynamicObj</div>
   static member add : name:string -&gt; newValue:obj -&gt; object:&#39;c -&gt; &#39;c (requires &#39;c :&gt; ImmutableDynamicObj and default constructor)
   static member addOpt : name:string -&gt; newValue:&#39;c option -&gt; object:&#39;d -&gt; &#39;d (requires &#39;d :&gt; ImmutableDynamicObj and default constructor)
   static member addOptBy : name:string -&gt; newValue:&#39;d option -&gt; f:(&#39;d -&gt; &#39;e) -&gt; object:&#39;f -&gt; &#39;f (requires &#39;f :&gt; ImmutableDynamicObj and default constructor)
-  static member combine : targetObject:#ImmutableDynamicObj -&gt; sourceObject:#ImmutableDynamicObj -&gt; ImmutableDynamicObj
+  static member combineWith : sourceObject:#ImmutableDynamicObj -&gt; targetObject:&#39;a1 -&gt; &#39;a1 (requires &#39;a1 :&gt; ImmutableDynamicObj and default constructor)
   ...<br /><em>&lt;summary&gt;
  Represents an DynamicObj&#39;s counterpart
  with immutability enabled only.

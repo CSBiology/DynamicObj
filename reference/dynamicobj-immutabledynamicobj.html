@@ -814,9 +814,9 @@
             <div>
               <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
                 <p>
-                  <a id="combine">
-                    <a href="#combine">
-                      <code><span>ImmutableDynamicObj.combine&#32;<span>targetObject&#32;sourceObject</span></span></code>
+                  <a id="combineWith">
+                    <a href="#combineWith">
+                      <code><span>ImmutableDynamicObj.combineWith&#32;<span>sourceObject&#32;targetObject</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -824,14 +824,14 @@
               <div class="fsdocs-tip" id="49">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ImmutableDynamicObj.combine&#32;<span>targetObject&#32;sourceObject</span></span></code>
+                  <code><span>ImmutableDynamicObj.combineWith&#32;<span>sourceObject&#32;targetObject</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        targetObject
+                        sourceObject
                       </b>
                       :
                       <code>'a</code>
@@ -839,7 +839,7 @@
                     <br/>
                     <span>
                       <b>
-                        sourceObject
+                        targetObject
                       </b>
                       :
                       <code>'b</code>
@@ -849,7 +849,7 @@
                   <br/>
                   <span>
                     Returns: 
-                    <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobj.html">ImmutableDynamicObj</a></code>
+                    <code>'b</code>
                   </span>
                   <br/>
                 </div>
@@ -858,26 +858,29 @@
           </td>
           <td class="fsdocs-member-xmldoc">
             <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.ImmutableDynamicObj.combine``2```')">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.ImmutableDynamicObj.combineWith``2```')">
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
               </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.ImmutableDynamicObj.combine``2\'/>')">
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.ImmutableDynamicObj.combineWith``2\'/>')">
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/ImmutableDynamicObj.fs#L104-104" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/ImmutableDynamicObj.fs#L105-105" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
                 <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
               </a>
               <p class="fsdocs-summary">
-                
+                Merges the second ImmutableDynamicObj into the first one (that is, keeps the first one's type).
               </p>
             </div>
+            <p class="fsdocs-remarks">
+              Warning: In case of duplicate property names the members of the second object override those of the first.
+            </p>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  targetObject
+                  sourceObject
                 </span>
                 :
                 <code>'a</code>
@@ -885,7 +888,7 @@
               <dd class="fsdocs-param-docs"></dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  sourceObject
+                  targetObject
                 </span>
                 :
                 <code>'b</code>
@@ -897,7 +900,7 @@
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobj.html">ImmutableDynamicObj</a></code>
+                <code>'b</code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -1008,7 +1011,7 @@
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/ImmutableDynamicObj.fs#L142-142" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/ImmutableDynamicObj.fs#L143-143" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
                 <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1081,7 +1084,7 @@
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
                 <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/ImmutableDynamicObj.fs#L161-161" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/ImmutableDynamicObj.fs#L162-162" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
                 <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
               </a>

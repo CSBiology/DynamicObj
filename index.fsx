@@ -57,14 +57,14 @@ type A() =
 You can use the `DynObj.print` function to look at the dynamic members of the object:
 *)
 A.init(42) |> DynObj.print(* output: 
-?some_prop: 42*)
+*)
 (**
 And this is how the serialized JSON looks like:
 *)
 let aSerialized =
     A.init(42)
     |> JsonConvert.SerializeObject(* output: 
-"{"some_prop":42}"*)
+No value returned by any evaluator*)
 (**
 ## Nesting DynamicObjs
 *)
@@ -108,13 +108,11 @@ let complexSerialized =
 You can use the `DynObj.print` function to look at the dynamic members of the object:
 *)
 complex |> DynObj.print(* output: 
-?prop_a: System.Int32[]
-?prop_b:
-    ?some_prop: 68*)
+*)
 (**
 And this is how the serialized JSON looks like:
 ```
-"{"prop_a":[42,1337],"prop_b":{"some_prop":68}}"
+No value returned by any evaluator
 ```
 
 ## Simple inheritance pattern for ImmutableDynamicObj
@@ -148,7 +146,7 @@ type ImmutableA() =
 You can use the `ImmutableDynamicObj.print` function to look at the dynamic members of the object:
 *)
 ImmutableA.init(42) |> ImmutableDynamicObj.print(* output: 
-?some_prop: 42*)
+*)
 (**
 And this is how the serialized JSON looks like:
 *)
@@ -201,13 +199,11 @@ let immutableComplexSerialized =
 You can use the `DynObj.print` function to look at the dynamic members of the object:
 *)
 complex |> DynObj.print(* output: 
-?prop_a: System.Int32[]
-?prop_b:
-    ?some_prop: 68*)
+*)
 (**
 And this is how the serialized JSON looks like:
 ```
-"{"prop_a":[42,1337],"prop_b":{"some_prop":68}}"
+No value returned by any evaluator
 ```
 
 *)
