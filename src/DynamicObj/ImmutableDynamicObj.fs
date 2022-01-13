@@ -100,9 +100,9 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
             | :? 'a as o -> o |> Some
             | _ -> None
 
-    // Merges two ImmutableDynamicObj (Warning: In case of duplicate property names the members of the second object override those of the first)
-    static member combineWith (sourceObject : 'b :> ImmutableDynamicObj) (targetObject : 'a :> ImmutableDynamicObj) =
-        
+    /// <summary>Merges the second ImmutableDynamicObj into the first one (that is, keeps the first one's type).</summary>
+    /// <remarks>Warning: In case of duplicate property names the members of the second object override those of the first.</remarks>
+    static member combineWith (sourceObject : 'b :> ImmutableDynamicObj) (targetObject : 'a :> ImmutableDynamicObj) =        
         let empty = new 'a ()
         let rec loop (targetObject : 'a) (sourceObject : 'b) (propsToCopy: (string*obj) list) (acc : 'a) =
 
