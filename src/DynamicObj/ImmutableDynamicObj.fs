@@ -100,10 +100,11 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
             | :? 'a as o -> o |> Some
             | _ -> None
 
-    // Merges two DynamicObj (Warning: In case of duplicate property names the members of the second object override those of the first)
-    static member combine (targetObject : #ImmutableDynamicObj) (sourceObject : #ImmutableDynamicObj) =
-
-        let rec loop (targetObject : #ImmutableDynamicObj) (sourceObject : #ImmutableDynamicObj) (propsToCopy: (string*obj) list) (acc:ImmutableDynamicObj) =
+    /// <summary>Merges the second ImmutableDynamicObj into the first one (that is, keeps the first one's type).</summary>
+    /// <remarks>Warning: In case of duplicate property names the members of the second object override those of the first.</remarks>
+    static member combineWith (sourceObject : 'b :> ImmutableDynamicObj) (targetObject : 'a :> ImmutableDynamicObj) =        
+        let empty = new 'a ()
+        let rec loop (targetObject : 'a) (sourceObject : 'b) (propsToCopy: (string*obj) list) (acc : 'a) =
 
             let targetUniqueProps =
                 Set.difference 
@@ -125,7 +126,7 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
                         | :? #ImmutableDynamicObj as innerSourceIDO ->
 
                             let propsToCopy = innerSourceIDO.Properties |> Map.toList
-                            let innerCombine = loop innerTargetIDO innerSourceIDO propsToCopy ImmutableDynamicObj.empty
+                            let innerCombine = loop innerTargetIDO innerSourceIDO propsToCopy empty
                             loop targetObject sourceObject rest (acc |> ImmutableDynamicObj.add propName innerCombine)
 
                         | _ -> loop targetObject sourceObject rest (acc |> ImmutableDynamicObj.add propName sourceValue)
@@ -136,8 +137,8 @@ type ImmutableDynamicObj internal (map : Map<string, obj>) =
 
             | [] -> targetUniqueProps |> Seq.fold (fun acc prop -> acc |> ImmutableDynamicObj.add prop targetObject.[prop]) acc
 
-        loop targetObject sourceObject (sourceObject.Properties |> Map.toList) ImmutableDynamicObj.empty
-
+        loop targetObject sourceObject (sourceObject.Properties |> Map.toList) empty
+        
 
     static member format (object : #ImmutableDynamicObj) =
 
