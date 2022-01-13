@@ -9,12 +9,19 @@ F# library supporting Dynamic Objects including inheritance in functional style.
 
 #### Table of contents
 
-- [DynamicObj (mutable)](#DynamicObj-mutable)
-    - [Simple inheritance pattern for DynamicObj](#Simple-inheritance-pattern-for-DynamicObj)
-    - [Nesting DynamicObjs](#Nesting-DynamicObjs)
-- [ImmutableDynamicObj](#ImmutableDynamicObj)
-    - [Simple inheritance pattern for ImmutableDynamicObj](#Simple-inheritance-pattern-for-ImmutableDynamicObj)
-    - [Nesting ImmutableDynamicObjs](#Nesting-ImmutableDynamicObjs)
+* [DynamicObj (mutable)](#DynamicObj-mutable)
+
+  * [Simple inheritance pattern for DynamicObj](#Simple-inheritance-pattern-for-DynamicObj)
+  
+  * [Nesting DynamicObjs](#Nesting-DynamicObjs)
+  
+
+* [ImmutableDynamicObj](#ImmutableDynamicObj)
+
+  * [Simple inheritance pattern for ImmutableDynamicObj](#Simple-inheritance-pattern-for-ImmutableDynamicObj)
+  
+  * [Nesting ImmutableDynamicObjs](#Nesting-ImmutableDynamicObjs)
+  
 
 # DynamicObj (mutable)
 
@@ -27,7 +34,7 @@ Use it for your custom types via inheritance:
 ## Simple inheritance pattern for DynamicObj
 
 *)
-#r "nuget: Newtonsoft.JSON, 12.0.3"
+#r "nuget: Newtonsoft.JSON, 13.0.1"
 open Newtonsoft.Json
 open DynamicObj
 
@@ -55,18 +62,21 @@ type A() =
                 a
 (**
 You can use the `DynObj.print` function to look at the dynamic members of the object:
+
 *)
-A.init(42) |> DynObj.print(* output: 
-*)
+let aformat = A.init(42) |> DynObj.format(* output: 
+"?some_prop: 42"*)
 (**
 And this is how the serialized JSON looks like:
+
 *)
 let aSerialized =
     A.init(42)
     |> JsonConvert.SerializeObject(* output: 
-No value returned by any evaluator*)
+"{"some_prop":42}"*)
 (**
 ## Nesting DynamicObjs
+
 *)
 type MyComplexJSONType() =
     inherit DynamicObj()
@@ -106,13 +116,17 @@ let complexSerialized =
     |> JsonConvert.SerializeObject
 (**
 You can use the `DynObj.print` function to look at the dynamic members of the object:
+
 *)
 complex |> DynObj.print(* output: 
-*)
+?prop_a: System.Int32[]
+?prop_b:
+    ?some_prop: 68*)
 (**
 And this is how the serialized JSON looks like:
+
 ```
-No value returned by any evaluator
+"{"prop_a":[42,1337],"prop_b":{"some_prop":68}}"
 ```
 
 ## Simple inheritance pattern for ImmutableDynamicObj
@@ -144,11 +158,13 @@ type ImmutableA() =
                 |> ImmutableDynamicObj.addOpt "some_prop" SomeProp
 (**
 You can use the `ImmutableDynamicObj.print` function to look at the dynamic members of the object:
+
 *)
 ImmutableA.init(42) |> ImmutableDynamicObj.print(* output: 
-*)
+?some_prop: 42*)
 (**
 And this is how the serialized JSON looks like:
+
 *)
 let immutableASerialized =
     ImmutableA.init(42)
@@ -158,6 +174,7 @@ let immutableASerialized =
 ## Nesting DynamicObjs
 
 `DynamicObj.Operators` adds usefull operators for adding properties:
+
 *)
 open DynamicObj.Operators
 
@@ -197,13 +214,17 @@ let immutableComplexSerialized =
     |> JsonConvert.SerializeObject
 (**
 You can use the `DynObj.print` function to look at the dynamic members of the object:
+
 *)
 complex |> DynObj.print(* output: 
-*)
+?prop_a: System.Int32[]
+?prop_b:
+    ?some_prop: 68*)
 (**
 And this is how the serialized JSON looks like:
+
 ```
-No value returned by any evaluator
+"{"prop_a":[42,1337],"prop_b":{"some_prop":68}}"
 ```
 
 *)
