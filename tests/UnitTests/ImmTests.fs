@@ -255,7 +255,7 @@ let ``combine flat IDOs``() =
         ++ ("source-unique", [|42|])
         ++ ("will-be-overridden", "WAS_OVERRIDDEN =)")
 
-    let combined = ImmutableDynamicObj.combine target source
+    let combined = target |> ImmutableDynamicObj.combineWith source
 
     let expected = 
         ImmutableDynamicObj.empty
@@ -282,7 +282,8 @@ let ``combine nested IDOs``() =
         ++ ("nested-will-be-overridden", "WAS_OVERRIDDEN")
     
     let combined =
-        ImmutableDynamicObj.combine target source
+        target
+        |> ImmutableDynamicObj.combineWith source
     
     let expected = 
         ImmutableDynamicObj.empty
@@ -310,7 +311,7 @@ let ``combine inheritors`` () =
     let another =
         ImmutableDynamicObj ()
         ++ ("bbb", 4)
-    let combined = ImmutableDynamicObj.combine bla another
+    let combined = bla |> ImmutableDynamicObj.combineWith another
     Assert.Equal(combined, Blabla () ++ ("aaa", 5) ++ ("bbb", 4))
     Assert.Equal(4, combined.quack)
     
