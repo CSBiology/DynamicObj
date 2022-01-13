@@ -1,3 +1,6 @@
+### 1.0.1 - 1/13/2022
+Fix up some TFM confusions
+
 ### 1.0.0 - 1/13/2022
 - [Rename IDO combine to `combineWith`, which now also preserves the type of the second IDO.](https://github.com/CSBiology/DynamicObj/pull/12/files) (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
 - Target .NET 6
