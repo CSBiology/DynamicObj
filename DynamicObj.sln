@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{39AA72
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
 		build.fsx.lock = build.fsx.lock
+		.config\dotnet-tools.json = .config\dotnet-tools.json
 		fake.cmd = fake.cmd
 		fake.sh = fake.sh
 	EndProjectSection
@@ -38,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{42AA66FC-8
 		docs\index.fsx = docs\index.fsx
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTests", "tests\CSharpTests\CSharpTests.csproj", "{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpTests", "tests\CSharpTests\CSharpTests.csproj", "{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{988D804A-3A42-4E46-B233-B64F5C22524B}"
 EndProject

@@ -36,7 +36,7 @@ Use it for your custom types via inheritance:
 ## Simple inheritance pattern for DynamicObj
 
 *)
-#r "nuget: Newtonsoft.JSON, 12.0.3"
+#r "nuget: Newtonsoft.JSON, 13.0.1"
 open Newtonsoft.Json
 open DynamicObj
 
@@ -67,9 +67,14 @@ type A() =
 You can use the `DynObj.print` function to look at the dynamic members of the object:
 *)
 
-A.init(42) |> DynObj.print
+let aformat = A.init(42) |> DynObj.format
 
-(***include-output***)
+(*** condition: ipynb ***)
+#if IPYNB
+aformat
+#endif // IPYNB
+
+(***include-value:aformat***)
 
 (**
 And this is how the serialized JSON looks like:
