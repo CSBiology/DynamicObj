@@ -191,3 +191,21 @@ let ``combine nested DOs``() =
         )
 
     Assert.Equal(expected, combined)
+
+[<Fact>]
+let ``test print for issue 14``() = 
+    // https://github.com/CSBiology/DynamicObj/issues/14
+    let outer = DynamicObj()
+    let inner = DynamicObj()
+    inner.SetValue("Level", "Information")
+    inner.SetValue("MessageTemplate","{Method} Request at {Path}")
+    outer.SetValue("serilog", inner)
+
+    let print =
+        try 
+            outer |> DynObj.print
+            true
+        with
+            | e -> false
+
+    Assert.True(print)
