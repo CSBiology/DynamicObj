@@ -7,13 +7,10 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "DynamicObj", "src\DynamicOb
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "UnitTests", "tests\UnitTests\UnitTests.fsproj", "{D009964D-9408-4344-B610-B73F54FE2A86}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{39AA72A1-A628-481B-A2B5-94E2BD163061}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{39AA72A1-A628-481B-A2B5-94E2BD163061}"
 	ProjectSection(SolutionItems) = preProject
-		build.fsx = build.fsx
-		build.fsx.lock = build.fsx.lock
-		.config\dotnet-tools.json = .config\dotnet-tools.json
-		fake.cmd = fake.cmd
-		fake.sh = fake.sh
+		build.cmd = build.cmd
+		build.sh = build.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{F82A6F26-517C-4D5E-BD4F-BFC45B5867FE}"
@@ -25,6 +22,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".proj", ".proj", "{C3CF2F15-81C7-4C11-889E-5FCA2C8A981D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+		global.json = global.json
+		key.snk = key.snk
 		LICENSE = LICENSE
 		README.md = README.md
 		RELEASE_NOTES.md = RELEASE_NOTES.md
@@ -42,6 +42,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpTests", "tests\CSharpTests\CSharpTests.csproj", "{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{988D804A-3A42-4E46-B233-B64F5C22524B}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "build", "build\build.fsproj", "{C73AB951-91F2-4668-B2E0-B58298E5F664}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C73AB951-91F2-4668-B2E0-B58298E5F664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C73AB951-91F2-4668-B2E0-B58298E5F664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C73AB951-91F2-4668-B2E0-B58298E5F664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C73AB951-91F2-4668-B2E0-B58298E5F664}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D009964D-9408-4344-B610-B73F54FE2A86} = {988D804A-3A42-4E46-B233-B64F5C22524B}
 		{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D} = {988D804A-3A42-4E46-B233-B64F5C22524B}
+		{C73AB951-91F2-4668-B2E0-B58298E5F664} = {39AA72A1-A628-481B-A2B5-94E2BD163061}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F5C3597-4524-4A4E-94EC-44857BD0BCEC}

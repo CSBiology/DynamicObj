@@ -11,15 +11,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup .NET 5
+    - name: Setup .NET 6
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.404'
+        dotnet-version: '6.x.x'
+    - name: make script executable
+      run: chmod u+x build.sh
     - name: Restore tools
       run: dotnet tool restore
     - name: Build docs
       working-directory: ./
-      run: dotnet fake build -t builddocs
+      run: ./build.sh builddocs
     - name: deploy
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
