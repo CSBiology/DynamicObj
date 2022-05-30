@@ -1,3 +1,6 @@
+### 2.0.0 - 5/30/2022
+- [Use a strong name for the assembly](https://github.com/CSBiology/DynamicObj/pull/19). This may cause backwards incompatibility on netfx. (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
+
 ### 1.0.1 - 1/13/2022
 Fix up some TFM confusions
 
