@@ -143,9 +143,16 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
 
 module DynamicObj =
 
+    /// <summary>
+    /// Parse a DynamicObj to a json string.
+    /// </summary>
+    /// <param name="dynObj">The DynamicObj to parse to json.</param>
     let toJson (dynObj:DynamicObj) = JsonConvert.SerializeObject(dynObj, new DynamicObjConverter())
 
+    /// <summary>
     /// Read json string to DynamicObj. If json string has an array as root element the array will be set as value with "root" as key.
+    /// </summary>
+    /// <param name="jsonSource">The json string to parse to a DynamicObj.</param>
     let ofJson (jsonSource:string) = JsonConvert.DeserializeObject<DynamicObj>(jsonSource, new DynamicObjConverter())
 
 
@@ -158,8 +165,8 @@ type private DynamicObjConverter() =
         /// But every iteration thereafter we need to progress the reader to the next value, with reader.next().
         let rec readJsonParserFieldToDynObj (result: obj option) (isInit:bool) =
             let addValueToParentList(listObj:obj option) (value:'a) =
-                /// unbox 'a does not seem to provide any benefit. When comparing output to manually created dyn object,
-                /// it still needs to be boxed to be equal.
+                // unbox 'a does not seem to provide any benefit. When comparing output to manually created dyn object,
+                // it still needs to be boxed to be equal.
                 let list = listObj.Value :?> obj seq |> Seq.map (fun x -> unbox<'a> x) |> List.ofSeq
                 let res = (value::list) |> Seq.ofList |> box
                 readJsonParserFieldToDynObj (Some res) false
@@ -182,7 +189,7 @@ type private DynamicObjConverter() =
                 | JsonToken.EndObject -> 
                     result
                 | JsonToken.StartArray ->
-                    /// Need to use Sequence to be able to use any casting to and from: obj seq <-> 'a seq
+                    // Need to use Sequence to be able to use any casting to and from: obj seq <-> 'a seq
                     let list: obj seq = Seq.empty
                     readJsonParserFieldToDynObj (Some <| box list) false
                 | JsonToken.EndArray ->
