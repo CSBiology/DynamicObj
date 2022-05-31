@@ -4,7 +4,6 @@ open BlackFox.Fake
 open Fake.IO
 open Fake.DotNet
 open Fake.IO.Globbing.Operators
-
 open ProjectInfo
 
 let setPrereleaseTag = BuildTask.create "SetPrereleaseTag" [] {
@@ -25,6 +24,19 @@ let clean = BuildTask.create "Clean" [] {
 }
 
 let build = BuildTask.create "Build" [clean] {
-    solutionFile
-    |> DotNet.build id
+    !! "src/**/*.*proj"
+    -- "src/bin/*" 
+    |> Seq.iter (DotNet.build (fun p ->
+            let msBuildParams =
+                {p.MSBuildParams with 
+                    Properties = ([
+                        "AssemblyVersion", assemblyVersion
+                        "AssemblyInformationalVersion", stableVersionTag
+                    ] @ p.MSBuildParams.Properties)
+                }
+            {
+                p with 
+                    MSBuildParams = msBuildParams
+            }
+))
 }

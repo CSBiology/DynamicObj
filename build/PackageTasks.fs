@@ -20,6 +20,8 @@ let pack = BuildTask.create "Pack" [clean; build; runTests] {
                     {p.MSBuildParams with 
                         Properties = ([
                             "Version",stableVersionTag
+                            "AssemblyVersion", assemblyVersion
+                            "AssemblyInformationalVersion", stableVersionTag
                             "PackageReleaseNotes",  (release.Notes |> String.concat "\r\n")
                         ] @ p.MSBuildParams.Properties)
                     }
@@ -42,6 +44,8 @@ let packPrerelease = BuildTask.create "PackPrerelease" [setPrereleaseTag; clean;
                             {p.MSBuildParams with 
                                 Properties = ([
                                     "Version", prereleaseTag
+                                    "AssemblyVersion", assemblyVersion
+                                    "AssemblyInformationalVersion", stableVersionTag
                                     "PackageReleaseNotes",  (release.Notes |> String.toLines )
                                 ] @ p.MSBuildParams.Properties)
                             }
