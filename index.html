@@ -6,7 +6,7 @@
     <title>DynamicObj
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Timo Mühlhaus, F# open source contributors">
+    <meta name="author" content="Timo Mühlhaus, Kevin Schneider, F# open source contributors">
 
     <!--Opengraph properties (https://ogp.me/)-->
     <meta property="og:title" content="DynamicObj
@@ -43,7 +43,7 @@
                         </figure>
                     </a>
                     <h2 class="title has-text-centered has-text-white">DynamicObj</h2>
-                    <h5 class="has-text-centered has-text-white pb-4">Documentation for 1.0.1</h5>
+                    <h5 class="has-text-centered has-text-white pb-4">Documentation for 2.0.0</h5>
                 </div>
                 <div class="content">
                     <!-- BEGIN SEARCH BOX: this adds support for the search box -->
@@ -282,109 +282,109 @@
 <div class="fsdocs-tip" id="fs3">namespace DynamicObj</div>
 <div class="fsdocs-tip" id="fs4">type A =
   inherit DynamicObj
-  new : unit -&gt; A
-  static member init : ?SomeProp:int -&gt; A
-  static member style : ?SomeProp:int -&gt; (A -&gt; A)</div>
+  new: unit -&gt; A
+  static member init: ?SomeProp: int -&gt; A
+  static member style: ?SomeProp: int -&gt; (A -&gt; A)</div>
 <div class="fsdocs-tip" id="fs5">Multiple items<br />namespace DynamicObj<br /><br />--------------------<br />type DynamicObj =
   inherit DynamicObject
-  private new : dict:Dictionary&lt;string,obj&gt; -&gt; DynamicObj + 1 overload
-  member CopyDynamicProperties : unit -&gt; DynamicObj
-  member CopyDynamicPropertiesTo : target:DynamicObj -&gt; unit
-  override Equals : o:obj -&gt; bool
-  override GetDynamicMemberNames : unit -&gt; IEnumerable&lt;string&gt;
-  override GetHashCode : unit -&gt; int
-  member GetProperties : includeInstanceProperties:bool -&gt; seq&lt;KeyValuePair&lt;string,obj&gt;&gt;
-  member Remove : name:string -&gt; bool + 1 overload
-  member SetValue : name:string * value:&#39;a -&gt; unit
-  ...<br /><br />--------------------<br />new : unit -&gt; DynamicObj</div>
-<div class="fsdocs-tip" id="fs6">val SomeProp : int option</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+  new: unit -&gt; DynamicObj
+  member CopyDynamicProperties: unit -&gt; DynamicObj
+  member CopyDynamicPropertiesTo: target: DynamicObj -&gt; unit
+  override Equals: o: obj -&gt; bool
+  override GetDynamicMemberNames: unit -&gt; IEnumerable&lt;string&gt;
+  override GetHashCode: unit -&gt; int
+  member GetProperties: includeInstanceProperties: bool -&gt; seq&lt;KeyValuePair&lt;string,obj&gt;&gt;
+  member Remove: name: string -&gt; bool + 1 overload
+  member SetValue: name: string * value: &#39;a -&gt; unit
+  ...<br /><br />--------------------<br />new: unit -&gt; DynamicObj</div>
+<div class="fsdocs-tip" id="fs6">val SomeProp: int option</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
  primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
  with InvariantCulture settings. Otherwise the operation requires an appropriate
- static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
 type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
   int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
  of measure is erased in compiled code and when values of this type
- are analyzed using reflection. The type is representationally equivalent to 
+ are analyzed using reflection. The type is representationally equivalent to
  &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs8">new : unit -&gt; A</div>
-<div class="fsdocs-tip" id="fs9">static member A.style : ?SomeProp:int -&gt; (A -&gt; A)</div>
-<div class="fsdocs-tip" id="fs10">val a : A</div>
+<div class="fsdocs-tip" id="fs8">new: unit -&gt; A</div>
+<div class="fsdocs-tip" id="fs9">static member A.style: ?SomeProp: int -&gt; (A -&gt; A)</div>
+<div class="fsdocs-tip" id="fs10">val a: A</div>
 <div class="fsdocs-tip" id="fs11">module DynObj
 
 from DynamicObj</div>
-<div class="fsdocs-tip" id="fs12">val setValueOpt : dyn:DynamicObj -&gt; propName:string -&gt; _arg1:&#39;a option -&gt; unit</div>
-<div class="fsdocs-tip" id="fs13">val aformat : string</div>
-<div class="fsdocs-tip" id="fs14">static member A.init : ?SomeProp:int -&gt; A</div>
-<div class="fsdocs-tip" id="fs15">val format : d:DynamicObj -&gt; string</div>
-<div class="fsdocs-tip" id="fs16">val aSerialized : string</div>
+<div class="fsdocs-tip" id="fs12">val setValueOpt: dyn: DynamicObj -&gt; propName: string -&gt; _arg1: &#39;a option -&gt; unit</div>
+<div class="fsdocs-tip" id="fs13">val aformat: string</div>
+<div class="fsdocs-tip" id="fs14">static member A.init: ?SomeProp: int -&gt; A</div>
+<div class="fsdocs-tip" id="fs15">val format: d: DynamicObj -&gt; string</div>
+<div class="fsdocs-tip" id="fs16">val aSerialized: string</div>
 <div class="fsdocs-tip" id="fs17">type JsonConvert =
   static member DeserializeAnonymousType&lt;&#39;T&gt; : value: string * anonymousTypeObject: &#39;T -&gt; &#39;T + 1 overload
-  static member DeserializeObject : value: string -&gt; obj + 7 overloads
-  static member DeserializeXNode : value: string -&gt; XDocument + 3 overloads
-  static member DeserializeXmlNode : value: string -&gt; XmlDocument + 3 overloads
-  static member EnsureDecimalPlace : value: float * text: string -&gt; string + 1 overload
-  static member EnsureFloatFormat : value: float * text: string * floatFormatHandling: FloatFormatHandling * quoteChar: char * nullable: bool -&gt; string
-  static member PopulateObject : value: string * target: obj -&gt; unit + 1 overload
-  static member SerializeObject : value: obj -&gt; string + 7 overloads
-  static member SerializeObjectInternal : value: obj * type: Type * jsonSerializer: JsonSerializer -&gt; string
-  static member SerializeXNode : node: XObject -&gt; string + 2 overloads
+  static member DeserializeObject: value: string -&gt; obj + 7 overloads
+  static member DeserializeXNode: value: string -&gt; XDocument + 3 overloads
+  static member DeserializeXmlNode: value: string -&gt; XmlDocument + 3 overloads
+  static member PopulateObject: value: string * target: obj -&gt; unit + 1 overload
+  static member SerializeObject: value: obj -&gt; string + 7 overloads
+  static member SerializeXNode: node: XObject -&gt; string + 2 overloads
+  static member SerializeXmlNode: node: XmlNode -&gt; string + 2 overloads
+  static member ToString: value: DateTime -&gt; string + 24 overloads
+  static val False: string
   ...<br /><em>&lt;summary&gt;
             Provides methods for converting between .NET types and JSON types.
             &lt;/summary&gt;<br />&lt;example&gt;&lt;code lang=&quot;cs&quot; source=&quot;..\Src\Newtonsoft.Json.Tests\Documentation\SerializationTests.cs&quot; region=&quot;SerializeObject&quot; title=&quot;Serializing and Deserializing JSON with JsonConvert&quot; /&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs18">JsonConvert.SerializeObject(value: obj) : string<br />JsonConvert.SerializeObject(value: obj, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, [&lt;System.ParamArray&gt;] converters: JsonConverter []) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, type: System.Type, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting, [&lt;System.ParamArray&gt;] converters: JsonConverter []) : string<br />JsonConvert.SerializeObject(value: obj, type: System.Type, formatting: Formatting, settings: JsonSerializerSettings) : string</div>
+<div class="fsdocs-tip" id="fs18">JsonConvert.SerializeObject(value: obj) : string<br />JsonConvert.SerializeObject(value: obj, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, [&lt;System.ParamArray&gt;] converters: JsonConverter[]) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, ``type`` : System.Type, settings: JsonSerializerSettings) : string<br />JsonConvert.SerializeObject(value: obj, formatting: Formatting, [&lt;System.ParamArray&gt;] converters: JsonConverter[]) : string<br />JsonConvert.SerializeObject(value: obj, ``type`` : System.Type, formatting: Formatting, settings: JsonSerializerSettings) : string</div>
 <div class="fsdocs-tip" id="fs19">Multiple items<br />type MyComplexJSONType =
   inherit DynamicObj
-  new : unit -&gt; MyComplexJSONType
-  static member init : ?PropA:int [] * ?PropB:A -&gt; MyComplexJSONType
-  static member style : ?PropA:int [] * ?PropB:A -&gt; (MyComplexJSONType -&gt; MyComplexJSONType)<br /><br />--------------------<br />new : unit -&gt; MyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs20">val PropA : int [] option</div>
-<div class="fsdocs-tip" id="fs21">val PropB : A option</div>
-<div class="fsdocs-tip" id="fs22">static member MyComplexJSONType.style : ?PropA:int [] * ?PropB:A -&gt; (MyComplexJSONType -&gt; MyComplexJSONType)</div>
-<div class="fsdocs-tip" id="fs23">val t : MyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs24">val complex : MyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs25">static member MyComplexJSONType.init : ?PropA:int [] * ?PropB:A -&gt; MyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs26">val complexSerialized : string</div>
-<div class="fsdocs-tip" id="fs27">val print : d:DynamicObj -&gt; unit</div>
+  new: unit -&gt; MyComplexJSONType
+  static member init: ?PropA: int[] * ?PropB: A -&gt; MyComplexJSONType
+  static member style: ?PropA: int[] * ?PropB: A -&gt; (MyComplexJSONType -&gt; MyComplexJSONType)<br /><br />--------------------<br />new: unit -&gt; MyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs20">val PropA: int[] option</div>
+<div class="fsdocs-tip" id="fs21">val PropB: A option</div>
+<div class="fsdocs-tip" id="fs22">static member MyComplexJSONType.style: ?PropA: int[] * ?PropB: A -&gt; (MyComplexJSONType -&gt; MyComplexJSONType)</div>
+<div class="fsdocs-tip" id="fs23">val t: MyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs24">val complex: MyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs25">static member MyComplexJSONType.init: ?PropA: int[] * ?PropB: A -&gt; MyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs26">val complexSerialized: string</div>
+<div class="fsdocs-tip" id="fs27">val print: d: DynamicObj -&gt; unit</div>
 <div class="fsdocs-tip" id="fs28">Multiple items<br />type ImmutableA =
   inherit ImmutableDynamicObj
-  new : unit -&gt; ImmutableA
-  static member init : ?SomeProp:int -&gt; ImmutableA
-  static member style : ?SomeProp:int -&gt; (ImmutableA -&gt; ImmutableA)<br /><br />--------------------<br />new : unit -&gt; ImmutableA</div>
+  new: unit -&gt; ImmutableA
+  static member init: ?SomeProp: int -&gt; ImmutableA
+  static member style: ?SomeProp: int -&gt; (ImmutableA -&gt; ImmutableA)<br /><br />--------------------<br />new: unit -&gt; ImmutableA</div>
 <div class="fsdocs-tip" id="fs29">Multiple items<br />type ImmutableDynamicObj =
-  private new : map:Map&lt;string,obj&gt; -&gt; ImmutableDynamicObj + 1 overload
-  override Equals : o:obj -&gt; bool
-  override GetHashCode : unit -&gt; int
-  member private ToDictionary : unit -&gt; Dictionary&lt;string,obj&gt;
-  member TryGetTypedValue : name:string -&gt; &#39;a option
-  member TryGetValue : name:string -&gt; obj option
-  static member add : name:string -&gt; newValue:obj -&gt; object:&#39;c -&gt; &#39;c (requires &#39;c :&gt; ImmutableDynamicObj and default constructor)
-  static member addOpt : name:string -&gt; newValue:&#39;c option -&gt; object:&#39;d -&gt; &#39;d (requires &#39;d :&gt; ImmutableDynamicObj and default constructor)
-  static member addOptBy : name:string -&gt; newValue:&#39;d option -&gt; f:(&#39;d -&gt; &#39;e) -&gt; object:&#39;f -&gt; &#39;f (requires &#39;f :&gt; ImmutableDynamicObj and default constructor)
-  static member combineWith : sourceObject:#ImmutableDynamicObj -&gt; targetObject:&#39;a1 -&gt; &#39;a1 (requires &#39;a1 :&gt; ImmutableDynamicObj and default constructor)
+  new: unit -&gt; ImmutableDynamicObj
+  override Equals: o: obj -&gt; bool
+  override GetHashCode: unit -&gt; int
+  member TryGetTypedValue: name: string -&gt; &#39;a option
+  member TryGetValue: name: string -&gt; obj option
+  static member add: name: string -&gt; newValue: obj -&gt; object: &#39;c -&gt; &#39;c (requires &#39;c :&gt; ImmutableDynamicObj and default constructor)
+  static member addOpt: name: string -&gt; newValue: &#39;c option -&gt; object: &#39;d -&gt; &#39;d (requires &#39;d :&gt; ImmutableDynamicObj and default constructor)
+  static member addOptBy: name: string -&gt; newValue: &#39;d option -&gt; f: (&#39;d -&gt; &#39;e) -&gt; object: &#39;f -&gt; &#39;f (requires &#39;f :&gt; ImmutableDynamicObj and default constructor)
+  static member combineWith: sourceObject: #ImmutableDynamicObj -&gt; targetObject: &#39;a1 -&gt; &#39;a1 (requires &#39;a1 :&gt; ImmutableDynamicObj and default constructor)
+  static member format: object: #ImmutableDynamicObj -&gt; string
   ...<br /><em>&lt;summary&gt;
  Represents an DynamicObj&#39;s counterpart
  with immutability enabled only.
-&lt;/summary&gt;</em><br /><br />--------------------<br />new : unit -&gt; ImmutableDynamicObj</div>
-<div class="fsdocs-tip" id="fs30">static member ImmutableA.style : ?SomeProp:int -&gt; (ImmutableA -&gt; ImmutableA)</div>
-<div class="fsdocs-tip" id="fs31">val a : ImmutableA</div>
-<div class="fsdocs-tip" id="fs32">static member ImmutableDynamicObj.addOpt : name:string -&gt; newValue:&#39;c option -&gt; object:&#39;d -&gt; &#39;d (requires &#39;d :&gt; ImmutableDynamicObj and default constructor)</div>
-<div class="fsdocs-tip" id="fs33">static member ImmutableA.init : ?SomeProp:int -&gt; ImmutableA</div>
-<div class="fsdocs-tip" id="fs34">static member ImmutableDynamicObj.print : object:#ImmutableDynamicObj -&gt; unit</div>
-<div class="fsdocs-tip" id="fs35">val immutableASerialized : string</div>
+&lt;/summary&gt;</em><br /><br />--------------------<br />new: unit -&gt; ImmutableDynamicObj</div>
+<div class="fsdocs-tip" id="fs30">static member ImmutableA.style: ?SomeProp: int -&gt; (ImmutableA -&gt; ImmutableA)</div>
+<div class="fsdocs-tip" id="fs31">val a: ImmutableA</div>
+<div class="fsdocs-tip" id="fs32">static member ImmutableDynamicObj.addOpt: name: string -&gt; newValue: &#39;c option -&gt; object: &#39;d -&gt; &#39;d (requires &#39;d :&gt; ImmutableDynamicObj and default constructor)</div>
+<div class="fsdocs-tip" id="fs33">static member ImmutableA.init: ?SomeProp: int -&gt; ImmutableA</div>
+<div class="fsdocs-tip" id="fs34">static member ImmutableDynamicObj.print: object: #ImmutableDynamicObj -&gt; unit</div>
+<div class="fsdocs-tip" id="fs35">val immutableASerialized: string</div>
 <div class="fsdocs-tip" id="fs36">module Operators
 
 from DynamicObj</div>
 <div class="fsdocs-tip" id="fs37">Multiple items<br />type ImmutableMyComplexJSONType =
   inherit ImmutableDynamicObj
-  new : unit -&gt; ImmutableMyComplexJSONType
-  static member init : ?PropA:int [] * ?PropB:A -&gt; ImmutableMyComplexJSONType
-  static member style : ?PropA:int [] * ?PropB:A -&gt; (ImmutableMyComplexJSONType -&gt; ImmutableMyComplexJSONType)<br /><br />--------------------<br />new : unit -&gt; ImmutableMyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs38">static member ImmutableMyComplexJSONType.style : ?PropA:int [] * ?PropB:A -&gt; (ImmutableMyComplexJSONType -&gt; ImmutableMyComplexJSONType)</div>
-<div class="fsdocs-tip" id="fs39">val t : ImmutableMyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs40">val immutableComplex : ImmutableMyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs41">static member ImmutableMyComplexJSONType.init : ?PropA:int [] * ?PropB:A -&gt; ImmutableMyComplexJSONType</div>
-<div class="fsdocs-tip" id="fs42">val immutableComplexSerialized : string</div>
+  new: unit -&gt; ImmutableMyComplexJSONType
+  static member init: ?PropA: int[] * ?PropB: A -&gt; ImmutableMyComplexJSONType
+  static member style: ?PropA: int[] * ?PropB: A -&gt; (ImmutableMyComplexJSONType -&gt; ImmutableMyComplexJSONType)<br /><br />--------------------<br />new: unit -&gt; ImmutableMyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs38">static member ImmutableMyComplexJSONType.style: ?PropA: int[] * ?PropB: A -&gt; (ImmutableMyComplexJSONType -&gt; ImmutableMyComplexJSONType)</div>
+<div class="fsdocs-tip" id="fs39">val t: ImmutableMyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs40">val immutableComplex: ImmutableMyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs41">static member ImmutableMyComplexJSONType.init: ?PropA: int[] * ?PropB: A -&gt; ImmutableMyComplexJSONType</div>
+<div class="fsdocs-tip" id="fs42">val immutableComplexSerialized: string</div>
 
     </div>
 
