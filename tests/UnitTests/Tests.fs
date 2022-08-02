@@ -193,7 +193,7 @@ let ``combine nested DOs``() =
     Assert.Equal(expected, combined)
 
 [<Fact>]
-let ``test print for issue 14``() = 
+let ``Test nested prints (GitHub issue 14)``() = 
     // https://github.com/CSBiology/DynamicObj/issues/14
     let outer = DynamicObj()
     let inner = DynamicObj()
@@ -209,3 +209,117 @@ let ``test print for issue 14``() =
             | e -> false
 
     Assert.True(print)
+
+
+// DynamicObj of json tests
+
+let private minifyJson(json:string) = 
+    json
+        .Replace(" ","")
+        // if i add this line, my tests break
+        // .Replace("\n",System.Environment.NewLine)
+        .Replace(System.Environment.NewLine,"") 
+
+[<Fact>]
+let ``Test json string to DynamicObj compared to DynamicObj created by hand.``() = 
+    let simpleJson = """{"firstLevel": "test"}"""
+    let dynObjOfJson = DynamicObj.ofJson(simpleJson)
+    let dynObj = 
+        let l = DynamicObj()
+        l.SetValue("firstLevel", "test")
+        l
+
+    Assert.Equal(dynObj,dynObjOfJson)
+
+[<Fact>]
+let ``Test json string to DynamicObj and back to json``() =
+    let simpleJson = minifyJson """{"firstLevel": "test"}"""
+    let dynObjOfJson = DynamicObj.ofJson(simpleJson)
+    let revertToJson = DynamicObj.toJson(dynObjOfJson)
+
+    Assert.Equal(simpleJson, revertToJson)
+
+[<Fact>]
+let ``Test nested simple json object``() =
+    let json = minifyJson """{"firstLevel": {"name": "firstLevelName"}}"""
+    let dynObjOfJson = DynamicObj.ofJson json
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json, revertToJson)
+
+[<Fact>]
+let ``Test json number types``() =
+    let json = minifyJson """{"depth": 2, "floatingBoat": 3.51}"""
+    let dynObjOfJson = DynamicObj.ofJson json 
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json, revertToJson)
+
+[<Fact>]
+let ``Test 3-level nested json object with string and number json types``() =
+    let json = minifyJson """{"firstLevel": {"name": "firstLevelName","type": "object","firstLevelProperties": {"depth": 2,"floatingBoat": 3.51}}}"""
+    let dynObjOfJson = DynamicObj.ofJson(json)
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json,revertToJson)
+
+[<Fact>]
+let ``Test Integer, float, bool, null json types``() =
+    let json = minifyJson """{"depth": 2,"floatingBoat": 3.51,"isTrue?": true,"isNull?": null}"""
+    let dynObjOfJson = DynamicObj.ofJson json 
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json,revertToJson)
+
+[<Fact>]
+let ``Test basic json array type``() =
+    let json = minifyJson """{"myfirstArray": ["value1", "value2", "value3"]}"""
+    let dynObjOfJson = DynamicObj.ofJson json
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json,revertToJson)
+
+[<Fact>]
+let ``Compare 'ofJson' to DynamicObj created by hand, for json array type``() =
+    let simpleJson = """{"myfirstArray": ["value1", "value2", "value3"]}"""
+    let dynObjOfJson = DynamicObj.ofJson(simpleJson)
+    let dynObj = 
+        let l = DynamicObj()
+        /// Sadly i am not able to avoid converting to 'obj list'.
+        let list: obj list = ["value1"; "value2"; "value3"]
+        l.SetValue("myfirstArray", list)
+        l
+
+    Assert.Equal(dynObjOfJson, dynObj)
+    
+[<Fact>]
+let ``Test nested json array with object elements``() =
+    let json = minifyJson """{"myfirstArray": [{"name": "John","age": 30},{"name": "Mary","age": 25},{"name": "Peter","age": 20}]}"""
+    let dynObjOfJson = DynamicObj.ofJson json
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json,revertToJson)
+
+[<Fact>]
+let ``Test root level json array with object elements``() =
+    let json = minifyJson """[{"name": "John","age": 30},{"name": "Mary","age": 25},{"name": "Peter","age": 20}]"""
+    let dynObjOfJson = DynamicObj.ofJson json
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json,revertToJson)
+
+[<Fact>]
+let ``Test empty json objects``() =
+    let json = minifyJson """{"name": {}}"""
+    let dynObjOfJson = DynamicObj.ofJson json
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json,revertToJson)
+
+[<Fact>]
+let ``Root json array with simple elements``() =
+    let json = minifyJson """["Ford", "BMW", "Fiat"]"""
+    let dynObjOfJson = DynamicObj.ofJson json
+    let revertToJson = DynamicObj.toJson dynObjOfJson
+
+    Assert.Equal(json,revertToJson)
