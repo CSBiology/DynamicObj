@@ -14,6 +14,7 @@ let buildDocs = BuildTask.create "BuildDocs" [build] {
 }
 
 let buildDocsPrerelease = BuildTask.create "BuildDocsPrerelease" [setPrereleaseTag; build] {
+    let prereleaseTag = PreReleaseFlag.toNugetTag release.SemVer prereleaseSuffix prereleaseSuffixNumber
     printfn "building docs with prerelease version %s" prereleaseTag
     runDotNet 
         (sprintf "fsdocs build --eval --clean --properties Configuration=Release --parameters fsdocs-package-version %s" prereleaseTag)
@@ -28,6 +29,7 @@ let watchDocs = BuildTask.create "WatchDocs" [build] {
 }
 
 let watchDocsPrerelease = BuildTask.create "WatchDocsPrerelease" [setPrereleaseTag; build] {
+    let prereleaseTag = PreReleaseFlag.toNugetTag release.SemVer prereleaseSuffix prereleaseSuffixNumber
     printfn "watching docs with prerelease version %s" prereleaseTag
     runDotNet 
         (sprintf "fsdocs watch --eval --clean --properties Configuration=Release --parameters fsdocs-package-version %s" prereleaseTag)
