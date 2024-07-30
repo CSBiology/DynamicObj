@@ -13,7 +13,7 @@ do()
 /// Represents an DynamicObj's counterpart
 /// with immutability enabled only.
 [<JsonConverter(typeof<ImmutableDynamicObjJsonConverter>)>]
-type ImmutableDynamicObj internal (map : Map<string, obj>) = 
+type ImmutableDynamicObj (map : Map<string, obj>) = 
     
     let mutable properties = map
     

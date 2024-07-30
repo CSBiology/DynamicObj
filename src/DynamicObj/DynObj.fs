@@ -79,16 +79,14 @@ module DynObj =
         | None -> ()
     
     let tryGetValue (dyn:DynamicObj) name = 
-        match dyn.TryGetMember name with
-        | true,value ->  Some value
-        | _ -> None
+        dyn.TryGetValue name
 
     let remove (dyn:DynamicObj) propName = 
         DynamicObj.Remove (dyn, propName) |> ignore
 
     let format (d:DynamicObj) =
     
-        let members = d.GetDynamicMemberNames() |> Seq.cast<string> |> List.ofSeq
+        let members = d.GetDynamicMemberNames() |> List.ofSeq
 
         let rec loop (object:DynamicObj) (identationLevel:int) (membersLeft:string list) (acc:string list) =
             let ident = [for i in 0 .. identationLevel-1 do yield "    "] |> String.concat ""

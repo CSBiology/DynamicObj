@@ -1,16 +1,26 @@
 ﻿namespace DynamicObj
 
-open System.Dynamic
+//open System.Dynamic
 open System.Collections.Generic
+open Fable.Core
 
+module Fable = 
+
+    [<Emit("$0[$1]")>]
+    let getProperty (o:obj) (propName:string) : 'a =
+        jsNative
+
+    [<Emit("Object.getOwnPropertyNames($0)")>]
+    let getPropertyNames (o:obj) : string seq = 
+        jsNative
 
 type DynamicObj internal (dict:Dictionary<string, obj>) = 
     
-    inherit DynamicObject () 
-    
+
+
     let properties = dict//new Dictionary<string, obj>()
 
-    member private this.Properties = properties
+    member this.Properties = properties
 
     /// 
     new () = DynamicObj(new Dictionary<string, obj>())
@@ -38,19 +48,9 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
     member this.SetValue (name,value) = // private
         // first check to see if there's a native property to set
 
-        match ReflectionUtils.tryGetPropertyInfo this name with
-        | Some property ->
-            try 
-                // let t = property.ReflectedType
-                // t.InvokeMember(name,Reflection.BindingFlags.SetProperty,null,this,[|value|]) |> ignore
-
-                //let tmp = Convert.ChangeType(this, property.ReflectedType)
-                //let tmp = downcast this : (typeof<t.GetType()>)
-                property.SetValue(this, value, null)
-            with
-            | :? System.ArgumentException -> raise <| System.ArgumentException("Readonly property - Property set method not found.")
-            | :? System.NullReferenceException -> raise <| System.NullReferenceException()
-        
+        match ReflectionUtils.trySetPropertyValue this name value with
+        | Some _ ->
+            ()
         | None -> 
             // Next check the Properties collection for member
             match properties.TryGetValue name with            
@@ -64,19 +64,13 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
         | false -> properties.Remove(name)
 
 
-    override this.TryGetMember(binder:GetMemberBinder,result:obj byref ) =     
-        match this.TryGetValue binder.Name with
-        | Some value -> result <- value; true
-        | None -> false
-
-
-    override this.TrySetMember(binder:SetMemberBinder, value:obj) =        
-        this.SetValue(binder.Name,value)
-        true
-
     /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
     /// Properties are returned as a key value pair of the member names and the boxed values
     member this.GetProperties includeInstanceProperties =        
+        #if FABLE_COMPILER
+        Fable.getPropertyNames this
+        |> Seq.map (fun name ->  new KeyValuePair<string, obj>(name, this.TryGetValue name))
+        #else
         seq [
             if includeInstanceProperties then                
                 for prop in ReflectionUtils.getPublicProperties (this.GetType()) -> 
@@ -84,11 +78,11 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
             for key in properties.Keys ->
                new KeyValuePair<string, obj>(key, properties.[key]);
         ]
+        #endif
 
-    /// Returns both instance and dynamic member names.
-    /// Important to return both so JSON serialization with Json.NET works.
-    override this.GetDynamicMemberNames() =
-        this.GetProperties(true) |> Seq.map (fun pair -> pair.Key)
+    member this.GetDynamicMemberNames() =
+        properties.Keys
+        |> seq
 
     /// Operator to access a dynamic member by name
     static member (?) (lookup:#DynamicObj,name:string) =
@@ -100,18 +94,18 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
     static member (?<-) (lookup:#DynamicObj,name:string,value:'v) =
         lookup.SetValue (name,value)
     
-    /// Copies all dynamic members of the DynamicObj to the target DynamicObj.
-    member this.CopyDynamicPropertiesTo(target:#DynamicObj) =
-        this.GetProperties(false)
-        |> Seq.iter (fun kv ->
-            target?(kv.Key) <- kv.Value
-        )
+    ///// Copies all dynamic members of the DynamicObj to the target DynamicObj.
+    //member this.CopyDynamicPropertiesTo(target:#DynamicObj) =
+    //    this.GetProperties(false)
+    //    |> Seq.iter (fun kv ->
+    //        target?(kv.Key) <- kv.Value
+    //    )
 
-    /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
-    member this.CopyDynamicProperties() =
-        let target = DynamicObj()
-        this.CopyDynamicPropertiesTo(target)
-        target
+    ///// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    //member this.CopyDynamicProperties() =
+    //    let target = DynamicObj()
+    //    this.CopyDynamicPropertiesTo(target)
+    //    target
 
     static member GetValue (lookup:DynamicObj,name) =
         lookup.TryGetValue(name).Value

@@ -24,15 +24,17 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="ReflectionUtils.fs" />
-    <Compile Include="DynamicObj.fs" />
-    <Compile Include="DynObj.fs" />
-    <None Include="Playground.fsx" />
+    <Compile Include="ImmutableDynamicObj.fs" />
+    <Compile Include="Operators.fs" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Fable.Core" Version="4.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicObj\DynamicObj.fsproj" />
   </ItemGroup>
 
   

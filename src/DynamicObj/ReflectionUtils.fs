@@ -1,10 +1,14 @@
 ﻿namespace DynamicObj
 
+open Fable.Core
+
 module ReflectionUtils =
     
     open System
     open System.Reflection
     
+    #if !FABLE_COMPILER
+
     // Gets public properties including interface propterties
     let getPublicProperties (t:Type) =
         [|
@@ -41,8 +45,18 @@ module ReflectionUtils =
         getPublicProperties (o.GetType())
         |> Array.tryFind (fun n -> n.Name = propName)        
 
+    #endif
+
     /// Sets property value using reflection
+    #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+    [<Emit("$0[$1] = $2")>]
+    #endif
     let trySetPropertyValue (o:obj) (propName:string) (value:obj) =
+        
+        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+        jsNative
+        #else
+
         match tryGetPropertyInfo o propName with 
         | Some property ->
             try 
@@ -52,9 +66,16 @@ module ReflectionUtils =
             | :? System.ArgumentException -> None
             | :? System.NullReferenceException -> None
         | None -> None
+        #endif
 
     /// Gets property value as option using reflection
+    #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+    [<Emit("$0[$1]")>]
+    #endif
     let tryGetPropertyValue (o:obj) (propName:string) =
+        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+        jsNative
+        #else
         try 
             match tryGetPropertyInfo o propName with 
             | Some v -> Some (v.GetValue(o,null))
@@ -62,37 +83,44 @@ module ReflectionUtils =
         with 
         | :? System.Reflection.TargetInvocationException -> None
         | :? System.NullReferenceException -> None
+        #endif
     
-    /// Gets property value as 'a option using reflection. Cast to 'a
-    let tryGetPropertyValueAs<'a> (o:obj) (propName:string) =
-        try 
-            match tryGetPropertyInfo o propName with 
-            | Some v -> Some (v.GetValue(o,null) :?> 'a)
-            | None -> None
-        with 
-        | :? System.Reflection.TargetInvocationException -> None
-        | :? System.NullReferenceException -> None
+    ///// Gets property value as 'a option using reflection. Cast to 'a
+    //let tryGetPropertyValueAs<'a> (o:obj) (propName:string) =
+    //    try 
+    //        tryGetPropertyValue o propName
+    //        |> Option.map (fun v -> v :?> 'a)
+            
+    //    with 
+    //    | :? System.Reflection.TargetInvocationException -> None
+    //    | :? System.NullReferenceException -> None
 
-    /// Updates property value by given function
-    let tryUpdatePropertyValueFromName (o:obj) (propName:string) (f: 'a -> 'a) =
-        let v = optBuildApply f (tryGetPropertyValueAs<'a> o propName)
-        trySetPropertyValue o propName v 
-        //o
+    ///// Updates property value by given function
+    //let tryUpdatePropertyValueFromName (o:obj) (propName:string) (f: 'a -> 'a) =
+    //    let v = optBuildApply f (tryGetPropertyValueAs<'a> o propName)
+    //    trySetPropertyValue o propName v 
+    //    //o
 
-    /// Updates property value by given function
-    let tryUpdatePropertyValue (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) =
-        let propName = tryGetPropertyName expr
-        let g = (tryGetPropertyValueAs<'a> o propName.Value)
-        let v = optBuildApply f g
-        trySetPropertyValue o propName.Value v 
-        //o
+    ///// Updates property value by given function
+    //let tryUpdatePropertyValue (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) =
+    //    let propName = tryGetPropertyName expr
+    //    let g = (tryGetPropertyValueAs<'a> o propName.Value)
+    //    let v = optBuildApply f g
+    //    trySetPropertyValue o propName.Value v 
+    //    //o
 
-    let updatePropertyValueAndIgnore (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) = 
-        tryUpdatePropertyValue o expr f |> ignore
+    //let updatePropertyValueAndIgnore (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) = 
+    //    tryUpdatePropertyValue o expr f |> ignore
 
 
-    /// Removes property 
-    let removeProperty (o:obj) (propName:string) =        
+    /// Sets property value using reflection
+    #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+    [<Emit("$0[$1] = null")>]
+    #endif
+    let removeProperty (o:obj) (propName:string) =     
+        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+        jsNative
+        #else
         match tryGetPropertyInfo o propName with         
         | Some property ->
             try 
@@ -102,4 +130,4 @@ module ReflectionUtils =
             | :? System.ArgumentException -> false
             | :? System.NullReferenceException -> false
         | None -> false
-
+        #endif
