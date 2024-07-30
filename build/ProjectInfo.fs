@@ -9,8 +9,9 @@ let summary = "F# library supporting Dynamic Objects including inheritance in fu
 
 let testProjects = 
     [
-        "tests/UnitTests/UnitTests.fsproj"
-        "tests/CSharpTests/CSharpTests.csproj"
+        "tests/DynamicObject.Tests"
+        "tests/DynamicObject.Immutable.Tests"
+        "tests/CSharpTests"
     ]
 
 let solutionFile  = $"{project}.sln"
