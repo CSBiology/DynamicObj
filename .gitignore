@@ -195,3 +195,5 @@ docsrc/tools/FSharp.Formatting.svclog
 
 .ionide
 pkg
+/tests/**/js
+/tests/**/py

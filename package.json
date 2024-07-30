@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "scripts": {
+    "mocha": "mocha"  
+  },
+  "dependencies": {
+    "fable-library": "^1.1.1"
+  },
+  "devDependencies": {
+    "mkdirp": "3.0.1",
+    "mocha": "^10.2.0"
+  }
+}
