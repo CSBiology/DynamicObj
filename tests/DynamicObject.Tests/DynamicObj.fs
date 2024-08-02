@@ -15,13 +15,20 @@ let tests_set = testList "Set" [
         Expect.equal a b "Values should be equal"
         Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
 
-
     testCase "Different Strings" <| fun _ ->
         let a = DynamicObj ()
         a.SetValue("aaa", 1212)
         let b = DynamicObj ()
         b.SetValue("aaa", 5)
         Expect.notEqual a b "Values should not be equal"
+
+    testCase "String only on one" <| fun _ ->
+        let a = DynamicObj ()
+        let b = DynamicObj ()
+        b.SetValue("aaa", 5)
+
+        Expect.notEqual a b "Values should not be equal"
+        Expect.notEqual b a "Values should not be equal (Reversed equality)"
 
     testCase "Same list" <| fun _ ->
         let a' = DynamicObj ()
@@ -71,7 +78,7 @@ let tests_set = testList "Set" [
 
 let tests_remove = testList "Remove" [
   
-    testCase "Nested Remove only on one" <| fun _ ->
+    testCase "Nested Remove Non-Existing" <| fun _ ->
         let a = DynamicObj ()
         let b = DynamicObj ()
 
@@ -84,8 +91,27 @@ let tests_remove = testList "Remove" [
         a.Remove "quack!" |> ignore
         b.SetValue("aaa", b')
 
+        Expect.equal a b "Values should be unequal"
+        Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be unequal"
+
+    testCase "Nested Remove only on one" <| fun _ ->
+        let a = DynamicObj ()
+        let b = DynamicObj ()
+
+        let a' = DynamicObj ()
+        let b' = DynamicObj ()
+        a'.SetValue("quack!", [1; 2; 3])
+        b'.SetValue("quack!", [1; 2; 3])
+
+        a.SetValue("aaa", a')
+        a'.Remove "quack!" |> ignore
+        b.SetValue("aaa", b')
+
         Expect.notEqual a b "Values should be unequal"
         Expect.notEqual (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be unequal"
+
+    testCase "Pypecto unequality" <| fun _ ->
+        Expect.notEqual 1 2 "hello"
 
     testCase "Nested Remove on both" <| fun _ ->
         let a = DynamicObj ()
@@ -131,16 +157,19 @@ let tests_combine = testList "Combine" [
 
     testCase "Combine flat DOs" <| fun _ ->
         let target = DynamicObj()
+
         target.SetValue("target-unique", [42])
         target.SetValue("will-be-overridden", "WAS_NOT_OVERRIDDEN!")
 
         let source = DynamicObj()
+
         source.SetValue("source-unique", [42; 32])
         source.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
 
         let combined = DynObj.combine target source
 
         let expected = DynamicObj()
+
         expected.SetValue("target-unique", [42])
         expected.SetValue("source-unique", [42; 32])
         expected.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
@@ -158,7 +187,7 @@ let tests_combine = testList "Combine" [
         something2BeOverriden.SetValue("inner","NOT_OVERRIDDEN")
         target.SetValue("nested-will-be-combined", something2BeCombined)
         target.SetValue("nested-will-be-overridden", something2BeOverriden)
-
+    
         let source = DynamicObj()
 
         source.SetValue("source-unique", 69)
@@ -167,9 +196,9 @@ let tests_combine = testList "Combine" [
         alsoSomething2BeCombined.SetValue("inner_combined","Complete")
         source.SetValue("nested-will-be-combined", alsoSomething2BeCombined)
         source.SetValue("nested-will-be-overridden", "WAS_OVERRIDDEN")
-
+    
         let combined = DynObj.combine target source
-
+    
         let expected = DynamicObj()
 
         expected.SetValue("source-unique", 69)

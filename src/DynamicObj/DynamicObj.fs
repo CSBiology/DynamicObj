@@ -79,6 +79,7 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
                new KeyValuePair<string, obj>(key, properties.[key]);
         ]
         #endif
+        |> Seq.filter (fun kv -> kv.Key.ToLower() <> "properties")
 
     member this.GetDynamicMemberNames() =
         properties.Keys
@@ -116,16 +117,11 @@ type DynamicObj internal (dict:Dictionary<string, obj>) =
     override this.Equals o =
         match o with
         | :? DynamicObj as other ->
-            let subdictOf (super : Dictionary<'a, 'b>) (dict : Dictionary<'a, 'b>) =
-                dict
-                |> Seq.forall (fun pair ->
-                    let (contains, value) = super.TryGetValue pair.Key
-                    contains && value.Equals(pair.Value))
-            subdictOf this.Properties other.Properties
+            this.GetHashCode() = other.GetHashCode()
         | _ -> false
 
     override this.GetHashCode () =
-        this.Properties
+        this.GetProperties(true)
         |> List.ofSeq
         |> List.sortBy (fun pair -> pair.Key)
         |> List.map (fun pair -> struct (pair.Key, pair.Value))
