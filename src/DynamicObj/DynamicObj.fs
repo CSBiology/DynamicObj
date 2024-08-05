@@ -86,9 +86,9 @@ type DynamicObj() =
         #endif
         |> Seq.filter (fun kv -> kv.Key.ToLower() <> "properties")
 
-    member this.GetDynamicMemberNames() =
-        properties.Keys
-        |> seq
+    member this.GetPropertyNames(includeInstanceProperties) =
+        this.GetProperties(includeInstanceProperties)
+        |> Seq.map (fun kv -> kv.Key)
 
     /// Operator to access a dynamic member by name
     static member (?) (lookup:#DynamicObj,name:string) =

@@ -174,7 +174,7 @@ let tests_formatString = testList "FormatString" [
         let foo = DynamicObj()
         foo.SetValue("bar", [1;2;3;4])
         let expected = "?bar: [1; 2; 3; ... ]"
-        Expect.equal expected (foo |> DynObj.format) "Format string 1 failed"
+        Expect.equal (foo |> DynObj.format) expected "Format string 1 failed"
 
     testCase "Format string 2" <| fun _ ->
         let foo = DynamicObj()
@@ -183,7 +183,7 @@ let tests_formatString = testList "FormatString" [
         inner.SetValue("bar", "baz")
         foo.SetValue("foo", inner)
         let expected = $"""?corgi: corgi{Environment.NewLine}?foo:{Environment.NewLine}    ?bar: baz"""
-        Expect.equal expected (foo |> DynObj.format) "Format string 2 failed"
+        Expect.equal (foo |> DynObj.format) expected "Format string 2 failed"
 
 ]
 
