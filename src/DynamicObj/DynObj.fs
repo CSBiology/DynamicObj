@@ -5,26 +5,26 @@ open System.Collections.Generic
 module DynObj =
 
     /// New DynamicObj of Dictionary
-    let ofDict dict = DynamicObj(dict)
+    let ofDict dict = DynamicObj.fromDict dict
 
     /// New DynamicObj of a sequence of key value
     let ofSeq kv = 
         let dict = new Dictionary<string, obj>()
         kv |> Seq.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj(dict)
+        DynamicObj.fromDict dict
 
     /// New DynamicObj of a list of key value
     let ofList kv = 
         let dict = new Dictionary<string, obj>()
         kv |> List.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj(dict)
+        DynamicObj.fromDict dict
 
 
     /// New DynamicObj of an array of key value
     let ofArray kv = 
         let dict = new Dictionary<string, obj>()
         kv |> Array.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj(dict)
+        DynamicObj.fromDict dict
 
     
     // 

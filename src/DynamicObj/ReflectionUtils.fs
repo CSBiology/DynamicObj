@@ -115,7 +115,7 @@ module ReflectionUtils =
 
     /// Sets property value using reflection
     #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-    [<Emit("$0[$1] = null")>]
+    [<Emit("delete $0[$1]")>]
     #endif
     let removeProperty (o:obj) (propName:string) =     
         #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT

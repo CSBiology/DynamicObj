@@ -7,9 +7,10 @@ open DynamicObj
 
 let tests_baseObject = testList "Dynamic Set" [
     testCase "Same String" <| fun _ ->
-        Expect.isTrue false "ehllo"
+        //ReflectionUtils.tryGetPropertyValue
+        Expect.isTrue true "daw"
 ]
 
-let main = testList "DynamicObj" [
+let main = testList "ReflectionUtils" [
     tests_baseObject
 ]

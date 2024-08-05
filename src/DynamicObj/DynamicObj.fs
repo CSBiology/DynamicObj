@@ -14,16 +14,21 @@ module Fable =
     let getPropertyNames (o:obj) : string seq = 
         jsNative
 
-type DynamicObj internal (dict:Dictionary<string, obj>) = 
+[<AttachMembers>]
+type DynamicObj() = 
     
 
 
-    let properties = dict//new Dictionary<string, obj>()
+    let mutable properties = new Dictionary<string, obj>()
 
-    member this.Properties = properties
+    member this.Properties
+        with get() = properties
+        and internal set(value) = properties <- value           
 
-    /// 
-    new () = DynamicObj(new Dictionary<string, obj>())
+    static member fromDict dict = 
+        let obj = DynamicObj()
+        obj.Properties <- dict
+        obj
 
     /// Gets property value
     member this.TryGetValue name = 

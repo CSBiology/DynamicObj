@@ -78,6 +78,41 @@ let tests_set = testList "Set" [
 
 let tests_remove = testList "Remove" [
   
+    testCase "Remove" <| fun _ ->
+        let a = DynamicObj ()
+        let b = DynamicObj ()
+
+        a.SetValue("quack!", "hello")
+
+        a.Remove "quack!" |> ignore
+
+        Expect.equal a b "Values should be equal"
+        Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
+
+    testCase "Remove Non-Existing" <| fun _ ->
+        let a = DynamicObj ()
+        let b = DynamicObj ()
+
+        a.SetValue("quack!", "hello")
+        b.SetValue("quack!", "hello")
+
+        a.Remove "quecky!" |> ignore
+
+        Expect.equal a b "Values should be equal"
+        Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
+
+    testCase "Remove only on one" <| fun _ ->
+        let a = DynamicObj ()
+        let b = DynamicObj ()
+
+        a.SetValue("quack!", "hello")
+        b.SetValue("quack!", "hello")
+
+        a.Remove "quack!" |> ignore
+
+        Expect.notEqual a b "Values should be unequal"
+        Expect.notEqual (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be unequal"
+
     testCase "Nested Remove Non-Existing" <| fun _ ->
         let a = DynamicObj ()
         let b = DynamicObj ()
@@ -91,8 +126,8 @@ let tests_remove = testList "Remove" [
         a.Remove "quack!" |> ignore
         b.SetValue("aaa", b')
 
-        Expect.equal a b "Values should be unequal"
-        Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be unequal"
+        Expect.equal a b "Values should be equal"
+        Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
 
     testCase "Nested Remove only on one" <| fun _ ->
         let a = DynamicObj ()
