@@ -145,9 +145,6 @@ let tests_remove = testList "Remove" [
         Expect.notEqual a b "Values should be unequal"
         Expect.notEqual (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be unequal"
 
-    testCase "Pypecto unequality" <| fun _ ->
-        Expect.notEqual 1 2 "hello"
-
     testCase "Nested Remove on both" <| fun _ ->
         let a = DynamicObj ()
         let b = DynamicObj ()
