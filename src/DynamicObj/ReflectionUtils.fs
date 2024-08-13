@@ -2,20 +2,122 @@
 
 open Fable.Core
 
+module FableJS =
+    
+    module PropertyDescriptor = 
+        
+        [<Emit("$0[$1]")>]
+        let tryGetPropertyValue (o:obj) (propName:string) : obj option =
+            jsNative
+
+        let tryGetIsWritable (o:obj) : bool option =
+            tryGetPropertyValue o "writable"
+            |> Option.map (fun v -> v :?> bool)
+
+        let containsGetter (o:obj) : bool =
+            match tryGetPropertyValue o "get" with
+            | Some _ -> true
+            | None -> false
+
+        let containsSetter (o:obj) : bool =
+            match tryGetPropertyValue o "set" with
+            | Some _ -> true
+            | None -> false
+
+        let isWritable (o:obj) : bool =
+            match tryGetIsWritable o with
+            | Some v -> v
+            | None -> containsSetter o
+
+    [<Emit("Object.getOwnPropertyNames($0)")>]
+    let getOwnPropertyNames (o:obj) : string [] =
+        jsNative
+
+    [<Emit("Object.getPrototype($0)")>]
+    let getPrototype (o:obj) : obj =
+        jsNative
+
+    let getStaticPropertyNames (o:obj) =
+        getPrototype o
+        |> getOwnPropertyNames
+
+    [<Emit("$0[$1] = $2")>]
+    let setPropertyValue (o:obj) (propName:string) (value:obj) =    
+        jsNative
+
+    let createSetter (propName:string) =
+        fun (o:obj) (value:obj) -> 
+         setPropertyValue o propName value
+
+    [<Emit("$0[$1]")>]
+    let getPropertyValue (o:obj) (propName:string) =
+        jsNative
+
+    let createGetter (propName:string) =
+        fun (o:obj) -> 
+            getPropertyValue o propName
+
+    [<Emit("Object.getOwnPropertyDescriptor($0, $1)")>]
+    let getPropertyDescriptor (o:obj) (propName:string) =
+        jsNative
+
+    let getStaticPropertyHelpers (o:obj) : PropertyHelper [] =
+        getStaticPropertyNames o
+        |> Array.map (fun n ->
+            let pd = getPropertyDescriptor o n
+            let isWritable = PropertyDescriptor.isWritable pd
+            {
+                Name = n
+                IsStatic = true
+                IsDynamic = false
+                IsMutable = isWritable
+                IsImmutable = not isWritable
+                GetValue = createGetter n
+                SetValue = createSetter n
+            }        
+        )
+
+    let getDynamicPropertyHelpers (o:obj) : PropertyHelper [] =
+        getOwnPropertyNames o
+        |> Array.map (fun n ->
+            let pd = getPropertyDescriptor o n
+            let isWritable = PropertyDescriptor.isWritable pd
+            {
+                Name = n
+                IsStatic = false
+                IsDynamic = true
+                IsMutable = isWritable
+                IsImmutable = not isWritable
+                GetValue = createGetter n
+                SetValue = createSetter n
+            }        
+        )
+
+    [<Emit("Object.getOwnPropertyNames($0)")>]
+    let getStaticProperties (o:obj) =
+        jsNative
+
 module ReflectionUtils =
     
     open System
     open System.Reflection
     
-    #if !FABLE_COMPILER
-
-    // Gets public properties including interface propterties
-    let getPublicProperties (t:Type) =
+    // Gets public, static properties including interface propterties
+    let getStaticProperties (o : obj) =
+        let t = o.GetType()
         [|
             for propInfo in t.GetProperties() -> propInfo
             for i in t.GetInterfaces() do yield! i.GetProperties()
         |]
+        |> Array.map PropertyHelper.fromPropertyInfo
 
+        /// Try to get the PropertyInfo by name using reflection
+    let tryGetPropertyInfo (o:obj) (propName:string) =
+        getStaticProperties (o)
+        |> Array.tryFind (fun n -> n.Name = propName)        
+
+
+    #if !FABLE_COMPILER
     /// Creates an instance of the Object according to applyStyle and applies the function..
     let buildApply (applyStyle:'a -> 'a) =
         let instance =
@@ -40,11 +142,6 @@ module ReflectionUtils =
         | Microsoft.FSharp.Quotations.Patterns.PropertyGet (_,pInfo,_) -> Some pInfo.Name
         | _ -> None
 
-    /// Try to get the PropertyInfo by name using reflection
-    let tryGetPropertyInfo (o:obj) (propName:string) =
-        getPublicProperties (o.GetType())
-        |> Array.tryFind (fun n -> n.Name = propName)        
-
     #endif
 
     /// Sets property value using reflection
@@ -60,7 +157,7 @@ module ReflectionUtils =
         match tryGetPropertyInfo o propName with 
         | Some property ->
             try 
-                property.SetValue(o, value, null)
+                property.SetValue o value
                 Some o
             with
             | :? System.ArgumentException -> None
@@ -78,7 +175,7 @@ module ReflectionUtils =
         #else
         try 
             match tryGetPropertyInfo o propName with 
-            | Some v -> Some (v.GetValue(o,null))
+            | Some v -> Some (v.GetValue(o))
             | None -> None
         with 
         | :? System.Reflection.TargetInvocationException -> None
@@ -124,7 +221,7 @@ module ReflectionUtils =
         match tryGetPropertyInfo o propName with         
         | Some property ->
             try 
-                property.SetValue(o, null, null)
+                property.SetValue o null
                 true
             with
             | :? System.ArgumentException -> false

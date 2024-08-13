@@ -52,10 +52,13 @@ type DynamicObj() =
     /// Sets property value, creating a new property if none exists
     member this.SetValue (name,value) = // private
         // first check to see if there's a native property to set
-
-        match ReflectionUtils.trySetPropertyValue this name value with
-        | Some _ ->
-            ()
+        
+        match ReflectionUtils.tryGetPropertyInfo this name  with
+        | Some pi ->
+            if pi.IsMutable then
+                pi.SetValue this value
+            else
+                failwith $"Cannot set value for static, immutable property \"{name}\""
         | None -> 
             // Next check the Properties collection for member
             match properties.TryGetValue name with            
@@ -78,8 +81,8 @@ type DynamicObj() =
         #else
         seq [
             if includeInstanceProperties then                
-                for prop in ReflectionUtils.getPublicProperties (this.GetType()) -> 
-                    new KeyValuePair<string, obj>(prop.Name, prop.GetValue(this, null))
+                for prop in ReflectionUtils.getStaticProperties (this) -> 
+                    new KeyValuePair<string, obj>(prop.Name, prop.GetValue(this))
             for key in properties.Keys ->
                new KeyValuePair<string, obj>(key, properties.[key]);
         ]

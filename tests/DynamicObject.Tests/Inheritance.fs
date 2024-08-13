@@ -16,6 +16,21 @@ type Person(name : string) =
         with get() = name
         and set(value) = name <- value
 
+[<AttachMembers>]
+type PersonImmutable(name : string) =
+    
+    inherit DynamicObj()
+
+    member this.Name
+        with get() = name
+
+[<AttachMembers>]
+type Animal(name : string) =
+    
+    inherit DynamicObj()
+
+    member val Name = name with get, set
+
 let tests_set = testList "Set" [
 
     testCase "Static Property" <| fun _ ->
@@ -23,6 +38,11 @@ let tests_set = testList "Set" [
         p.SetValue("Name", "Jane")
         Expect.equal p.Name "Jane" "Static property should be set"
         Expect.equal (p.TryGetValue("Name")) (Some "Jane") "Static property should be retreivable dynamically"
+
+    testCase "Static Immutable Property" <| fun _ ->
+        let p = PersonImmutable("John")
+        let f = fun () -> p.SetValue("Name", "Jane")
+        Expect.throws f "Cannot set static property"
 
     testCase "Dynamic Property" <| fun _ ->
         let p = Person("John")
@@ -64,7 +84,7 @@ let tests_remove = testList "Remove" [
 
         p.Remove("Name") |> ignore
        
-        Expect.equal p.Name null "Static property should not be removed"
+        Expect.equal p.Name null "Static property should "
 
 
     testCase "Remove Dynamic" <| fun _ ->
