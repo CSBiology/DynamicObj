@@ -30,7 +30,7 @@ let tests_set = testList "Set" [
         Expect.notEqual a b "Values should not be equal"
         Expect.notEqual b a "Values should not be equal (Reversed equality)"
 
-    testCase "Same list" <| fun _ ->
+    testCase "Same lists different keys" <| fun _ ->
         let a' = DynamicObj ()
         let b' = DynamicObj ()
         a'.SetValue("quack!", [1; 2; 3])
@@ -169,17 +169,20 @@ let tests_formatString = testList "FormatString" [
 
     testCase "Format string 1" <| fun _ ->
         let foo = DynamicObj()
-        foo.SetValue("bar", [1;2;3;4])
-        let expected = "?bar: [1; 2; 3; ... ]"
+        let list = [1;2;3;4]
+        foo.SetValue("bar", list)
+        let expected = $"?bar: {list}"
         Expect.equal (foo |> DynObj.format) expected "Format string 1 failed"
 
     testCase "Format string 2" <| fun _ ->
         let foo = DynamicObj()
-        foo.SetValue("corgi", "corgi")
+        let corgi = "corgi"
+        foo.SetValue("corgi", corgi)
         let inner = DynamicObj()
-        inner.SetValue("bar", "baz")
+        let baz = "baz"
+        inner.SetValue("bar", baz)
         foo.SetValue("foo", inner)
-        let expected = $"""?corgi: corgi{Environment.NewLine}?foo:{Environment.NewLine}    ?bar: baz"""
+        let expected = $"""?corgi: {corgi}{Environment.NewLine}?foo:{Environment.NewLine}    ?bar: {baz}"""
         Expect.equal (foo |> DynObj.format) expected "Format string 2 failed"
 
 ]

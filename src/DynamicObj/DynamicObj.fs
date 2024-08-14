@@ -60,10 +60,14 @@ type DynamicObj() =
             else
                 failwith $"Cannot set value for static, immutable property \"{name}\""
         | None -> 
+            #if FABLE_COMPILER 
+            FableJS.setPropertyValue this name value
+            #else
             // Next check the Properties collection for member
             match properties.TryGetValue name with            
             | true,_ -> properties.[name] <- value
             | _      -> properties.Add(name,value)
+            #endif
 
     member this.Remove name =
         match ReflectionUtils.removeStaticProperty this name with
@@ -74,10 +78,16 @@ type DynamicObj() =
 
     /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
     /// Properties are returned as a key value pair of the member names and the boxed values
-    member this.GetProperties includeInstanceProperties =        
-        #if FABLE_COMPILER
-        Fable.getPropertyNames this
-        |> Seq.map (fun name ->  new KeyValuePair<string, obj>(name, this.TryGetValue name))
+    member this.GetProperties includeInstanceProperties : seq<KeyValuePair<string,obj>> =    
+        #if FABLE_COMPILER           
+        FableJS.getPropertyHelpers this
+        |> Seq.choose (fun pd ->  
+            if includeInstanceProperties || pd.IsDynamic then
+                new KeyValuePair<string, obj>(pd.Name, pd.GetValue this)
+                |> Some
+            else
+                None  
+        )
         #else
         seq [
             if includeInstanceProperties then                
@@ -130,7 +140,9 @@ type DynamicObj() =
 
     override this.GetHashCode () =
         this.GetProperties(true)
-        |> List.ofSeq
-        |> List.sortBy (fun pair -> pair.Key)
-        |> List.map (fun pair -> struct (pair.Key, pair.Value))
-        |> fun l -> l.GetHashCode()
+        |> Seq.map (fun kv ->
+            kv
+        )
+        |> Seq.sortBy (fun pair -> pair.Key)
+        |> HashCodes.boxHashKeyValSeq
+        |> fun x -> x :?> int

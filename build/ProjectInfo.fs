@@ -7,6 +7,11 @@ let project = "DynamicObj"
 
 let summary = "F# library supporting Dynamic Objects including inheritance in functional style."
 
+let fableTestProjects =
+    [
+        "tests/DynamicObject.Tests"
+    ]
+
 let testProjects = 
     [
         "tests/DynamicObject.Tests"

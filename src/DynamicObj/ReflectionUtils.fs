@@ -29,6 +29,15 @@ module FableJS =
             | Some v -> v
             | None -> containsSetter o
 
+        [<Emit("typeof $0 === 'function'")>]
+        let valueIsFunction (o:obj) : bool =
+            jsNative
+
+        let isFunction (o:obj) : bool =
+            match tryGetPropertyValue o "value" with
+            | Some v -> valueIsFunction v
+            | None -> false
+
     [<Emit("Object.getOwnPropertyNames($0)")>]
     let getOwnPropertyNames (o:obj) : string [] =
         jsNative
@@ -83,41 +92,54 @@ module FableJS =
 
     let getStaticPropertyHelpers (o:obj) : PropertyHelper [] =
         getStaticPropertyNames o
-        |> Array.map (fun n ->
+        |> Array.choose (fun n ->
             let pd = getStaticPropertyDescriptor o n
-            let isWritable = PropertyDescriptor.isWritable pd
-            {
-                Name = n
-                IsStatic = true
-                IsDynamic = false
-                IsMutable = isWritable
-                IsImmutable = not isWritable
-                GetValue = createGetter n
-                SetValue = createSetter n
-                RemoveValue = createRemover n true
-            }        
+            if PropertyDescriptor.isFunction pd then 
+                None
+            else 
+                let isWritable = PropertyDescriptor.isWritable pd
+                {
+                    Name = n
+                    IsStatic = true
+                    IsDynamic = false
+                    IsMutable = isWritable
+                    IsImmutable = not isWritable
+                    GetValue = createGetter n
+                    SetValue = createSetter n
+                    RemoveValue = createRemover n true
+                }     
+                |> Some
         )
 
     let getDynamicPropertyHelpers (o:obj) : PropertyHelper [] =
         getOwnPropertyNames o
-        |> Array.map (fun n ->
+        |> Array.choose (fun n ->
             let pd = getPropertyDescriptor o n
-            let isWritable = PropertyDescriptor.isWritable pd
-            {
-                Name = n
-                IsStatic = false
-                IsDynamic = true
-                IsMutable = isWritable
-                IsImmutable = not isWritable
-                GetValue = createGetter n
-                SetValue = createSetter n
-                RemoveValue = createRemover n false
-            }        
+            if PropertyDescriptor.isFunction pd then 
+                None
+            else 
+                let isWritable = PropertyDescriptor.isWritable pd
+                {
+                    Name = n
+                    IsStatic = false
+                    IsDynamic = true
+                    IsMutable = isWritable
+                    IsImmutable = not isWritable
+                    GetValue = createGetter n
+                    SetValue = createSetter n
+                    RemoveValue = createRemover n false
+                }        
+                |> Some
         )
 
-    [<Emit("Object.getOwnPropertyNames($0)")>]
-    let getStaticProperties (o:obj) =
-        jsNative
+    let getPropertyHelpers (o:obj) =
+        getStaticPropertyHelpers o
+        |> Array.append (getDynamicPropertyHelpers o)
+
+    let getPropertyNames (o:obj) =
+        getPropertyHelpers o 
+        |> Array.map (fun h -> h.Name)
+
 
 
 module ReflectionUtils =
@@ -140,7 +162,11 @@ module ReflectionUtils =
 
     /// Try to get the PropertyInfo by name using reflection
     let tryGetPropertyInfo (o:obj) (propName:string) =
+        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+        FableJS.getPropertyHelpers o
+        #else
         getStaticProperties (o)
+        #endif
         |> Array.tryFind (fun n -> n.Name = propName)        
 
     let trySetPropertyValue (o:obj) (propName:string) (value:obj) =
