@@ -66,7 +66,7 @@ type DynamicObj() =
             | _      -> properties.Add(name,value)
 
     member this.Remove name =
-        match ReflectionUtils.removeProperty this name with
+        match ReflectionUtils.removeStaticProperty this name with
         | true -> true
         // Maybe in map
         | false -> properties.Remove(name)
@@ -133,4 +133,4 @@ type DynamicObj() =
         |> List.ofSeq
         |> List.sortBy (fun pair -> pair.Key)
         |> List.map (fun pair -> struct (pair.Key, pair.Value))
-        |> (fun l -> l.GetHashCode())
+        |> fun l -> l.GetHashCode()

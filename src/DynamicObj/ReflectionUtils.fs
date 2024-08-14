@@ -33,13 +33,14 @@ module FableJS =
     let getOwnPropertyNames (o:obj) : string [] =
         jsNative
 
-    [<Emit("Object.getPrototype($0)")>]
+    [<Emit("Object.getPrototypeOf($0)")>]
     let getPrototype (o:obj) : obj =
         jsNative
 
     let getStaticPropertyNames (o:obj) =
         getPrototype o
         |> getOwnPropertyNames
+        |> Array.filter (fun n -> n <> "constructor")
 
     [<Emit("$0[$1] = $2")>]
     let setPropertyValue (o:obj) (propName:string) (value:obj) =    
@@ -48,6 +49,22 @@ module FableJS =
     let createSetter (propName:string) =
         fun (o:obj) (value:obj) -> 
          setPropertyValue o propName value
+
+    let removeStaticPropertyValue (o:obj) (propName:string) =
+        setPropertyValue o propName null
+
+    [<Emit("delete $0[$1]")>]
+    let deleteDynamicPropertyValue (o:obj) (propName:string) =
+        jsNative
+
+    let createRemover (propName:string) (isStatic : bool) =
+        if isStatic then
+            fun (o:obj) -> 
+                removeStaticPropertyValue o propName
+        else
+            fun (o:obj) -> 
+                deleteDynamicPropertyValue o propName
+
 
     [<Emit("$0[$1]")>]
     let getPropertyValue (o:obj) (propName:string) =
@@ -61,10 +78,13 @@ module FableJS =
     let getPropertyDescriptor (o:obj) (propName:string) =
         jsNative
 
+    let getStaticPropertyDescriptor (o:obj) (propName:string) =
+        getPropertyDescriptor (getPrototype o) propName
+
     let getStaticPropertyHelpers (o:obj) : PropertyHelper [] =
         getStaticPropertyNames o
         |> Array.map (fun n ->
-            let pd = getPropertyDescriptor o n
+            let pd = getStaticPropertyDescriptor o n
             let isWritable = PropertyDescriptor.isWritable pd
             {
                 Name = n
@@ -74,6 +94,7 @@ module FableJS =
                 IsImmutable = not isWritable
                 GetValue = createGetter n
                 SetValue = createSetter n
+                RemoveValue = createRemover n true
             }        
         )
 
@@ -90,12 +111,14 @@ module FableJS =
                 IsImmutable = not isWritable
                 GetValue = createGetter n
                 SetValue = createSetter n
+                RemoveValue = createRemover n false
             }        
         )
 
     [<Emit("Object.getOwnPropertyNames($0)")>]
     let getStaticProperties (o:obj) =
         jsNative
+
 
 module ReflectionUtils =
     
@@ -104,17 +127,58 @@ module ReflectionUtils =
     
     // Gets public, static properties including interface propterties
     let getStaticProperties (o : obj) =
-        let t = o.GetType()
-        [|
-            for propInfo in t.GetProperties() -> propInfo
-            for i in t.GetInterfaces() do yield! i.GetProperties()
-        |]
-        |> Array.map PropertyHelper.fromPropertyInfo
+        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+            FableJS.getStaticPropertyHelpers o
+        #else
+            let t = o.GetType()
+            [| 
+                for propInfo in t.GetProperties() -> propInfo
+                for i in t.GetInterfaces() do yield! i.GetProperties()
+            |]
+            |> Array.map PropertyHelper.fromPropertyInfo
+        #endif    
 
-        /// Try to get the PropertyInfo by name using reflection
+    /// Try to get the PropertyInfo by name using reflection
     let tryGetPropertyInfo (o:obj) (propName:string) =
         getStaticProperties (o)
         |> Array.tryFind (fun n -> n.Name = propName)        
+
+    let trySetPropertyValue (o:obj) (propName:string) (value:obj) =
+        match tryGetPropertyInfo o propName with 
+        | Some property when property.IsMutable ->
+            property.SetValue o value
+            true
+        | _ -> false
+
+    let tryGetPropertyValue (o:obj) (propName:string) =
+        try 
+            match tryGetPropertyInfo o propName with 
+            | Some v -> Some (v.GetValue(o))
+            | None -> None
+        with 
+        | :? System.Reflection.TargetInvocationException -> None
+        | :? System.NullReferenceException -> None
+    
+
+    /// Gets property value as 'a option using reflection. Cast to 'a
+    let tryGetPropertyValueAs<'a> (o:obj) (propName:string) =
+        try 
+            tryGetPropertyValue o propName
+            |> Option.map (fun v -> v :?> 'a)
+            
+        with 
+        | :? System.Reflection.TargetInvocationException -> None
+        | :? System.NullReferenceException -> None
+
+    let removeStaticProperty (o:obj) (propName:string) =     
+
+        match tryGetPropertyInfo o propName with         
+        | Some property when property.IsMutable ->
+            property.RemoveValue(o)
+            true
+        | _ -> false
+
+
 
 
     #if !FABLE_COMPILER
@@ -142,89 +206,21 @@ module ReflectionUtils =
         | Microsoft.FSharp.Quotations.Patterns.PropertyGet (_,pInfo,_) -> Some pInfo.Name
         | _ -> None
 
+    /// Updates property value by given function
+    let tryUpdatePropertyValueFromName (o:obj) (propName:string) (f: 'a -> 'a) =
+        let v = optBuildApply f (tryGetPropertyValueAs<'a> o propName)
+        trySetPropertyValue o propName v 
+        //o
+
+    /// Updates property value by given function
+    let tryUpdatePropertyValue (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) =
+        let propName = tryGetPropertyName expr
+        let g = (tryGetPropertyValueAs<'a> o propName.Value)
+        let v = optBuildApply f g
+        trySetPropertyValue o propName.Value v 
+        //o
+
+    let updatePropertyValueAndIgnore (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) = 
+        tryUpdatePropertyValue o expr f |> ignore
+
     #endif
-
-    /// Sets property value using reflection
-    #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-    [<Emit("$0[$1] = $2")>]
-    #endif
-    let trySetPropertyValue (o:obj) (propName:string) (value:obj) =
-        
-        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-        jsNative
-        #else
-
-        match tryGetPropertyInfo o propName with 
-        | Some property ->
-            try 
-                property.SetValue o value
-                Some o
-            with
-            | :? System.ArgumentException -> None
-            | :? System.NullReferenceException -> None
-        | None -> None
-        #endif
-
-    /// Gets property value as option using reflection
-    #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-    [<Emit("$0[$1]")>]
-    #endif
-    let tryGetPropertyValue (o:obj) (propName:string) =
-        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-        jsNative
-        #else
-        try 
-            match tryGetPropertyInfo o propName with 
-            | Some v -> Some (v.GetValue(o))
-            | None -> None
-        with 
-        | :? System.Reflection.TargetInvocationException -> None
-        | :? System.NullReferenceException -> None
-        #endif
-    
-    ///// Gets property value as 'a option using reflection. Cast to 'a
-    //let tryGetPropertyValueAs<'a> (o:obj) (propName:string) =
-    //    try 
-    //        tryGetPropertyValue o propName
-    //        |> Option.map (fun v -> v :?> 'a)
-            
-    //    with 
-    //    | :? System.Reflection.TargetInvocationException -> None
-    //    | :? System.NullReferenceException -> None
-
-    ///// Updates property value by given function
-    //let tryUpdatePropertyValueFromName (o:obj) (propName:string) (f: 'a -> 'a) =
-    //    let v = optBuildApply f (tryGetPropertyValueAs<'a> o propName)
-    //    trySetPropertyValue o propName v 
-    //    //o
-
-    ///// Updates property value by given function
-    //let tryUpdatePropertyValue (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) =
-    //    let propName = tryGetPropertyName expr
-    //    let g = (tryGetPropertyValueAs<'a> o propName.Value)
-    //    let v = optBuildApply f g
-    //    trySetPropertyValue o propName.Value v 
-    //    //o
-
-    //let updatePropertyValueAndIgnore (o:obj) (expr : Microsoft.FSharp.Quotations.Expr) (f: 'a -> 'a) = 
-    //    tryUpdatePropertyValue o expr f |> ignore
-
-
-    /// Sets property value using reflection
-    #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-    [<Emit("delete $0[$1]")>]
-    #endif
-    let removeProperty (o:obj) (propName:string) =     
-        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-        jsNative
-        #else
-        match tryGetPropertyInfo o propName with         
-        | Some property ->
-            try 
-                property.SetValue o null
-                true
-            with
-            | :? System.ArgumentException -> false
-            | :? System.NullReferenceException -> false
-        | None -> false
-        #endif
