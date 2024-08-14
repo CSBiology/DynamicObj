@@ -76,6 +76,31 @@ type DynamicObj() =
         | false -> properties.Remove(name)
 
 
+    member this.GetPropertyHelpers (includeInstanceProperties) =
+        #if FABLE_COMPILER           
+        FableJS.getPropertyHelpers this
+        |> Seq.filter (fun pd ->  
+            includeInstanceProperties || pd.IsDynamic
+        )
+        #else
+        seq [
+            if includeInstanceProperties then                
+                yield! ReflectionUtils.getStaticProperties (this)
+            for key in properties.Keys ->
+                {
+                    Name = key
+                    IsStatic = false
+                    IsDynamic = true
+                    IsMutable = true
+                    IsImmutable = false
+                    GetValue = fun o -> properties.[key]
+                    SetValue = fun o v -> properties.[key] <- v
+                    RemoveValue = fun o -> properties.Remove(key) |> ignore
+                }
+        ]
+        #endif
+        |> Seq.filter (fun p -> p.Name.ToLower() <> "properties")
+
     /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
     /// Properties are returned as a key value pair of the member names and the boxed values
     member this.GetProperties includeInstanceProperties : seq<KeyValuePair<string,obj>> =    

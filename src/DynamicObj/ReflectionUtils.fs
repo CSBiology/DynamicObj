@@ -111,11 +111,16 @@ module FableJS =
                 |> Some
         )
 
+    let transpiledPropertyRegex = "^[a-zA-Z]+@[0-9]+$"
+
+    let isTranspiledPropertyHelper (propertyName : string) =
+        System.Text.RegularExpressions.Regex.IsMatch(propertyName, transpiledPropertyRegex)
+
     let getDynamicPropertyHelpers (o:obj) : PropertyHelper [] =
         getOwnPropertyNames o
         |> Array.choose (fun n ->
             let pd = getPropertyDescriptor o n
-            if PropertyDescriptor.isFunction pd then 
+            if PropertyDescriptor.isFunction pd || isTranspiledPropertyHelper n then 
                 None
             else 
                 let isWritable = PropertyDescriptor.isWritable pd
@@ -133,8 +138,8 @@ module FableJS =
         )
 
     let getPropertyHelpers (o:obj) =
-        getStaticPropertyHelpers o
-        |> Array.append (getDynamicPropertyHelpers o)
+        getDynamicPropertyHelpers o
+        |> Array.append (getStaticPropertyHelpers o)
 
     let getPropertyNames (o:obj) =
         getPropertyHelpers o 

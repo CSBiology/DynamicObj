@@ -86,22 +86,23 @@ module DynObj =
 
     let format (d:DynamicObj) =
     
-        let members = d.GetPropertyNames(true) |> List.ofSeq
+        let members = d.GetPropertyHelpers(true) |> List.ofSeq
 
-        let rec loop (object:DynamicObj) (identationLevel:int) (membersLeft:string list) (acc:string list) =
-            let ident = [for i in 0 .. identationLevel-1 do yield "    "] |> String.concat ""
+        let rec loop (object:DynamicObj) (indentationLevel:int) (membersLeft:PropertyHelper list) (acc:string list) =
+            let indent = [for i in 0 .. indentationLevel-1 do yield "    "] |> String.concat ""
             match membersLeft with
             | [] -> acc |> List.rev |> String.concat System.Environment.NewLine
             | m::rest ->
-                let item = object.TryGetValue m
+                let item = m.GetValue object
+                let dynamicIndicator = if m.IsDynamic then "?" else ""
+                let name = m.Name
                 match item with
-                | Some (:? DynamicObj as item) -> 
-                    let innerMembers = item.GetPropertyNames(true) |> Seq.cast<string> |> List.ofSeq
-                    let innerPrint = (loop item (identationLevel + 1) innerMembers [])
-                    loop object identationLevel rest ($"{ident}?{m}:{System.Environment.NewLine}{innerPrint}" :: acc)
-                | Some item -> 
-                    loop object identationLevel rest ($"{ident}?{m}: {item}"::acc)
-                | None -> loop object identationLevel rest acc
+                | :? DynamicObj as item -> 
+                    let innerMembers = item.GetPropertyHelpers(true) |> List.ofSeq
+                    let innerPrint = (loop item (indentationLevel + 1) innerMembers [])              
+                    loop object indentationLevel rest ($"{indent}{dynamicIndicator}{name}:{System.Environment.NewLine}{innerPrint}" :: acc)
+                | item -> 
+                    loop object indentationLevel rest ($"{indent}{dynamicIndicator}{name}: {item}"::acc)
     
         loop d 0 members []
 

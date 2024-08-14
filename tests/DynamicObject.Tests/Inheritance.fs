@@ -24,13 +24,6 @@ type PersonImmutable(name : string) =
     member this.Name
         with get() = name
 
-[<AttachMembers>]
-type Animal(name : string) =
-    
-    inherit DynamicObj()
-
-    member val Name = name with get, set
-
 let tests_set = testList "Set" [
 
     testCase "Static Property" <| fun _ ->
@@ -72,20 +65,12 @@ let tests_set = testList "Set" [
 
 let tests_remove = testList "Remove" [
   
-    ptestCase "Returns false on static" <| fun _ ->
-        let p = Person("John")
-
-        let r = p.Remove("Name")
-
-        Expect.isFalse r "Static property should not be removed"
-
     testCase "Remove Static" <| fun _ ->
         let p = Person("John")
 
         p.Remove("Name") |> ignore
        
         Expect.equal p.Name null "Static property should "
-
 
     testCase "Remove Dynamic" <| fun _ ->
         let p = Person("John")
@@ -113,43 +98,20 @@ let tests_remove = testList "Remove" [
 ]
 
 
-let tests_formatString = ptestList "FormatString" [
+let tests_formatString = testList "FormatString" [
 
     testCase "Format string 1" <| fun _ ->
-        let foo = DynamicObj()
-        foo.SetValue("bar", [1;2;3;4])
-        let expected = "?bar: [1; 2; 3; ... ]"
-        Expect.equal (foo |> DynObj.format) expected "Format string 1 failed"
-
+        
+        let name = "John"
+        let age = 20
+        let p = Person("John")
+        p.SetValue("age", age)
+        let expected = $"Name: {name}{System.Environment.NewLine}?age: {age}"
+        Expect.equal (p |> DynObj.format) expected "Format string 1 failed"
 ]
 
 
-let tests_combine = ptestList "Combine" [
-
-    testCase "Combine flat DOs" <| fun _ ->
-        let target = DynamicObj()
-
-        target.SetValue("target-unique", [42])
-        target.SetValue("will-be-overridden", "WAS_NOT_OVERRIDDEN!")
-
-        let source = DynamicObj()
-
-        source.SetValue("source-unique", [42; 32])
-        source.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
-
-        let combined = DynObj.combine target source
-
-        let expected = DynamicObj()
-
-        expected.SetValue("target-unique", [42])
-        expected.SetValue("source-unique", [42; 32])
-        expected.SetValue("will-be-overridden", "WAS_OVERRIDDEN =)")
-
-        Expect.equal expected combined "Combine flat DOs failed"
-
-]
-
-let tests_print = ptestList "Print" [
+let tests_print = testList "Print" [
 
     testCase "Test Print For Issue 14" <| fun _ ->
         let outer = DynamicObj()
@@ -172,5 +134,4 @@ let main = testList "Inheritance" [
     tests_set
     tests_remove
     tests_formatString
-    tests_combine
 ]
