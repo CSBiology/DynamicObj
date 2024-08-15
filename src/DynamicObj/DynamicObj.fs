@@ -60,8 +60,11 @@ type DynamicObj() =
             else
                 failwith $"Cannot set value for static, immutable property \"{name}\""
         | None -> 
-            #if FABLE_COMPILER 
+            #if FABLE_COMPILER_JAVASCRIPT  || FABLE_COMPILER_TYPESCRIPT
             FableJS.setPropertyValue this name value
+            #endif
+            #if FABLE_COMPILER_PYTHON
+            FablePy.setPropertyValue this name value
             #else
             // Next check the Properties collection for member
             match properties.TryGetValue name with            
@@ -77,8 +80,14 @@ type DynamicObj() =
 
 
     member this.GetPropertyHelpers (includeInstanceProperties) =
-        #if FABLE_COMPILER           
+        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT           
         FableJS.getPropertyHelpers this
+        |> Seq.filter (fun pd ->  
+            includeInstanceProperties || pd.IsDynamic
+        )
+        #endif
+        #if FABLE_COMPILER_PYTHON
+        FablePy.getPropertyHelpers this
         |> Seq.filter (fun pd ->  
             includeInstanceProperties || pd.IsDynamic
         )
@@ -104,8 +113,18 @@ type DynamicObj() =
     /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
     /// Properties are returned as a key value pair of the member names and the boxed values
     member this.GetProperties includeInstanceProperties : seq<KeyValuePair<string,obj>> =    
-        #if FABLE_COMPILER           
+        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT        
         FableJS.getPropertyHelpers this
+        |> Seq.choose (fun pd ->  
+            if includeInstanceProperties || pd.IsDynamic then
+                new KeyValuePair<string, obj>(pd.Name, pd.GetValue this)
+                |> Some
+            else
+                None  
+        )
+        #endif
+        #if FABLE_COMPILER_PYTHON
+        FablePy.getPropertyHelpers this
         |> Seq.choose (fun pd ->  
             if includeInstanceProperties || pd.IsDynamic then
                 new KeyValuePair<string, obj>(pd.Name, pd.GetValue this)

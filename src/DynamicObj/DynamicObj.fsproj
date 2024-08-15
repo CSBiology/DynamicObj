@@ -26,6 +26,8 @@
   <ItemGroup>
     <Compile Include="HashCodes.fs" />
     <Compile Include="PropertyHelper.fs" />
+    <Compile Include="FablePy.fs" />
+    <Compile Include="FableJS.fs" />
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="DynamicObj.fs" />
     <Compile Include="DynObj.fs" />

@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".proj", ".proj", "{C3CF2F15
 		key.snk = key.snk
 		LICENSE = LICENSE
 		package.json = package.json
+		pyproject.toml = pyproject.toml
 		README.md = README.md
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection

@@ -197,3 +197,4 @@ docsrc/tools/FSharp.Formatting.svclog
 pkg
 /tests/**/js
 /tests/**/py
+/.venv
