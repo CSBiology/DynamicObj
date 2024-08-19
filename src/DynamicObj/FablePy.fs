@@ -2,54 +2,56 @@
 
 
 open Fable.Core
-
+open System.Collections.Generic
 
 module FablePy =
     
-    module PropertyDescriptor = 
-        
-        [<Emit("$0.$1")>]
-        let tryGetPropertyValue (o:obj) (propName:string) : obj option =
-            PyInterop.em
+    type PropertyObject = 
+        abstract fget : obj
+        abstract fset : obj
 
-        let tryGetIsWritable (o:obj) : bool option =
-            tryGetPropertyValue o "writable"
-            |> Option.map (fun v -> v :?> bool)
+    module PropertyObject = 
+        
+        [<Emit("$0.fget")>]
+        let tryGetGetter (o:PropertyObject) : obj option =
+            nativeOnly
+
+        [<Emit("$0.fset")>]
+        let tryGetSetter (o:PropertyObject) : obj option =
+            nativeOnly
 
         let containsGetter (o:obj) : bool =
-            match tryGetPropertyValue o "get" with
+            match tryGetGetter o with
             | Some _ -> true
             | None -> false
 
         let containsSetter (o:obj) : bool =
-            match tryGetPropertyValue o "set" with
+            match tryGetSetter o with
             | Some _ -> true
             | None -> false
 
         let isWritable (o:obj) : bool =
-            match tryGetIsWritable o with
-            | Some v -> v
-            | None -> containsSetter o
+            containsSetter o
 
-        [<Emit("typeof $0 === 'function'")>]
-        let valueIsFunction (o:obj) : bool =
+        [<Emit("isinstance($0, property)")>]
+        let isProperty (o:obj) : bool =
             nativeOnly
 
-        let isFunction (o:obj) : bool =
-            match tryGetPropertyValue o "value" with
-            | Some v -> valueIsFunction v
-            | None -> false
-
-    [<Emit("Object.getOwnPropertyNames($0)")>]
-    let getOwnPropertyNames (o:obj) : string [] =
+    [<Emit("vars($0)")>]
+    let getOwnMemberObjects (o:obj) : Dictionary<string,obj> =
         nativeOnly
 
-    [<Emit("Object.getPrototypeOf($0)")>]
-    let getPrototype (o:obj) : obj =
+    [<Emit("$0.__class__")>]
+    let getClass (o:obj) : obj =
         nativeOnly
 
-    let getStaticPropertyNames (o:obj) =
-        getPrototype o
+    let getOwnPropertyObjects (o:obj) : Dictionary<string,obj> =
+        getOwnMemberObjects o
+
+
+
+    let getStaticPropertyObjects (o:obj) =
+        getClass o
         |> getOwnPropertyNames
         |> Array.filter (fun n -> n <> "constructor")
 

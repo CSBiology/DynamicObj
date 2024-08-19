@@ -53,7 +53,7 @@ let tests_set = testList "Set" [
         Expect.equal p1 p2 "Values should be equal"
         Expect.equal (p1.GetHashCode()) (p2.GetHashCode()) "Hash codes should be equal"
 
-    ptestCase "Dynamic Property Only on one" <| fun _ ->
+    testCase "Dynamic Property Only on one" <| fun _ ->
         let p1 = Person("John")
         let p2 = Person("John")
 
