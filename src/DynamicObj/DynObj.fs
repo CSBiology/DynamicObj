@@ -82,7 +82,7 @@ module DynObj =
         dyn.TryGetValue name
 
     let remove (dyn:DynamicObj) propName = 
-        DynamicObj.Remove (dyn, propName) |> ignore
+        DynamicObj.remove (dyn, propName) |> ignore
 
     let format (d:DynamicObj) =
     

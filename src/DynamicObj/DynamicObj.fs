@@ -38,6 +38,9 @@ type DynamicObj() =
         // Next check for Public properties via Reflection
         | _ -> ReflectionUtils.tryGetPropertyValue this name
 
+    
+    member this.GetValue (name) =
+        this.TryGetValue(name).Value
 
     /// Gets property value
     member this.TryGetTypedValue<'a> name = 
@@ -65,7 +68,8 @@ type DynamicObj() =
             #endif
             #if FABLE_COMPILER_PYTHON
             FablePy.setPropertyValue this name value
-            #else
+            #endif
+            #if !FABLE_COMPILER
             // Next check the Properties collection for member
             match properties.TryGetValue name with            
             | true,_ -> properties.[name] <- value
@@ -91,7 +95,8 @@ type DynamicObj() =
         |> Seq.filter (fun pd ->  
             includeInstanceProperties || pd.IsDynamic
         )
-        #else
+        #endif
+        #if !FABLE_COMPILER
         seq [
             if includeInstanceProperties then                
                 yield! ReflectionUtils.getStaticProperties (this)
@@ -132,7 +137,8 @@ type DynamicObj() =
             else
                 None  
         )
-        #else
+        #endif
+        #if !FABLE_COMPILER
         seq [
             if includeInstanceProperties then                
                 for prop in ReflectionUtils.getStaticProperties (this) -> 
@@ -170,10 +176,11 @@ type DynamicObj() =
     //    this.CopyDynamicPropertiesTo(target)
     //    target
 
-    static member GetValue (lookup:DynamicObj,name) =
-        lookup.TryGetValue(name).Value
 
-    static member Remove (lookup:DynamicObj,name) =
+    static member getValue (lookup:DynamicObj,name) =
+        lookup.GetValue(name)
+
+    static member remove (lookup:DynamicObj,name) =
         lookup.Remove(name)
 
     override this.Equals o =

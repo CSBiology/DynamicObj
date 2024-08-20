@@ -13,7 +13,8 @@ module ReflectionUtils =
         #endif
         #if FABLE_COMPILER_PYTHON
             FablePy.getStaticPropertyHelpers o
-        #else
+        #endif
+        #if !FABLE_COMPILER
             let t = o.GetType()
             [| 
                 for propInfo in t.GetProperties() -> propInfo
@@ -29,7 +30,8 @@ module ReflectionUtils =
         #endif
         #if FABLE_COMPILER_PYTHON
         FablePy.getPropertyHelpers o
-        #else
+        #endif
+        #if !FABLE_COMPILER
         getStaticProperties (o)
         #endif
         |> Array.tryFind (fun n -> n.Name = propName)        

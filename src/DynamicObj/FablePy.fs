@@ -6,6 +6,21 @@ open System.Collections.Generic
 
 module FablePy =
     
+    module Dictionary = 
+        
+        let ofSeq (s:seq<KeyValuePair<_,_>>) =
+            let d = new System.Collections.Generic.Dictionary<_,_>()
+            s |> Seq.iter (fun kv -> d.Add(kv.Key, kv.Value))
+            d
+
+        let choose (f: 'T -> 'U option) (d:System.Collections.Generic.Dictionary<_,'T>) =
+            let nd = new System.Collections.Generic.Dictionary<_,'U>()
+            for kv in d do
+                match f kv.Value with
+                | Some v -> nd.Add(kv.Key, v)
+                | None -> ()
+            nd
+
     type PropertyObject = 
         abstract fget : obj
         abstract fset : obj
@@ -13,31 +28,64 @@ module FablePy =
     module PropertyObject = 
         
         [<Emit("$0.fget")>]
-        let tryGetGetter (o:PropertyObject) : obj option =
+        let tryGetGetter (o:PropertyObject) : (obj -> obj) option =
             nativeOnly
 
         [<Emit("$0.fset")>]
-        let tryGetSetter (o:PropertyObject) : obj option =
+        let tryGetSetter (o:PropertyObject) : (obj -> obj -> unit) option =
             nativeOnly
 
-        let containsGetter (o:obj) : bool =
+        let getGetter (o : PropertyObject) : obj -> obj =
+            match tryGetGetter o with
+            | Some f -> f
+            | None -> fun o -> failwith ("Property does not contain getter")
+
+        let getSetter (o:PropertyObject) : obj -> obj -> unit =
+            match tryGetSetter o with
+            | Some f -> f
+            | None -> fun s o -> failwith ("Property does not contain setter")
+
+        let containsGetter (o:PropertyObject) : bool =
             match tryGetGetter o with
             | Some _ -> true
             | None -> false
 
-        let containsSetter (o:obj) : bool =
+        let containsSetter (o:PropertyObject) : bool =
             match tryGetSetter o with
             | Some _ -> true
             | None -> false
 
-        let isWritable (o:obj) : bool =
+        let isWritable (o:PropertyObject) : bool =
             containsSetter o
 
         [<Emit("isinstance($0, property)")>]
         let isProperty (o:obj) : bool =
             nativeOnly
 
-    [<Emit("vars($0)")>]
+        let tryProperty (o:obj) : PropertyObject option =
+            if isProperty o then
+                Some (o :?> PropertyObject)
+            else
+                None
+
+    [<Emit("getattr($0,$1)")>]
+    let getPropertyValue (o:obj) (propName:string) =
+        nativeOnly
+
+    let createGetter (propName:string) =
+        fun (o:obj) -> 
+            getPropertyValue o propName
+
+    [<Emit("setattr($0,$1,$2)")>]
+    let setPropertyValue (o:obj) (propName:string) (value:obj) : unit =    
+        nativeOnly
+
+    let createSetter (propName:string) =
+        fun (o:obj) (value:obj) -> 
+         setPropertyValue o propName value
+
+
+    [<Emit("vars($0).items()")>]
     let getOwnMemberObjects (o:obj) : Dictionary<string,obj> =
         nativeOnly
 
@@ -45,28 +93,15 @@ module FablePy =
     let getClass (o:obj) : obj =
         nativeOnly
 
-    let getOwnPropertyObjects (o:obj) : Dictionary<string,obj> =
-        getOwnMemberObjects o
-
-
-
-    let getStaticPropertyObjects (o:obj) =
+    let getStaticPropertyObjects (o:obj) : Dictionary<string,PropertyObject> =
         getClass o
-        |> getOwnPropertyNames
-        |> Array.filter (fun n -> n <> "constructor")
-
-    [<Emit("$0.$1 = $2")>]
-    let setPropertyValue (o:obj) (propName:string) (value:obj) =    
-        nativeOnly
-
-    let createSetter (propName:string) =
-        fun (o:obj) (value:obj) -> 
-         setPropertyValue o propName value
+        |> getOwnMemberObjects
+        |> Dictionary.choose PropertyObject.tryProperty
 
     let removeStaticPropertyValue (o:obj) (propName:string) =
         setPropertyValue o propName null
 
-    [<Emit("delete $0[$1]")>]
+    [<Emit("delattr($0,$1)")>]
     let deleteDynamicPropertyValue (o:obj) (propName:string) =
         nativeOnly
 
@@ -79,67 +114,92 @@ module FablePy =
                 deleteDynamicPropertyValue o propName
 
 
-    [<Emit("$0[$1]")>]
-    let getPropertyValue (o:obj) (propName:string) =
+
+    [<Emit("$0.__dict__[$1]")>]
+    let getMemberObject (o:obj) (propName:string) =
         nativeOnly
 
-    let createGetter (propName:string) =
-        fun (o:obj) -> 
-            getPropertyValue o propName
+    let tryGetPropertyObject (o:obj) (propName:string) : PropertyObject option =
+        match PropertyObject.tryProperty (getMemberObject o propName) with
+        | Some po -> Some po
+        | None -> None
 
-    [<Emit("Object.getOwnPropertyDescriptor($0, $1)")>]
-    let getPropertyDescriptor (o:obj) (propName:string) =
-        nativeOnly
+    let tryGetDynamicPropertyHelper (o:obj) (propName:string) : PropertyHelper option =
+        match getMemberObject o propName with
+        | Some _ -> 
+            Some {
+                Name = propName
+                IsStatic = false
+                IsDynamic = true
+                IsMutable = true
+                IsImmutable = false
+                GetValue = createGetter propName
+                SetValue = createSetter propName
+                RemoveValue = fun o -> deleteDynamicPropertyValue o propName
+            }
+        | None -> None
 
-    let getStaticPropertyDescriptor (o:obj) (propName:string) =
-        getPropertyDescriptor (getPrototype o) propName
+    let tryGetStaticPropertyHelper (o:obj) (propName:string) : PropertyHelper option =
+        match tryGetPropertyObject (getClass o) propName with
+        | Some po -> 
+            let isWritable = PropertyObject.isWritable po
+            Some {
+                Name = propName
+                IsStatic = true
+                IsDynamic = false
+                IsMutable = isWritable
+                IsImmutable = not isWritable
+                GetValue = createGetter propName
+                SetValue = createSetter propName
+                RemoveValue = fun o -> removeStaticPropertyValue o propName
+            }
+         | None -> None
 
-    let getStaticPropertyHelpers (o:obj) : PropertyHelper [] =
-        getStaticPropertyNames o
-        |> Array.choose (fun n ->
-            let pd = getStaticPropertyDescriptor o n
-            if PropertyDescriptor.isFunction pd then 
-                None
-            else 
-                let isWritable = PropertyDescriptor.isWritable pd
-                {
-                    Name = n
-                    IsStatic = true
-                    IsDynamic = false
-                    IsMutable = isWritable
-                    IsImmutable = not isWritable
-                    GetValue = createGetter n
-                    SetValue = createSetter n
-                    RemoveValue = createRemover n true
-                }     
-                |> Some
-        )
-
-    let transpiledPropertyRegex = "^[a-zA-Z]+@[0-9]+$"
+    let transpiledPropertyRegex = "^[a-zA-Z]+_[0-9]+$"
 
     let isTranspiledPropertyHelper (propertyName : string) =
         System.Text.RegularExpressions.Regex.IsMatch(propertyName, transpiledPropertyRegex)
 
+
     let getDynamicPropertyHelpers (o:obj) : PropertyHelper [] =
-        getOwnPropertyNames o
-        |> Array.choose (fun n ->
-            let pd = getPropertyDescriptor o n
-            if PropertyDescriptor.isFunction pd || isTranspiledPropertyHelper n then 
+        getOwnMemberObjects o
+        |> Seq.choose (fun kv -> 
+            let n = kv.Key
+            if isTranspiledPropertyHelper n then 
                 None
-            else 
-                let isWritable = PropertyDescriptor.isWritable pd
+            else
                 {
                     Name = n
                     IsStatic = false
                     IsDynamic = true
-                    IsMutable = isWritable
-                    IsImmutable = not isWritable
+                    IsMutable = true
+                    IsImmutable = false
                     GetValue = createGetter n
                     SetValue = createSetter n
-                    RemoveValue = createRemover n false
-                }        
+                    RemoveValue = fun o -> deleteDynamicPropertyValue o n
+                }
                 |> Some
         )
+        |> Seq.toArray
+
+
+    let getStaticPropertyHelpers (o:obj) : PropertyHelper [] =
+        getStaticPropertyObjects o
+        |> Seq.map (fun kv -> 
+            let n = kv.Key
+            let po = kv.Value
+            {
+                Name = n
+                IsStatic = true
+                IsDynamic = false
+                IsMutable = PropertyObject.isWritable po
+                IsImmutable = not (PropertyObject.isWritable po)
+                GetValue = createGetter n
+                SetValue = createSetter n
+                RemoveValue = fun o -> removeStaticPropertyValue o n
+            }
+        )
+        |> Seq.toArray
 
     let getPropertyHelpers (o:obj) =
         getDynamicPropertyHelpers o
