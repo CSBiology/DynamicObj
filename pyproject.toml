@@ -2,11 +2,11 @@
 name = "DynamicObj"
 version = "3.0.0"
 description = "Fable compatible library supporting Dynamic Objects including inheritance in functional style."
-authors = ["Heinrich Lukas Weil <weil@rptu.de>", "Kevin Frey <freymaurer@gmx.de>"]
-maintainers = ["Florian Wetzels"]
+authors = [""]
+maintainers = [""]
 readme = "README.md"
-repository = "https://github.com/nfdi4plants/ARCtrl"
-keywords = ["arc", "annotated research context", "isa", "research data", "multi platform"]
+repository = ""
+keywords = [""]
 
 [tool.poetry.dependencies]
 python = "^3.10"

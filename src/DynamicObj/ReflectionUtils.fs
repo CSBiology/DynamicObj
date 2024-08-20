@@ -63,7 +63,7 @@ module ReflectionUtils =
         | :? System.Reflection.TargetInvocationException -> None
         | :? System.NullReferenceException -> None
 
-    let removeStaticProperty (o:obj) (propName:string) =     
+    let removeProperty (o:obj) (propName:string) =     
 
         match tryGetPropertyInfo o propName with         
         | Some property when property.IsMutable ->

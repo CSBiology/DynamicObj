@@ -4,21 +4,9 @@
 open System.Collections.Generic
 open Fable.Core
 
-module Fable = 
-
-    [<Emit("$0[$1]")>]
-    let getProperty (o:obj) (propName:string) : 'a =
-        jsNative
-
-    [<Emit("Object.getOwnPropertyNames($0)")>]
-    let getPropertyNames (o:obj) : string seq = 
-        jsNative
-
 [<AttachMembers>]
 type DynamicObj() = 
     
-
-
     let mutable properties = new Dictionary<string, obj>()
 
     member this.Properties
@@ -77,7 +65,7 @@ type DynamicObj() =
             #endif
 
     member this.Remove name =
-        match ReflectionUtils.removeStaticProperty this name with
+        match ReflectionUtils.removeProperty this name with
         | true -> true
         // Maybe in map
         | false -> properties.Remove(name)
