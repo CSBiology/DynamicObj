@@ -141,13 +141,20 @@ type DynamicObj() =
         this.GetProperties(includeInstanceProperties)
         |> Seq.map (fun kv -> kv.Key)
 
+
+    /// <summary>
     /// Operator to access a dynamic member by name
+    /// </summary>
+    /// <remarks>This operator is not Fable-compatible</remarks>
     static member (?) (lookup:#DynamicObj,name:string) =
         match lookup.TryGetValue name with
         | Some(value) -> value
         | None -> raise <| System.MemberAccessException()        
 
+    /// <summary>
     /// Operator to set a dynamic member
+    /// </summary>
+    /// <remarks>This operator is not Fable-compatible</remarks>
     static member (?<-) (lookup:#DynamicObj,name:string,value:'v) =
         lookup.SetValue (name,value)
     
