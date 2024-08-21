@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Authors>Timo Mühlhaus, Kevin Schneider, F# open source contributors</Authors>
+    <Authors>Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors</Authors>
     <Description>F# library supporting Dynamic Objects including inheritance in functional style.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://csbiology.github.io/DynamicObj/</PackageProjectUrl>
@@ -39,5 +39,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="*.fsproj; **\*.fs; **\*.fsi" PackagePath="fable\" />
+  </ItemGroup>
   
 </Project>

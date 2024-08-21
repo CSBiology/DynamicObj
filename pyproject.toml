@@ -2,11 +2,11 @@
 name = "DynamicObj"
 version = "3.0.0"
 description = "Fable compatible library supporting Dynamic Objects including inheritance in functional style."
-authors = [""]
-maintainers = [""]
+authors = ["Kevin Schneider", "WhiteBlackGoose", "Heinrich Lukas Weil", "Timo Muehlhaus", "Kevin Frey", "David Zimmer"]
+maintainers = ["Heinrich Lukas Weil", "Timo Muehlhaus", "Kevin Schneider"]
 readme = "README.md"
-repository = ""
-keywords = [""]
+repository = "https://github.com/CSBiology/DynamicObj"
+keywords = ["Dynamic Object", "Fable", "FSharp", "Javascript", "Python"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
