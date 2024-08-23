@@ -110,6 +110,6 @@ let packPyPrerelease = BuildTask.create "PackPyPrerelease" [setPrereleaseTag; cl
     }
 
 
-let pack = BuildTask.createEmpty "Pack" [packDotNet; packJS; packPy]
+let pack = BuildTask.createEmpty "Pack" [packDotNet(*; packJS; packPy*)]
 
-let packPrerelease = BuildTask.createEmpty "PackPrerelease" [packDotNetPrerelease;packJSPrerelease;packPyPrerelease]
+let packPrerelease = BuildTask.createEmpty "PackPrerelease" [packDotNetPrerelease(*;packJSPrerelease;packPyPrerelease*)]

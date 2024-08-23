@@ -1,3 +1,9 @@
+### 3.0.0 - 8/23/2024
+- Make project fable-compatible
+- Rework project structure by splitting into DynamicObj and DynamicObj.Immutable
+- Add a bunch of tests
+- Backwards incompatible because of renaming and removing some members
+
 ### 2.0.0 - 5/30/2022
 - [Use a strong name for the assembly](https://github.com/CSBiology/DynamicObj/pull/19). This may cause backwards incompatibility on netfx. (thanks [@WhiteBlackGoose](https://github.com/WhiteBlackGoose)) 
 

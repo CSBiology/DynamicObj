@@ -194,7 +194,7 @@ docsrc/tools/FSharp.Formatting.svclog
 /tests/FSharp.Stats.Tests/coverage.xml
 
 .ionide
-pkg
+dist
 /tests/**/js
 /tests/**/py
 /.venv

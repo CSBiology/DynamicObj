@@ -13,7 +13,7 @@
 
   <PropertyGroup>
     <Authors>Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors</Authors>
-    <Description>F# library supporting Dynamic Objects including inheritance in functional style.</Description>
+    <Description>F# library supporting Dynamic Objects including inheritance in functional style. Compatible with Fable javascript and python transpilation.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://csbiology.github.io/DynamicObj/</PackageProjectUrl>
     <PackageTags>F# FSharp dotnet dynamic object</PackageTags>
@@ -21,8 +21,9 @@
     <RepositoryType>git</RepositoryType>
     <FsDocsLicenseLink>https://github.com/CSBiology/DynamicObj/blob/main/LICENSE</FsDocsLicenseLink>
     <FsDocsReleaseNotesLink>https://github.com/CSBiology/DynamicObj/blob/main/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Compile Include="HashCodes.fs" />
     <Compile Include="PropertyHelper.fs" />
@@ -32,6 +33,7 @@
     <Compile Include="DynamicObj.fs" />
     <Compile Include="DynObj.fs" />
     <None Include="Playground.fsx" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
   
   <ItemGroup>
