@@ -5,26 +5,26 @@ open System.Collections.Generic
 module DynObj =
 
     /// New DynamicObj of Dictionary
-    let ofDict dict = DynamicObj(dict)
+    let ofDict dict = DynamicObj.fromDict dict
 
     /// New DynamicObj of a sequence of key value
     let ofSeq kv = 
         let dict = new Dictionary<string, obj>()
         kv |> Seq.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj(dict)
+        DynamicObj.fromDict dict
 
     /// New DynamicObj of a list of key value
     let ofList kv = 
         let dict = new Dictionary<string, obj>()
         kv |> List.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj(dict)
+        DynamicObj.fromDict dict
 
 
     /// New DynamicObj of an array of key value
     let ofArray kv = 
         let dict = new Dictionary<string, obj>()
         kv |> Array.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj(dict)
+        DynamicObj.fromDict dict
 
     
     // 
@@ -79,30 +79,30 @@ module DynObj =
         | None -> ()
     
     let tryGetValue (dyn:DynamicObj) name = 
-        match dyn.TryGetMember name with
-        | true,value ->  Some value
-        | _ -> None
+        dyn.TryGetValue name
 
     let remove (dyn:DynamicObj) propName = 
-        DynamicObj.Remove (dyn, propName) |> ignore
+        DynamicObj.remove (dyn, propName) |> ignore
 
     let format (d:DynamicObj) =
     
-        let members = d.GetDynamicMemberNames() |> Seq.cast<string> |> List.ofSeq
+        let members = d.GetPropertyHelpers(true) |> List.ofSeq
 
-        let rec loop (object:DynamicObj) (identationLevel:int) (membersLeft:string list) (acc:string list) =
-            let ident = [for i in 0 .. identationLevel-1 do yield "    "] |> String.concat ""
+        let rec loop (object:DynamicObj) (indentationLevel:int) (membersLeft:PropertyHelper list) (acc:string list) =
+            let indent = [for i in 0 .. indentationLevel-1 do yield "    "] |> String.concat ""
             match membersLeft with
             | [] -> acc |> List.rev |> String.concat System.Environment.NewLine
             | m::rest ->
-                let item = object?(``m``)
+                let item = m.GetValue object
+                let dynamicIndicator = if m.IsDynamic then "?" else ""
+                let name = m.Name
                 match item with
                 | :? DynamicObj as item -> 
-                    let innerMembers = item.GetDynamicMemberNames() |> Seq.cast<string> |> List.ofSeq
-                    let innerPrint = (loop item (identationLevel + 1) innerMembers [])
-                    loop object identationLevel rest ($"{ident}?{m}:{System.Environment.NewLine}{innerPrint}" :: acc)
-                | _ -> 
-                    loop object identationLevel rest ($"{ident}?{m}: {item}"::acc)
+                    let innerMembers = item.GetPropertyHelpers(true) |> List.ofSeq
+                    let innerPrint = (loop item (indentationLevel + 1) innerMembers [])              
+                    loop object indentationLevel rest ($"{indent}{dynamicIndicator}{name}:{System.Environment.NewLine}{innerPrint}" :: acc)
+                | item -> 
+                    loop object indentationLevel rest ($"{indent}{dynamicIndicator}{name}: {item}"::acc)
     
         loop d 0 members []
 

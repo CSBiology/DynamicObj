@@ -1,15 +1,22 @@
 ﻿module ProjectInfo
 
 open Fake.Core
+open Helpers
 
 let project = "DynamicObj"
 
 let summary = "F# library supporting Dynamic Objects including inheritance in functional style."
 
+let fableTestProjects =
+    [
+        "tests/DynamicObject.Tests"
+    ]
+
 let testProjects = 
     [
-        "tests/UnitTests/UnitTests.fsproj"
-        "tests/CSharpTests/CSharpTests.csproj"
+        "tests/DynamicObject.Tests"
+        "tests/DynamicObject.Immutable.Tests"
+        "tests/CSharpTests"
     ]
 
 let solutionFile  = $"{project}.sln"
@@ -22,7 +29,9 @@ let gitHome = $"https://github.com/{gitOwner}"
 
 let projectRepo = $"https://github.com/{gitOwner}/{project}"
 
-let pkgDir = "pkg"
+let netPkgDir = "./dist/net"
+let npmPkgDir = "./dist/js"
+let pyPkgDir = "./dist/py"
 
 let release = ReleaseNotes.load "RELEASE_NOTES.md"
 
@@ -34,8 +43,8 @@ let assemblyVersion = $"{stableVersion.Major}.0.0"
 
 let assemblyInformationalVersion = $"{stableVersion.Major}.{stableVersion.Minor}.{stableVersion.Patch}"
 
-let mutable prereleaseSuffix = ""
+let mutable prereleaseSuffix = PreReleaseFlag.Alpha
 
-let mutable prereleaseTag = ""
+let mutable prereleaseSuffixNumber = 0
 
 let mutable isPrerelease = false

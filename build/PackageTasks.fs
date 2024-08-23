@@ -5,57 +5,111 @@ open ProjectInfo
 open MessagePrompts
 open BasicTasks
 open TestTasks
+open Helpers
 
 open BlackFox.Fake
 open Fake.Core
 open Fake.IO.Globbing.Operators
 
-let pack = BuildTask.create "Pack" [clean; build; runTests] {
-    if promptYesNo (sprintf "creating stable package with version %s OK?" stableVersionTag ) 
-        then
-            !! "src/**/*.*proj"
-            -- "src/bin/*"
-            |> Seq.iter (Fake.DotNet.DotNet.pack (fun p ->
-                let msBuildParams =
-                    {p.MSBuildParams with 
-                        Properties = ([
-                            "Version",stableVersionTag
-                            "AssemblyVersion", assemblyVersion
-                            "AssemblyInformationalVersion", stableVersionTag
-                            "PackageReleaseNotes",  (release.Notes |> String.concat "\r\n")
-                        ] @ p.MSBuildParams.Properties)
-                    }
-                {
-                    p with 
-                        MSBuildParams = msBuildParams
-                        OutputPath = Some pkgDir
+open System.Text.RegularExpressions
+
+/// https://github.com/Freymaurer/Fake.Extensions.Release#release-notes-in-nuget
+let private replaceCommitLink input = 
+    let commitLinkPattern = @"\[\[#[a-z0-9]*\]\(.*\)\] "
+    Regex.Replace(input,commitLinkPattern,"")
+
+module BundleDotNet =
+    let bundle (versionTag : string) (versionSuffix : string option) =
+        System.IO.Directory.CreateDirectory(ProjectInfo.netPkgDir) |> ignore
+        !! "src/**/*.*proj"
+        -- "src/bin/*"
+        |> Seq.iter (Fake.DotNet.DotNet.pack (fun p ->
+            let msBuildParams =
+                {p.MSBuildParams with 
+                    Properties = ([
+                        "Version",versionTag
+                        "PackageReleaseNotes",  (ProjectInfo.release.Notes |> List.map replaceCommitLink |> String.toLines )
+                    ] @ p.MSBuildParams.Properties)
                 }
-            ))
-    else failwith "aborted"
+            {
+                p with 
+                    VersionSuffix = versionSuffix
+                    MSBuildParams = msBuildParams
+                    OutputPath = Some ProjectInfo.netPkgDir
+            }
+        ))
+
+let packDotNet = BuildTask.create "PackDotNet" [clean; build; runTests] {
+    BundleDotNet.bundle ProjectInfo.stableVersionTag None
 }
 
-let packPrerelease = BuildTask.create "PackPrerelease" [setPrereleaseTag; clean; build; runTests] {
-    if promptYesNo (sprintf "package tag will be %s OK?" prereleaseTag )
-        then 
-            !! "src/**/*.*proj"
-            -- "src/bin/*"
-            |> Seq.iter (Fake.DotNet.DotNet.pack (fun p ->
-                        let msBuildParams =
-                            {p.MSBuildParams with 
-                                Properties = ([
-                                    "Version", prereleaseTag
-                                    "AssemblyVersion", assemblyVersion
-                                    "AssemblyInformationalVersion", stableVersionTag
-                                    "PackageReleaseNotes",  (release.Notes |> String.toLines )
-                                ] @ p.MSBuildParams.Properties)
-                            }
-                        {
-                            p with 
-                                VersionSuffix = Some prereleaseSuffix
-                                OutputPath = Some pkgDir
-                                MSBuildParams = msBuildParams
-                        }
-            ))
-    else
-        failwith "aborted"
+let packDotNetPrerelease = BuildTask.create "PackDotNetPrerelease" [setPrereleaseTag; clean; build; runTests] {
+    let prereleaseTag = PreReleaseFlag.toNugetTag release.SemVer prereleaseSuffix prereleaseSuffixNumber
+    BundleDotNet.bundle prereleaseTag (Some prereleaseTag)
 }
+
+module BundleJs =
+    let bundle (versionTag: string) =
+        Fake.JavaScript.Npm.run "bundlejs" (fun o -> o)
+        //GenerateIndexJs.DynamicObj_generate ProjectInfo.npmPkgDir
+        failwith "implement IndexJs generation"
+        Fake.IO.File.readAsString "build/release_package.json"
+        |> fun t ->
+            let t = t.Replace(ProjectInfo.stableVersionTag, versionTag)
+            Fake.IO.File.writeString false $"{ProjectInfo.npmPkgDir}/package.json" t
+
+        Fake.IO.File.readAsString "README.md"
+        |> Fake.IO.File.writeString false $"{ProjectInfo.npmPkgDir}/README.md"
+
+        "" // "fable-library.**/**"
+        |> Fake.IO.File.writeString false $"{ProjectInfo.npmPkgDir}/fable_modules/.npmignore"
+
+        Fake.JavaScript.Npm.exec "pack" (fun o ->
+            { o with
+                WorkingDirectory = ProjectInfo.npmPkgDir
+            })
+
+let packJS = BuildTask.create "PackJS" [clean; build; runTests] {
+    BundleJs.bundle ProjectInfo.stableVersionTag
+}
+
+let packJSPrerelease = BuildTask.create "PackJSPrerelease" [setPrereleaseTag; clean; build; runTests] {
+    let prereleaseTag = PreReleaseFlag.toNPMTag release.SemVer prereleaseSuffix prereleaseSuffixNumber
+    BundleJs.bundle prereleaseTag
+}
+
+module BundlePy =
+    let bundle (versionTag: string) =
+        
+        run dotnet $"fable src/DynamicObj -o {ProjectInfo.pyPkgDir}/DynamicObj --lang python" ""
+        run python "-m poetry install --no-root" ProjectInfo.pyPkgDir
+        //GenerateIndexPy.DynamicObj_generate (ProjectInfo.pyPkgDir + "/dynamicObj")
+        failwith "implement IndexJs generation"
+        Fake.IO.File.readAsString "pyproject.toml"
+        |> fun t ->
+            let t = t.Replace(ProjectInfo.stableVersionTag, versionTag)
+            Fake.IO.File.writeString false $"{ProjectInfo.pyPkgDir}/pyproject.toml" t
+
+        Fake.IO.File.readAsString "README.md"
+        |> Fake.IO.File.writeString false $"{ProjectInfo.pyPkgDir}/README.md"
+
+        //"" // "fable-library.**/**"
+        //|> Fake.IO.File.writeString false $"{ProjectInfo.npmPkgDir}/fable_modules/.npmignore"
+
+        run python "-m poetry build" ProjectInfo.pyPkgDir //Remove "-o ." because not compatible with publish 
+
+
+let packPy = BuildTask.create "PackPy" [clean; build; runTests] {
+    BundlePy.bundle ProjectInfo.stableVersionTag
+
+}
+
+let packPyPrerelease = BuildTask.create "PackPyPrerelease" [setPrereleaseTag; clean; build; runTests] {
+    let prereleaseTag = PreReleaseFlag.toPyPITag release.SemVer prereleaseSuffix prereleaseSuffixNumber
+    BundlePy.bundle prereleaseTag
+    }
+
+
+let pack = BuildTask.createEmpty "Pack" [packDotNet; packJS; packPy]
+
+let packPrerelease = BuildTask.createEmpty "PackPrerelease" [packDotNetPrerelease;packJSPrerelease;packPyPrerelease]

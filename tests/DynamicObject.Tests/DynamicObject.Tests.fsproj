@@ -8,13 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="ImmTests.fs" />
-    <Compile Include="Tests.fs" />
-    <Compile Include="OperatorsTests.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Inheritance.fs" />
+    <Compile Include="ReflectionUtils.fs" />
+    <Compile Include="DynamicObj.fs" />
+    <Compile Include="Main.fs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fable.Pyxpecto" Version="1.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
