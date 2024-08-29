@@ -115,7 +115,7 @@ module FablePy =
 
 
 
-    [<Emit("$0.__dict__[$1]")>]
+    [<Emit("$0.__dict__.get($1)")>]
     let getMemberObject (o:obj) (propName:string) =
         nativeOnly
 
