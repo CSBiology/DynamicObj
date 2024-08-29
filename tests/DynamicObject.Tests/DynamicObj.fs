@@ -269,9 +269,44 @@ let tests_print = testList "Print" [
         Expect.isTrue print "Print failed for issue 14"
 ]
 
+let tests_copyDynamicProperties = testList "CopyDynamicProperties" [
+    testCase "NewObject" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        a.SetValue("b", 2)
+        let b = a.CopyDynamicProperties()
+        Expect.equal a b "Values should be equal"
+    testCase "ExistingObject" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        a.SetValue("b", 2)
+        let b = DynamicObj()
+        b.SetValue("c", 3)
+        a.CopyDynamicPropertiesTo(b)
+        Expect.equal (b.GetValue("a")) 1 "Value a should be copied"
+        Expect.equal (b.GetValue("b")) 2 "Value b should be copied"
+        Expect.equal (b.GetValue("c")) 3 "Value c should be unaffected"
+    testCase "NoOverwrite throws" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = DynamicObj()
+        b.SetValue("a", 3)
+        let f = fun () -> a.CopyDynamicPropertiesTo(b)
+        Expect.throws f "Should throw because property exists"
+    testCase "Overwrite" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = DynamicObj()
+        b.SetValue("a", 3)
+        Expect.notEqual a b "Values should not be equal before copying"
+        a.CopyDynamicPropertiesTo(b, true)
+        Expect.equal a b "Values should be equal"
+]
+
 let main = testList "DynamicObj" [
     tests_set
     tests_remove
     tests_formatString
     tests_combine
+    tests_copyDynamicProperties
 ]

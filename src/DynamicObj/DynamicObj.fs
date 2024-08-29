@@ -23,7 +23,6 @@ type DynamicObj() =
         // first check the Properties collection for member
         this.TryGetPropertyInfo(name)
         |> Option.map (fun pi -> pi.GetValue(this))
-
     
     member this.GetValue (name) =
         this.TryGetValue(name).Value
@@ -68,7 +67,7 @@ type DynamicObj() =
         match this.TryGetStaticPropertyInfo name with
         | Some pi -> Some pi
         | None -> this.TryGetDynamicPropertyInfo name
-        
+
     /// Sets property value, creating a new property if none exists
     member this.SetValue (name,value) = // private
         // first check to see if there's a native property to set
@@ -98,7 +97,6 @@ type DynamicObj() =
         | Some pi when pi.IsMutable -> pi.RemoveValue this
         | Some _ -> failwith $"Cannot remove value for static, immutable property \"{name}\""
         | None -> ()
-
 
     member this.GetPropertyHelpers (includeInstanceProperties) =
         #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT           
@@ -165,6 +163,23 @@ type DynamicObj() =
         ]
         #endif
         |> Seq.filter (fun kv -> kv.Key.ToLower() <> "properties")
+
+    /// Copies all dynamic members of the DynamicObj to the target DynamicObj.
+    member this.CopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
+        let overWrite = Option.defaultValue false overWrite
+        this.GetProperties(false)
+        |> Seq.iter (fun kv ->
+            match target.TryGetPropertyInfo kv.Key with
+            | Some pi when overWrite -> pi.SetValue target kv.Value
+            | Some _ -> failwith $"Property \"{kv.Key}\" already exists on target object and overWrite was not set to true."
+            | None -> target.SetValue(kv.Key,kv.Value)
+        )
+
+    /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    member this.CopyDynamicProperties() =
+        let target = DynamicObj()
+        this.CopyDynamicPropertiesTo(target)
+        target
 
     member this.GetPropertyNames(includeInstanceProperties) =
         this.GetProperties(includeInstanceProperties)
