@@ -21,10 +21,8 @@ type DynamicObj() =
     /// Gets property value
     member this.TryGetValue name = 
         // first check the Properties collection for member
-        match properties.TryGetValue name with
-        | true,value ->  Some value
-        // Next check for Public properties via Reflection
-        | _ -> ReflectionUtils.tryGetPropertyValue this name
+        this.TryGetPropertyInfo(name)
+        |> Option.map (fun pi -> pi.GetValue(this))
 
     
     member this.GetValue (name) =
@@ -39,12 +37,43 @@ type DynamicObj() =
             | :? 'a -> o :?> 'a |> Some
             | _ -> None
 
+
+    member this.TryGetStaticPropertyInfo name : PropertyHelper option  = 
+        ReflectionUtils.tryGetStaticPropertyInfo this name
+
+    member this.TryGetDynamicPropertyInfo name : PropertyHelper option =
+        #if FABLE_COMPILER_JAVASCRIPT  || FABLE_COMPILER_TYPESCRIPT
+        FableJS.tryGetDynamicPropertyHelper this name
+        #endif
+        #if FABLE_COMPILER_PYTHON
+        FablePy.tryGetDynamicPropertyHelper this name
+        #endif
+        #if !FABLE_COMPILER
+        match properties.TryGetValue name with            
+        | true,_ -> 
+            Some {
+                Name = name
+                IsStatic = false
+                IsDynamic = true
+                IsMutable = true
+                IsImmutable = false
+                GetValue = fun o -> properties.[name]
+                SetValue = fun o v -> properties.[name] <- v
+                RemoveValue = fun o -> properties.Remove(name) |> ignore
+            }
+        | _      -> None
+        #endif
+        
+    member this.TryGetPropertyInfo name : PropertyHelper option =
+        match this.TryGetStaticPropertyInfo name with
+        | Some pi -> Some pi
+        | None -> this.TryGetDynamicPropertyInfo name
         
     /// Sets property value, creating a new property if none exists
     member this.SetValue (name,value) = // private
         // first check to see if there's a native property to set
         
-        match ReflectionUtils.tryGetPropertyInfo this name  with
+        match ReflectionUtils.tryGetStaticPropertyInfo this name  with
         | Some pi ->
             if pi.IsMutable then
                 pi.SetValue this value
@@ -65,10 +94,10 @@ type DynamicObj() =
             #endif
 
     member this.Remove name =
-        match ReflectionUtils.removeProperty this name with
-        | true -> true
-        // Maybe in map
-        | false -> properties.Remove(name)
+        match this.TryGetPropertyInfo name with
+        | Some pi when pi.IsMutable -> pi.RemoveValue this
+        | Some _ -> failwith $"Cannot remove value for static, immutable property \"{name}\""
+        | None -> ()
 
 
     member this.GetPropertyHelpers (includeInstanceProperties) =

@@ -24,20 +24,20 @@ module ReflectionUtils =
         #endif    
 
     /// Try to get the PropertyInfo by name using reflection
-    let tryGetPropertyInfo (o:obj) (propName:string) =
+    let tryGetStaticPropertyInfo (o:obj) (propName:string) =      
         #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-        FableJS.getPropertyHelpers o
+        FableJS.tryGetStaticPropertyHelper o propName
         #endif
         #if FABLE_COMPILER_PYTHON
-        FablePy.getPropertyHelpers o
+        FablePy.tryGetStaticPropertyHelper o propName
         #endif
         #if !FABLE_COMPILER
-        getStaticProperties (o)
+        getStaticProperties (o)        
+        |> Array.tryFind (fun n -> n.Name = propName)     
         #endif
-        |> Array.tryFind (fun n -> n.Name = propName)        
 
     let trySetPropertyValue (o:obj) (propName:string) (value:obj) =
-        match tryGetPropertyInfo o propName with 
+        match tryGetStaticPropertyInfo o propName with 
         | Some property when property.IsMutable ->
             property.SetValue o value
             true
@@ -45,7 +45,7 @@ module ReflectionUtils =
 
     let tryGetPropertyValue (o:obj) (propName:string) =
         try 
-            match tryGetPropertyInfo o propName with 
+            match tryGetStaticPropertyInfo o propName with 
             | Some v -> Some (v.GetValue(o))
             | None -> None
         with 
@@ -65,7 +65,7 @@ module ReflectionUtils =
 
     let removeProperty (o:obj) (propName:string) =     
 
-        match tryGetPropertyInfo o propName with         
+        match tryGetStaticPropertyInfo o propName with         
         | Some property when property.IsMutable ->
             property.RemoveValue(o)
             true

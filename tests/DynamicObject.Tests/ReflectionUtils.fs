@@ -39,7 +39,7 @@ let tests_PropertyHelper = testList "PropertyHelper" [
 
     testCase "TryGetPropertyInfo" <| fun _ ->
         let p = TestObject("1", "test")
-        let idOption = ReflectionUtils.tryGetPropertyInfo p "Id"
+        let idOption = ReflectionUtils.tryGetStaticPropertyInfo p "Id"
         let id = Expect.wantSome idOption "Should have immutable property"
         Expect.equal id.Name "Id" "Should have correct property"
         Expect.equal id.IsStatic true "Id should be static"
@@ -47,7 +47,7 @@ let tests_PropertyHelper = testList "PropertyHelper" [
         Expect.equal id.IsMutable false "Id should not be mutable"
         Expect.equal id.IsImmutable true "Id should be immutable"
 
-        let nameOption = ReflectionUtils.tryGetPropertyInfo p "Name"
+        let nameOption = ReflectionUtils.tryGetStaticPropertyInfo p "Name"
         let name = Expect.wantSome nameOption "Should have mutable property"
         Expect.equal name.Name "Name" "Should have correct property"
         Expect.equal name.IsStatic true "Name should be static"
@@ -55,7 +55,7 @@ let tests_PropertyHelper = testList "PropertyHelper" [
         Expect.equal name.IsMutable true "Name should be mutable"
         Expect.equal name.IsImmutable false "Name should not be immutable"
 
-        let nonExistingOption = ReflectionUtils.tryGetPropertyInfo p "NonExisting"
+        let nonExistingOption = ReflectionUtils.tryGetStaticPropertyInfo p "NonExisting"
         Expect.isNone nonExistingOption "Should not have property"
 ]
 
