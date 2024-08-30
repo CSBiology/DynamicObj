@@ -72,7 +72,7 @@ type DynamicObj() =
     member this.SetValue (name,value) = // private
         // first check to see if there's a native property to set
         
-        match ReflectionUtils.tryGetStaticPropertyInfo this name  with
+        match this.TryGetStaticPropertyInfo name  with
         | Some pi ->
             if pi.IsMutable then
                 pi.SetValue this value
@@ -133,36 +133,13 @@ type DynamicObj() =
     /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
     /// Properties are returned as a key value pair of the member names and the boxed values
     member this.GetProperties includeInstanceProperties : seq<KeyValuePair<string,obj>> =    
-        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT        
-        FableJS.getPropertyHelpers this
-        |> Seq.choose (fun pd ->  
-            if includeInstanceProperties || pd.IsDynamic then
-                new KeyValuePair<string, obj>(pd.Name, pd.GetValue this)
-                |> Some
+        this.GetPropertyHelpers(includeInstanceProperties)
+        |> Seq.choose (fun kv -> 
+            if kv.Name <> "properties" then
+                Some (KeyValuePair(kv.Name, kv.GetValue this))
             else
-                None  
+                None
         )
-        #endif
-        #if FABLE_COMPILER_PYTHON
-        FablePy.getPropertyHelpers this
-        |> Seq.choose (fun pd ->  
-            if includeInstanceProperties || pd.IsDynamic then
-                new KeyValuePair<string, obj>(pd.Name, pd.GetValue this)
-                |> Some
-            else
-                None  
-        )
-        #endif
-        #if !FABLE_COMPILER
-        seq [
-            if includeInstanceProperties then                
-                for prop in ReflectionUtils.getStaticProperties (this) -> 
-                    new KeyValuePair<string, obj>(prop.Name, prop.GetValue(this))
-            for key in properties.Keys ->
-               new KeyValuePair<string, obj>(key, properties.[key]);
-        ]
-        #endif
-        |> Seq.filter (fun kv -> kv.Key.ToLower() <> "properties")
 
     /// Copies all dynamic members of the DynamicObj to the target DynamicObj.
     member this.CopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
