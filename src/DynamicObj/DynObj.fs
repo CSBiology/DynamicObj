@@ -63,6 +63,15 @@ module DynObj =
             | _ -> first.SetValue(kv.Key,kv.Value)
         first
 
+    
+    let inline tryGetTypedValue<'a> (name) (dynObj : DynamicObj) =
+        match (dynObj.TryGetValue name) with
+        | None -> None
+        | Some o -> 
+            match o with
+            | :? 'a as o -> o |> Some
+            | _ -> None
+
     let setValue (dyn:DynamicObj) propName o =
         dyn.SetValue(propName,o)
 

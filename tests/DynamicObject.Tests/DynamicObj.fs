@@ -4,6 +4,67 @@ open System
 open Fable.Pyxpecto
 open DynamicObj
 
+let tests_tryGetTypedValue = testList "TryGetTypedValue" [
+    
+    testCase "typeof" <| fun _ -> 
+        let a = typeof<int>
+        Expect.equal a.Name "Int32" "Type should be Int32"
+
+    testCase "NonExisting" <| fun _ -> 
+        let a = DynamicObj()
+        let b = DynObj.tryGetTypedValue<int> "a" a
+        Expect.isNone b "Value should not exist"
+
+    testCase "Correct Int" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = DynObj.tryGetTypedValue<int> "a" a
+        Expect.equal b (Some 1) "Value should be 1"
+
+    testCase "Incorrect Int" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", "1")
+        let b = DynObj.tryGetTypedValue<int> "a" a
+        Expect.isNone b "Value should not be an int"
+
+    testCase "Correct String" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", "1")
+        let b = DynObj.tryGetTypedValue<string> "a" a
+        Expect.equal b (Some "1") "Value should be '1'"
+
+    testCase "Incorrect String" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = DynObj.tryGetTypedValue<string> "a" a
+        Expect.isNone b "Value should not be a string"
+
+    testCase "Correct List" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", [1; 2; 3])
+        let b = DynObj.tryGetTypedValue<int list> "a" a
+        Expect.equal b (Some [1; 2; 3]) "Value should be [1; 2; 3]"
+
+    ptestCase "Incorrect List" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", [1; 2; 3])
+        let b = DynObj.tryGetTypedValue<string list> "a" a
+        Expect.isNone b "Value should not be a string list"
+
+    testCase "Correct DynamicObj" <| fun _ ->
+        let a = DynamicObj()
+        let b = DynamicObj()
+        a.SetValue("a", b)
+        let c = DynObj.tryGetTypedValue<DynamicObj> "a" a
+        Expect.equal c (Some b) "Value should be a DynamicObj"
+
+    testCase "Incorrect DynamicObj" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = DynObj.tryGetTypedValue<DynamicObj> "a" a
+        Expect.isNone b "Value should not be a DynamicObj"
+]
+    
 
 let tests_set = testList "Set" [
 
@@ -304,6 +365,7 @@ let tests_copyDynamicProperties = testList "CopyDynamicProperties" [
 ]
 
 let main = testList "DynamicObj" [
+    tests_tryGetTypedValue
     tests_set
     tests_remove
     tests_formatString
