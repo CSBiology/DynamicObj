@@ -21,11 +21,8 @@ type DynamicObj() =
     /// Gets property value
     member this.TryGetValue name = 
         // first check the Properties collection for member
-        match properties.TryGetValue name with
-        | true,value ->  Some value
-        // Next check for Public properties via Reflection
-        | _ -> ReflectionUtils.tryGetPropertyValue this name
-
+        this.TryGetPropertyInfo(name)
+        |> Option.map (fun pi -> pi.GetValue(this))
     
     member this.GetValue (name) =
         this.TryGetValue(name).Value
@@ -39,12 +36,43 @@ type DynamicObj() =
             | :? 'a -> o :?> 'a |> Some
             | _ -> None
 
+
+    member this.TryGetStaticPropertyInfo name : PropertyHelper option  = 
+        ReflectionUtils.tryGetStaticPropertyInfo this name
+
+    member this.TryGetDynamicPropertyInfo name : PropertyHelper option =
+        #if FABLE_COMPILER_JAVASCRIPT  || FABLE_COMPILER_TYPESCRIPT
+        FableJS.tryGetDynamicPropertyHelper this name
+        #endif
+        #if FABLE_COMPILER_PYTHON
+        FablePy.tryGetDynamicPropertyHelper this name
+        #endif
+        #if !FABLE_COMPILER
+        match properties.TryGetValue name with            
+        | true,_ -> 
+            Some {
+                Name = name
+                IsStatic = false
+                IsDynamic = true
+                IsMutable = true
+                IsImmutable = false
+                GetValue = fun o -> properties.[name]
+                SetValue = fun o v -> properties.[name] <- v
+                RemoveValue = fun o -> properties.Remove(name) |> ignore
+            }
+        | _      -> None
+        #endif
         
+    member this.TryGetPropertyInfo name : PropertyHelper option =
+        match this.TryGetStaticPropertyInfo name with
+        | Some pi -> Some pi
+        | None -> this.TryGetDynamicPropertyInfo name
+
     /// Sets property value, creating a new property if none exists
     member this.SetValue (name,value) = // private
         // first check to see if there's a native property to set
         
-        match ReflectionUtils.tryGetPropertyInfo this name  with
+        match this.TryGetStaticPropertyInfo name  with
         | Some pi ->
             if pi.IsMutable then
                 pi.SetValue this value
@@ -65,11 +93,10 @@ type DynamicObj() =
             #endif
 
     member this.Remove name =
-        match ReflectionUtils.removeProperty this name with
-        | true -> true
-        // Maybe in map
-        | false -> properties.Remove(name)
-
+        match this.TryGetPropertyInfo name with
+        | Some pi when pi.IsMutable -> pi.RemoveValue this
+        | Some _ -> failwith $"Cannot remove value for static, immutable property \"{name}\""
+        | None -> ()
 
     member this.GetPropertyHelpers (includeInstanceProperties) =
         #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT           
@@ -106,36 +133,30 @@ type DynamicObj() =
     /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
     /// Properties are returned as a key value pair of the member names and the boxed values
     member this.GetProperties includeInstanceProperties : seq<KeyValuePair<string,obj>> =    
-        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT        
-        FableJS.getPropertyHelpers this
-        |> Seq.choose (fun pd ->  
-            if includeInstanceProperties || pd.IsDynamic then
-                new KeyValuePair<string, obj>(pd.Name, pd.GetValue this)
-                |> Some
+        this.GetPropertyHelpers(includeInstanceProperties)
+        |> Seq.choose (fun kv -> 
+            if kv.Name <> "properties" then
+                Some (KeyValuePair(kv.Name, kv.GetValue this))
             else
-                None  
+                None
         )
-        #endif
-        #if FABLE_COMPILER_PYTHON
-        FablePy.getPropertyHelpers this
-        |> Seq.choose (fun pd ->  
-            if includeInstanceProperties || pd.IsDynamic then
-                new KeyValuePair<string, obj>(pd.Name, pd.GetValue this)
-                |> Some
-            else
-                None  
+
+    /// Copies all dynamic members of the DynamicObj to the target DynamicObj.
+    member this.CopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
+        let overWrite = Option.defaultValue false overWrite
+        this.GetProperties(false)
+        |> Seq.iter (fun kv ->
+            match target.TryGetPropertyInfo kv.Key with
+            | Some pi when overWrite -> pi.SetValue target kv.Value
+            | Some _ -> failwith $"Property \"{kv.Key}\" already exists on target object and overWrite was not set to true."
+            | None -> target.SetValue(kv.Key,kv.Value)
         )
-        #endif
-        #if !FABLE_COMPILER
-        seq [
-            if includeInstanceProperties then                
-                for prop in ReflectionUtils.getStaticProperties (this) -> 
-                    new KeyValuePair<string, obj>(prop.Name, prop.GetValue(this))
-            for key in properties.Keys ->
-               new KeyValuePair<string, obj>(key, properties.[key]);
-        ]
-        #endif
-        |> Seq.filter (fun kv -> kv.Key.ToLower() <> "properties")
+
+    /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    member this.CopyDynamicProperties() =
+        let target = DynamicObj()
+        this.CopyDynamicPropertiesTo(target)
+        target
 
     member this.GetPropertyNames(includeInstanceProperties) =
         this.GetProperties(includeInstanceProperties)

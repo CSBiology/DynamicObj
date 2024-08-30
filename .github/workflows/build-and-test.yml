@@ -43,18 +43,6 @@ jobs:
         python-version: '3.12'
     - name: Setup Virtual Environment
       run: python -m venv .venv
-    - name: Setup Poetry Windows
-      if: matrix.os == 'windows-latest'
-      run: |
-          .\.venv\Scripts\python.exe -m pip install -U pip setuptools
-          .\.venv\Scripts\python.exe -m pip install poetry
-          .\.venv\Scripts\python.exe -m poetry install --no-root
-    - name: Setup Poetry Unix
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-          ./.venv/bin/python -m pip install -U pip setuptools
-          ./.venv/bin/python -m pip install poetry
-          ./.venv/bin/python -m poetry install --no-root
 
     # BUILD
     - name: make script executable

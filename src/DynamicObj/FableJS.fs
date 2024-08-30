@@ -85,58 +85,68 @@ module FableJS =
             getPropertyValue o propName
 
     [<Emit("Object.getOwnPropertyDescriptor($0, $1)")>]
-    let getPropertyDescriptor (o:obj) (propName:string) =
+    let tryGetPropertyDescriptor (o:obj) (propName:string) : obj option =
         jsNative
 
-    let getStaticPropertyDescriptor (o:obj) (propName:string) =
-        getPropertyDescriptor (getPrototype o) propName
+    let tryGetStaticPropertyDescriptor (o:obj) (propName:string) : obj option=
+        tryGetPropertyDescriptor (getPrototype o) propName
 
+    let tryStaticPropertyHelperFromDescriptor (pd:obj) (name:string) : PropertyHelper option =
+        let isWritable = PropertyDescriptor.isWritable pd
+        if PropertyDescriptor.isFunction pd then 
+            None
+        else 
+            {
+                Name = name
+                IsStatic = true
+                IsDynamic = false
+                IsMutable = isWritable
+                IsImmutable = not isWritable
+                GetValue = createGetter name
+                SetValue = createSetter name
+                RemoveValue = createRemover name true
+            }     
+            |> Some
+        
+    let tryGetStaticPropertyHelper (o:obj) (propName:string) : PropertyHelper option =
+        tryGetStaticPropertyDescriptor o propName
+        |> Option.bind (fun pd -> tryStaticPropertyHelperFromDescriptor pd propName)
+        
     let getStaticPropertyHelpers (o:obj) : PropertyHelper [] =
         getStaticPropertyNames o
-        |> Array.choose (fun n ->
-            let pd = getStaticPropertyDescriptor o n
-            if PropertyDescriptor.isFunction pd then 
-                None
-            else 
-                let isWritable = PropertyDescriptor.isWritable pd
-                {
-                    Name = n
-                    IsStatic = true
-                    IsDynamic = false
-                    IsMutable = isWritable
-                    IsImmutable = not isWritable
-                    GetValue = createGetter n
-                    SetValue = createSetter n
-                    RemoveValue = createRemover n true
-                }     
-                |> Some
-        )
+        |> Array.choose (tryGetStaticPropertyHelper o)
+
+    let tryGetDynamicPropertyDescriptor (o:obj) (propName:string) : obj option =
+        tryGetPropertyDescriptor o propName
 
     let transpiledPropertyRegex = "^[a-zA-Z]+@[0-9]+$"
 
     let isTranspiledPropertyHelper (propertyName : string) =
         System.Text.RegularExpressions.Regex.IsMatch(propertyName, transpiledPropertyRegex)
 
+    let tryDynamicPropertyHelperFromDescriptor (pd:obj) (name:string) : PropertyHelper option =
+        if PropertyDescriptor.isFunction pd || isTranspiledPropertyHelper name then 
+                None
+        else 
+            {
+                Name = name
+                IsStatic = false
+                IsDynamic = true
+                IsMutable = true
+                IsImmutable = false
+                GetValue = createGetter name
+                SetValue = createSetter name
+                RemoveValue = createRemover name false
+            }     
+            |> Some
+
+    let tryGetDynamicPropertyHelper (o:obj) (propName:string) : PropertyHelper option =
+        tryGetDynamicPropertyDescriptor o propName
+        |> Option.bind (fun pd -> tryDynamicPropertyHelperFromDescriptor pd propName)
+
     let getDynamicPropertyHelpers (o:obj) : PropertyHelper [] =
         getOwnPropertyNames o
-        |> Array.choose (fun n ->
-            let pd = getPropertyDescriptor o n
-            if PropertyDescriptor.isFunction pd || isTranspiledPropertyHelper n then 
-                None
-            else 
-                let isWritable = PropertyDescriptor.isWritable pd
-                {
-                    Name = n
-                    IsStatic = false
-                    IsDynamic = true
-                    IsMutable = isWritable
-                    IsImmutable = not isWritable
-                    GetValue = createGetter n
-                    SetValue = createSetter n
-                    RemoveValue = createRemover n false
-                }        
-                |> Some
-        )
+        |> Array.choose (tryGetDynamicPropertyHelper o)
 
     let getPropertyHelpers (o:obj) =
         getDynamicPropertyHelpers o
