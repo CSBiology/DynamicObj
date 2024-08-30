@@ -103,10 +103,4 @@ On windows you can use the `setup.cmd` to run the following steps automatically!
     
     `py -m venv .venv`
 
-4. Install [Poetry](https://python-poetry.org/) and dependencies
-
-   1. `.\.venv\Scripts\python.exe -m pip install -U pip setuptools`
-   2. `.\.venv\Scripts\python.exe -m pip install poetry`
-   3. `.\.venv\Scripts\python.exe -m poetry install --no-root`
-
 Verify correct setup with `./build.cmd runtests` ✨
