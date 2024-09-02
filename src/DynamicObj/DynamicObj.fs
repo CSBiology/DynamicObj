@@ -27,20 +27,19 @@ type DynamicObj() =
     member this.GetValue (name) =
         this.TryGetValue(name).Value
 
+    #if !FABLE_COMPILER
     /// Gets typed property value if type matches, otherwise None.
     ///
     /// WARNING: This Method is not supported in Fable transpiled code. Use static method tryGetTypedValue instead.
     member this.TryGetTypedValue<'a> name = 
-        #if !FABLE_COMPILER
+        
         match (this.TryGetValue name) with
         | None -> None
         | Some o ->      
             match o with
             | :? 'a as o -> o |> Some
             | _ -> None
-        #else
-        failwith "Method TryGetTypedValue is not supported in Fable transpiled code. Use static method tryGetTypedValue instead."
-        #endif    
+    #endif    
 
     member this.TryGetStaticPropertyInfo name : PropertyHelper option  = 
         ReflectionUtils.tryGetStaticPropertyInfo this name
