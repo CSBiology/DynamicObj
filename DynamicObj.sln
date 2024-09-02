@@ -20,6 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".proj", ".proj", "{C3CF2F15-81C7-4C11-889E-5FCA2C8A981D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		build.cmd = build.cmd
+		build.sh = build.sh
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 		global.json = global.json
 		key.snk = key.snk
