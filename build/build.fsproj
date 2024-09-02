@@ -28,6 +28,8 @@
     <PackageReference Include="Fake.IO.FileSystem" Version="6.0.0" />
     <PackageReference Include="Fake.JavaScript.Npm" Version="6.0.0" />
     <PackageReference Include="Fake.Tools.Git" Version="6.0.0" />
+    <PackageReference Include="Fake.Extensions.Release" Version="1.0.0" />
+
   </ItemGroup>
 
   <ItemGroup>

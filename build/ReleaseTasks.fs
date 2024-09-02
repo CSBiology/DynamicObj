@@ -16,6 +16,14 @@ open Fake.Tools
 open Fake.IO
 open Fake.IO.Globbing.Operators
 
+open Fake.Extensions.Release
+
+
+// https://github.com/Freymaurer/Fake.Extensions.Release#releaseupdate
+let updateReleaseNotes = BuildTask.createFn "ReleaseNotes" [] (fun config ->
+    ReleaseNotes.update(ProjectInfo.gitOwner, ProjectInfo.project, config)
+)
+
 let createTag = BuildTask.create "CreateTag" [clean; build; runTests; packDotNet] {
     if promptYesNo (sprintf "tagging branch with %s OK?" stableVersionTag ) then
         Git.Branches.tag "" stableVersionTag
