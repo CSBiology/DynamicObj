@@ -6,6 +6,7 @@ let all = testSequenced <| testList "DynamicObj" [
     ReflectionUtils.Tests.main
     DynamicObj.Tests.main
     Inheritance.Tests.main
+    Interface.Tests.main
 ]
 
 [<EntryPoint>]

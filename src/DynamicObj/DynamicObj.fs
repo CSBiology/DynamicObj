@@ -98,9 +98,11 @@ type DynamicObj() =
 
     member this.Remove name =
         match this.TryGetPropertyInfo name with
-        | Some pi when pi.IsMutable -> pi.RemoveValue this
+        | Some pi when pi.IsMutable -> 
+            pi.RemoveValue this
+            true
         | Some _ -> failwith $"Cannot remove value for static, immutable property \"{name}\""
-        | None -> ()
+        | None -> false
 
     member this.GetPropertyHelpers (includeInstanceProperties) =
         #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT           
