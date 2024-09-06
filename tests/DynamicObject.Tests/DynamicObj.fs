@@ -225,6 +225,16 @@ let tests_remove = testList "Remove" [
 
 ]
 
+let tests_getProperties = testList "GetProperties" [
+    testCase "GetProperties" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        a.SetValue("b", 2)
+        let properties = a.GetPropertyHelpers(true)
+        let names = properties |> Seq.map (fun p -> p.Name)
+        Expect.equal (Seq.toList names) ["a"; "b"] "Should have all properties"
+]
+
 
 let tests_formatString = testList "FormatString" [
 

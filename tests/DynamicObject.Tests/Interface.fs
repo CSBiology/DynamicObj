@@ -1,32 +1,36 @@
-﻿module Inheritance.Tests
+﻿module Interface.Tests
 
 open System
 open Fable.Pyxpecto
 open DynamicObj
 open Fable.Core
 
+type IPerson = 
+    abstract member Id : string with get
+    abstract member Name : string with get,set
+
 [<AttachMembers>]
-type Person(id : string, firstName : string) =
+type Person(id : string, name : string) =
 
     inherit DynamicObj()
 
     let id = id
-    let mutable firstName = firstName
+    let mutable name = name
 
-    member this.Id
-        with get() = id
+    interface IPerson with
+        member this.Id = id
+        member this.Name
+            with get() = name
+            and set(value) = name <- value
 
-    member this.FirstName
-        with get() = firstName
-        and set(value) = firstName <- value
 
 let tests_set = testList "Set" [
 
     testCase "Static Property" <| fun _ ->
         let p = Person("123","John")
-        p.SetValue("FirstName", "Jane")
-        Expect.equal p.FirstName "Jane" "Static property should be set"
-        Expect.equal (p.TryGetValue("FirstName")) (Some "Jane") "Static property should be retreivable dynamically"
+        p.SetValue("Name", "Jane")
+        Expect.equal (p : IPerson).Name "Jane" "Static property should be set"
+        Expect.equal (p.TryGetValue("Name")) (Some "Jane") "Static property should be retreivable dynamically"
 
     testCase "Static Immutable Property" <| fun _ ->
         let p = Person("123","John")
@@ -37,7 +41,7 @@ let tests_set = testList "Set" [
         let p = Person("123","John")
         p.SetValue("Age", 42)
         Expect.equal (p.TryGetValue("Age")) (Some 42) "Dynamic property should be set"
-        Expect.equal (p.TryGetValue("FirstName")) (Some "John") "Static property should be retreivable dynamically"
+        Expect.equal (p.TryGetValue("Name")) (Some "John") "Static property should be retreivable dynamically"
 
     testCase "Dynamic Property Equality" <| fun _ ->
         let p1 = Person("123","John")
@@ -64,9 +68,9 @@ let tests_remove = testList "Remove" [
     testCase "Remove Static" <| fun _ ->
         let p = Person("123","John")
 
-        p.Remove("FirstName") |> ignore
+        p.Remove("Name") |> ignore
        
-        Expect.equal p.FirstName null "Static property should "
+        Expect.equal (p : IPerson).Name null "Static property should "
 
     testCase "Remove Static Immutable" <| fun _ ->
         let p = Person("123","John")
@@ -98,7 +102,6 @@ let tests_remove = testList "Remove" [
 
 ]
 
-
 let tests_getProperties = testList "GetProperties" [
 
     testCase "Get Properties" <| fun _ ->
@@ -106,8 +109,9 @@ let tests_getProperties = testList "GetProperties" [
         p.SetValue("Age", 42)
         let properties = p.GetPropertyHelpers(true)
         let names = properties |> Seq.map (fun p -> p.Name)
-        Expect.equal (Seq.toList names) ["Id"; "FirstName"; "Age"] "Should have all properties"
+        Expect.equal (Seq.toList names) ["Id"; "Name"; "Age"] "Should have all properties"
 ]
+
 
 
 let tests_formatString = testList "FormatString" [
@@ -115,11 +119,11 @@ let tests_formatString = testList "FormatString" [
     testCase "Format string 1" <| fun _ ->
         
         let id = "123"
-        let firstName = "John"
+        let name = "John"
         let age = 20
-        let p = Person(id, firstName)
+        let p = Person(id, name)
         p.SetValue("age", age)
-        let expected = $"Id: {id}{System.Environment.NewLine}FirstName: {firstName}{System.Environment.NewLine}?age: {age}"
+        let expected = $"Id: {id}{System.Environment.NewLine}Name: {name}{System.Environment.NewLine}?age: {age}"
         Expect.equal (p |> DynObj.format) expected "Format string 1 failed"
 ]
 
@@ -143,7 +147,7 @@ let tests_print = testList "Print" [
         Expect.isTrue print "Print failed for issue 14"
 ]
 
-let main = testList "Inheritance" [
+let main = testList "Interface" [
     tests_set
     tests_remove
     tests_getProperties

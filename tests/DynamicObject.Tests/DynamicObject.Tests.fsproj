@@ -8,9 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Inheritance.fs" />
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="DynamicObj.fs" />
+    <Compile Include="Inheritance.fs" />
+    <Compile Include="Interface.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 

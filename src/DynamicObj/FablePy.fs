@@ -155,7 +155,7 @@ module FablePy =
             }
          | None -> None
 
-    let transpiledPropertyRegex = "^[a-zA-Z]+_[0-9]+$"
+    let transpiledPropertyRegex = "^([a-zA-Z]+_)+[0-9]+$"
 
     let isTranspiledPropertyHelper (propertyName : string) =
         System.Text.RegularExpressions.Regex.IsMatch(propertyName, transpiledPropertyRegex)
