@@ -4,50 +4,46 @@ open System.Collections.Generic
 
 module DynObj =
 
-    /// New DynamicObj of Dictionary
-    let ofDict dict = DynamicObj.fromDict dict
+    /// <summary>
+    /// Creates a new DynamicObj from a Dictionary containing dynamic properties.
+    /// </summary>
+    /// <param name="dynamicProperties">The dictionary with the dynamic properties</param>
+    let ofDict (dynamicProperties: Dictionary<string, obj>) = DynamicObj.fromDict dynamicProperties
 
-    /// New DynamicObj of a sequence of key value
-    let ofSeq kv = 
-        let dict = new Dictionary<string, obj>()
-        kv |> Seq.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj.fromDict dict
+    /// <summary>
+    /// Creates a new DynamicObj from a sequence of key value pairs containing dynamic properties.
+    /// </summary>
+    /// <param name="dynamicProperties"></param>
+    let ofSeq (dynamicProperties: seq<string * obj>) = 
+        dynamicProperties
+        |> dict
+        |> Dictionary
+        |> DynamicObj.fromDict
 
-    /// New DynamicObj of a list of key value
-    let ofList kv = 
-        let dict = new Dictionary<string, obj>()
-        kv |> List.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj.fromDict dict
+    /// <summary>
+    /// Creates a new DynamicObj from a list of key value pairs containing dynamic properties.
+    /// </summary>
+    /// <param name="dynamicProperties"></param>
+    let ofList (dynamicProperties: (string * obj) list) = 
+        dynamicProperties
+        |> ofSeq
 
+    /// <summary>
+    /// Creates a new DynamicObj from an array of key value pairs containing dynamic properties.
+    /// </summary>
+    /// <param name="dynamicProperties"></param>
+    let ofArray (dynamicProperties: (string * obj) array) = 
+        dynamicProperties
+        |> ofSeq
 
-    /// New DynamicObj of an array of key value
-    let ofArray kv = 
-        let dict = new Dictionary<string, obj>()
-        kv |> Array.iter (fun (k,v) -> dict.Add(k,v))
-        DynamicObj.fromDict dict
-
-    
-    // 
-    // let rec merge (first:#DynamicObj) (second:#DynamicObj) = 
-    //     let dict = new Dictionary<string, obj>()
-
-    //     Seq.append (first.GetProperties true) (second.GetProperties true)
-    //     |> Seq.iter (fun kv -> 
-    //         if dict.ContainsKey(kv.Key) then
-    //             match kv.Value with
-    //             | :? #DynamicObj as o -> 
-    //                 let oo = dict.[kv.Key] :?> #DynamicObj
-    //                 dict.[kv.Key] <- merge o oo
-    //             | _ -> dict.[kv.Key] <- kv.Value
-    //         else 
-    //             dict.Add(kv.Key, kv.Value)                
-    //             )
-    //     new DynamicObj(dict)
-
-    //let rec combine<'t when 't :> DynamicObj > (first:'t) (second:'t) =
-    
-
-    /// Merges two DynamicObj (Warning: In case of duplicate property names the members of the second object override those of the first)
+    /// <summary>
+    /// Combines the dynamic properties of the second DynamicObj onto the first. 
+    ///
+    /// In case of duplicate property names the members of the second object override those of the first.
+    /// </summary>
+    /// <param name="first"></param>
+    /// <param name="second"></param>
+    /// <remarks>This function mutates the first input DynamicObj</remarks>
     let rec combine (first:DynamicObj) (second:DynamicObj) =
         //printfn "Type %A" (first.GetType())
         /// Consider deep-copy of first
@@ -63,39 +59,128 @@ module DynObj =
             | _ -> first.SetValue(kv.Key,kv.Value)
         first
 
-    
-    let inline tryGetTypedValue<'a> (name) (dynObj : DynamicObj) =
-        match (dynObj.TryGetValue name) with
+    /// <summary>
+    /// Returns Some('TPropertyValue) when a dynamic property with the given name and type exists on the input DynamicObj, otherwise None.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="dynObj"></param>
+    let inline tryGetTypedValue<'TPropertyValue> (propertyName:string) (dynObj : DynamicObj) : 'TPropertyValue option =
+        match (dynObj.TryGetValue propertyName) with
         | None -> None
         | Some o -> 
             match o with
-            | :? 'a as o -> o |> Some
+            | :? 'TPropertyValue as o -> o |> Some
             | _ -> None
 
-    let setValue (dyn:DynamicObj) propName o =
-        dyn.SetValue(propName,o)
+    /// <summary>
+    /// Sets the given dynamic property name and value on the given DynamicObj.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to set</param>
+    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="dynObj">The DynamicObj to set the property on</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let setValue (propertyName:string) (propertyValue:'TPropertyValue) (dynObj : DynamicObj) =
+        dynObj.SetValue(propertyName,propertyValue)
 
-    let setValueOpt (dyn:DynamicObj) propName = 
-        function
-        | Some o -> 
-            dyn.SetValue(propName,o)
+    /// <summary>
+    /// Sets the given dynamic property name and value on the given DynamicObj and returns it.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to set</param>
+    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="dynObj">The DynamicObj to set the property on</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let withValue (propertyName:string) (propertyValue:'TPropertyValue) (dynObj: DynamicObj) =
+        setValue propertyName propertyValue dynObj
+        dynObj
+
+    /// <summary>
+    /// Sets the given dynamic property name and value on the given DynamicObj if the value is Some('TPropertyValue).
+    /// If the given propertyValue is None, does nothing to the input DynamicObj.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to set</param>
+    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="dynObj">The DynamicObj to set the property on</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let setValueOpt (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: DynamicObj) = 
+        match propertyValue with
+        | Some pv -> dynObj |> setValue propertyName pv
         | None -> ()
 
-    let setValueOptBy (dyn:DynamicObj) propName f = 
-        function
-        | Some o -> 
-            dyn.SetValue(propName,f o)
+    /// <summary>
+    /// Sets the given dynamic property name and value on the given DynamicObj if the value is Some('TPropertyValue) and returns it.
+    /// If the given propertyValue is None, returns the unchanged DynamicObj.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to set</param>
+    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="dynObj">The DynamicObj to set the property on</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let withValueOpt (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: DynamicObj) = 
+        match propertyValue with
+        | Some pv -> dynObj |> withValue propertyName pv
+        | None -> dynObj
+
+    /// <summary>
+    /// Sets the given dynamic property name with the result of a mapping function applied to the given property value on the given DynamicObj if the value is Some('TPropertyValue).
+    /// If the given propertyValue is None, does nothing to the input DynamicObj.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to set</param>
+    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="mapping">A function to apply to the property value before setting it on the DynamicObj</param>
+    /// <param name="dynObj">The DynamicObj to set the property on</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let setValueOptBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: DynamicObj) = 
+        match propertyValue with
+        | Some pv -> dynObj |> setValue propertyName (mapping pv)
         | None -> ()
-    
-    let tryGetValue (dyn:DynamicObj) name = 
-        dyn.TryGetValue name
 
-    let remove (dyn:DynamicObj) propName = 
-        DynamicObj.remove (dyn, propName) |> ignore
+    /// <summary>
+    /// Sets the given dynamic property name with the result of a mapping function applied to the given property value on the given DynamicObj if the value is Some('TPropertyValue) and returns it.
+    /// If the given propertyValue is None, returns the unchanged DynamicObj.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to set</param>
+    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="mapping">A function to apply to the property value before setting it on the DynamicObj</param>
+    /// <param name="dynObj">The DynamicObj to set the property on</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let withValueOptBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: DynamicObj) = 
+        match propertyValue with
+        | Some pv -> dynObj |> withValue propertyName (mapping pv)
+        | None -> dynObj
 
-    let format (d:DynamicObj) =
+    /// <summary>
+    /// Returns Some(boxed value) if the DynamicObj contains a dynamic property with the given name, and None otherwise.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to get</param>
+    /// <param name="dynObj">The DynamicObj to get the property from</param>
+    let tryGetValue (propertyName: string) (dynObj: DynamicObj) = 
+        dynObj.TryGetValue propertyName
+
+    /// <summary>
+    /// Removes any dynamic property with the given name from the input DynamicObj.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to remove</param>
+    /// <param name="dynObj">The DynamicObj to remove the property from</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let remove (propertyName: string) (dynObj: DynamicObj) = 
+        DynamicObj.remove (dynObj, propertyName) |> ignore
+
+    /// <summary>
+    /// Returns the input DynamicObj with any dynamic property with the given name removed.
+    /// </summary>
+    /// <param name="propertyName">The name of the dynamic property to remove</param>
+    /// <param name="dynObj">The DynamicObj to remove the property from</param>
+    /// <remarks>This function mutates the input DynamicObj</remarks>
+    let withoutProperty(propertyName: string) (dynObj: DynamicObj) = 
+        dynObj |> remove propertyName
+        dynObj
+
+    /// <summary>
+    /// Returns a formatted string containing all static and dynamic properties of the given DynamicObj
+    /// </summary>
+    /// <param name="dynObj">The DynamicObj for which to generate a formatted string for</param>
+    let format (dynObj:DynamicObj) =
     
-        let members = d.GetPropertyHelpers(true) |> List.ofSeq
+        let members = dynObj.GetPropertyHelpers(true) |> List.ofSeq
 
         let rec loop (object:DynamicObj) (indentationLevel:int) (membersLeft:PropertyHelper list) (acc:string list) =
             let indent = [for i in 0 .. indentationLevel-1 do yield "    "] |> String.concat ""
@@ -113,6 +198,10 @@ module DynObj =
                 | item -> 
                     loop object indentationLevel rest ($"{indent}{dynamicIndicator}{name}: {item}"::acc)
     
-        loop d 0 members []
+        loop dynObj 0 members []
 
-    let print (d:DynamicObj) = printfn "%s" (d |> format)
+    /// <summary>
+    /// Prints a formatted string containing all static and dynamic properties of the given DynamicObj
+    /// </summary>
+    /// <param name="dynObj">The DynamicObj for which to print a formatted string for</param>
+    let print (dynObj:DynamicObj) = printfn "%s" (dynObj |> format)
