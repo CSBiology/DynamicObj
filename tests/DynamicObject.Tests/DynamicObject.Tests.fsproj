@@ -9,9 +9,10 @@
 
   <ItemGroup>
     <Compile Include="ReflectionUtils.fs" />
-    <Compile Include="DynamicObj.fs" />
     <Compile Include="Inheritance.fs" />
     <Compile Include="Interface.fs" />
+    <Compile Include="InstanceMethods.fs" />
+    <Compile Include="DynObjStaticMethods.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 
