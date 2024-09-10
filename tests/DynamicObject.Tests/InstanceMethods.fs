@@ -62,7 +62,6 @@ let tests_TryGetValue = testList "TryGetValue" [
 
 ]
 
-
 let tests_GetValue = testList "GetValue" [
     testCase "NonExisting" <| fun _ -> 
         let a = DynamicObj()
@@ -163,7 +162,7 @@ let tests_TryGetTypedValue = testList "TryGetTypedValue" [
         let b = a.TryGetTypedValue<int list> "a"
         Expect.equal b (Some [1; 2; 3]) "Value should be [1; 2; 3]"
 
-    ptestCase "Incorrect List" <| fun _ ->
+    testCase "Incorrect List" <| fun _ ->
         let a = DynamicObj()
         a.SetValue("a", [1; 2; 3])
         let b = a.TryGetTypedValue<string list> "a"
@@ -183,6 +182,70 @@ let tests_TryGetTypedValue = testList "TryGetTypedValue" [
         Expect.isNone b "Value should not be a DynamicObj"
 ]
 #endif
+
+let tests_TryGetStaticPropertyInfo = testList "TryGetStaticPropertyInfo" [
+    testCase "NonExisting" <| fun _ -> 
+        let a = DynamicObj()
+        let b = a.TryGetStaticPropertyInfo("a")
+        Expect.isNone b "Value should not exist"
+
+    testCase "Properties dictionary is static property" <| fun _ -> 
+        let a = DynamicObj()
+        let b =  Expect.wantSome (a.TryGetStaticPropertyInfo("Properties")) "Value should exist"
+        Expect.isTrue b.IsStatic "Properties should be static"
+        Expect.isFalse b.IsDynamic "Properties should not be dynamic"
+        Expect.isTrue b.IsMutable "Properties should be mutable"
+        Expect.isFalse b.IsImmutable "Properties should not be immutable"
+
+    testCase "dynamic property not retrieved as static" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        Expect.isNone (a.TryGetStaticPropertyInfo("a")) "dynamic property should not be retrieved via TryGetStaticPropertyInfo"
+]
+
+let tests_TryGetDynamicPropertyInfo = testList "TryGetDynamicPropertyInfo" [
+    testCase "NonExisting" <| fun _ -> 
+        let a = DynamicObj()
+        let b = a.TryGetDynamicPropertyInfo("a")
+        Expect.isNone b "Value should not exist"
+
+    testCase "Existing dynamic property" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b =  Expect.wantSome (a.TryGetDynamicPropertyInfo("a")) "Value should exist"
+        Expect.isFalse b.IsStatic "Properties should be static"
+        Expect.isTrue b.IsDynamic "Properties should not be dynamic"
+        Expect.isTrue b.IsMutable "Properties should be mutable"
+        Expect.isFalse b.IsImmutable "Properties should not be immutable"
+
+    testCase "static property not retrieved as dynamic" <| fun _ -> 
+        let a = DynamicObj()
+        Expect.isNone (a.TryGetDynamicPropertyInfo("Properties")) "static property should not be retrieved via TryGetDynamicPropertyInfo"
+]
+
+let tests_TryGetPropertyInfo = testList "TryGetPropertyInfo" [
+    testCase "NonExisting" <| fun _ -> 
+        let a = DynamicObj()
+        let b = a.TryGetPropertyInfo("a")
+        Expect.isNone b "Value should not exist"
+
+    testCase "Existing dynamic property" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b =  Expect.wantSome (a.TryGetPropertyInfo("a")) "Value should exist"
+        Expect.isFalse b.IsStatic "Properties should be static"
+        Expect.isTrue b.IsDynamic "Properties should not be dynamic"
+        Expect.isTrue b.IsMutable "Properties should be mutable"
+        Expect.isFalse b.IsImmutable "Properties should not be immutable"
+
+    testCase "Existing static property" <| fun _ -> 
+        let a = DynamicObj()
+        let b =  Expect.wantSome (a.TryGetPropertyInfo("Properties")) "Value should exist"
+        Expect.isTrue b.IsStatic "Properties should be static"
+        Expect.isFalse b.IsDynamic "Properties should not be dynamic"
+        Expect.isTrue b.IsMutable "Properties should be mutable"
+        Expect.isFalse b.IsImmutable "Properties should not be immutable"
+]
 
 let tests_SetValue = testList "SetValue" [
 
@@ -353,13 +416,20 @@ let tests_GetPropertyHelpers = testList "GetPropertyHelpers" [
         Expect.equal (Seq.toList names) ["a"; "b"] "Should have all properties"
 ]
 
-let tests_copyDynamicProperties = testList "CopyDynamicProperties" [
-    testCase "NewObject" <| fun _ ->
+let tests_GetProperties = testList "GetProperties" [
+    testCase "GetProperties" <| fun _ ->
         let a = DynamicObj()
         a.SetValue("a", 1)
         a.SetValue("b", 2)
-        let b = a.CopyDynamicProperties()
-        Expect.equal a b "Values should be equal"
+        let properties = a.GetProperties(true) |> List.ofSeq
+        let expected = [
+            System.Collections.Generic.KeyValuePair("a", box 1)
+            System.Collections.Generic.KeyValuePair("b", box 2)
+        ]
+        Expect.equal properties expected "Should have all properties"
+]
+
+let tests_CopyDynamicPropertiesTo = testList "CopyDynamicPropertiesTo" [
     testCase "ExistingObject" <| fun _ ->
         let a = DynamicObj()
         a.SetValue("a", 1)
@@ -370,6 +440,7 @@ let tests_copyDynamicProperties = testList "CopyDynamicProperties" [
         Expect.equal (b.GetValue("a")) 1 "Value a should be copied"
         Expect.equal (b.GetValue("b")) 2 "Value b should be copied"
         Expect.equal (b.GetValue("c")) 3 "Value c should be unaffected"
+
     testCase "NoOverwrite throws" <| fun _ ->
         let a = DynamicObj()
         a.SetValue("a", 1)
@@ -377,6 +448,7 @@ let tests_copyDynamicProperties = testList "CopyDynamicProperties" [
         b.SetValue("a", 3)
         let f = fun () -> a.CopyDynamicPropertiesTo(b)
         Expect.throws f "Should throw because property exists"
+
     testCase "Overwrite" <| fun _ ->
         let a = DynamicObj()
         a.SetValue("a", 1)
@@ -385,6 +457,58 @@ let tests_copyDynamicProperties = testList "CopyDynamicProperties" [
         Expect.notEqual a b "Values should not be equal before copying"
         a.CopyDynamicPropertiesTo(b, true)
         Expect.equal a b "Values should be equal"
+]
+
+let tests_CopyDynamicProperties = testList "CopyDynamicProperties" [
+    testCase "NewObject" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        a.SetValue("b", 2)
+        let b = a.CopyDynamicProperties()
+        Expect.equal a b "Values should be equal"
+]
+
+let tests_Equals = testList "Equals" [
+    testCase "Same Object" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("b", 2)
+        Expect.isTrue (a.Equals(a)) "Values should be equal"
+
+    testCase "Different Equal Objects" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("b", 2)
+        let a2 = DynamicObj()
+        a2.SetValue("b", 2)
+        Expect.isTrue (a.Equals(a2)) "Values should be equal"
+
+    testCase "Different Unequal Objects" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("b", 2)
+        let a2 = DynamicObj()
+        a2.SetValue("b", 3)
+        Expect.isFalse (a.Equals(a2)) "Values should not be equal"
+
+]
+
+let tests_GetHashCode = testList "GetHashCode" [
+    testCase "Same Object" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("b", 2)
+        Expect.equal (a.GetHashCode()) (a.GetHashCode()) "Values should be equal"
+
+    testCase "Different Equal Objects" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("b", 2)
+        let a2 = DynamicObj()
+        a2.SetValue("b", 2)
+        Expect.equal (a.GetHashCode()) (a2.GetHashCode()) "Values should be equal"
+
+    testCase "Different Unequal Objects" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("b", 2)
+        let a2 = DynamicObj()
+        a.SetValue("b", 3)
+        Expect.notEqual (a.GetHashCode()) (a2.GetHashCode()) "Values should not be equal"
 ]
 
 let main = testList "Instance Methods" [
@@ -396,7 +520,15 @@ let main = testList "Instance Methods" [
     tests_TryGetTypedValue
     #endif
 
+    tests_TryGetStaticPropertyInfo
+    tests_TryGetDynamicPropertyInfo
+    tests_TryGetPropertyInfo
     tests_SetValue
     tests_Remove
-    tests_copyDynamicProperties
+    tests_GetPropertyHelpers
+    tests_GetProperties
+    tests_CopyDynamicPropertiesTo
+    tests_CopyDynamicProperties
+    tests_Equals
+    tests_GetHashCode
 ]
