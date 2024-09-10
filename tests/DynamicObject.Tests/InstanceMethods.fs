@@ -4,6 +4,122 @@ open System
 open Fable.Pyxpecto
 open DynamicObj
 
+let tests_TryGetValue = testList "TryGetValue" [
+    testCase "NonExisting" <| fun _ -> 
+        let a = DynamicObj()
+        let b = a.TryGetValue "a"
+        Expect.isNone b "Value should not exist"
+
+    testCase "Correct boxed Int" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = a.TryGetValue "a"
+        Expect.equal (b) (Some (box 1)) "Value should be 1"
+
+    testCase "Correct unboxed Int" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = a.TryGetValue "a"
+        Expect.equal (b |> Option.map unbox<int>) (Some 1) "Value should be 1"
+
+    testCase "Correct boxed String" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", "1")
+        let b = a.TryGetValue "a"
+        Expect.equal (b) (Some (box "1")) "Value should be '1'"
+
+    testCase "Correct unboxed String" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", "1")
+        let b = a.TryGetValue "a"
+        Expect.equal (b |> Option.map unbox<string>) (Some "1") "Value should be '1'"
+
+    testCase "Correct boxed List" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", [1; 2; 3])
+        let b = a.TryGetValue "a"
+        Expect.equal (b) (Some (box [1; 2; 3])) "Value should be [1; 2; 3]"
+
+    testCase "Correct unboxed List" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", [1; 2; 3])
+        let b = a.TryGetValue "a"
+        Expect.equal (b |> Option.map unbox<int list>) (Some [1; 2; 3]) "Value should be [1; 2; 3]"
+
+    testCase "Correct boxed DynamicObj" <| fun _ ->
+        let a = DynamicObj()
+        let b = DynamicObj()
+        a.SetValue("a", b)
+        let c = a.TryGetValue "a"
+        Expect.equal (c) (Some (box b)) "Value should be a DynamicObj"
+
+    testCase "Correct unboxed DynamicObj" <| fun _ ->
+        let a = DynamicObj()
+        let b = DynamicObj()
+        a.SetValue("a", b)
+        let c = a.TryGetValue "a"
+        Expect.equal (c |> Option.map unbox<DynamicObj>) (Some b) "Value should be a DynamicObj"
+
+]
+
+
+let tests_GetValue = testList "GetValue" [
+    testCase "NonExisting" <| fun _ -> 
+        let a = DynamicObj()
+        Expect.throws (fun () -> a.GetValue("b") |> ignore) "Value should not exist"
+
+    testCase "Correct boxed Int" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = a.GetValue "a"
+        Expect.equal (b) (box 1) "Value should be 1"
+
+    testCase "Correct unboxed Int" <| fun _ -> 
+        let a = DynamicObj()
+        a.SetValue("a", 1)
+        let b = a.GetValue "a"
+        Expect.equal (b |> unbox<int>) (1) "Value should be 1"
+
+    testCase "Correct boxed String" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", "1")
+        let b = a.GetValue "a"
+        Expect.equal (b) (box "1") "Value should be '1'"
+
+    testCase "Correct unboxed String" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", "1")
+        let b = a.GetValue "a"
+        Expect.equal (b |> unbox<string>) ("1") "Value should be '1'"
+
+    testCase "Correct boxed List" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", [1; 2; 3])
+        let b = a.GetValue "a"
+        Expect.equal (b) (box [1; 2; 3]) "Value should be [1; 2; 3]"
+
+    testCase "Correct unboxed List" <| fun _ ->
+        let a = DynamicObj()
+        a.SetValue("a", [1; 2; 3])
+        let b = a.GetValue "a"
+        Expect.equal (b |> unbox<int list>) ([1; 2; 3]) "Value should be [1; 2; 3]"
+
+    testCase "Correct boxed DynamicObj" <| fun _ ->
+        let a = DynamicObj()
+        let b = DynamicObj()
+        a.SetValue("a", b)
+        let c = a.GetValue "a"
+        Expect.equal (c) (box b) "Value should be a DynamicObj"
+
+    testCase "Correct unboxed DynamicObj" <| fun _ ->
+        let a = DynamicObj()
+        let b = DynamicObj()
+        a.SetValue("a", b)
+        let c = a.GetValue "a"
+        Expect.equal (c |> unbox<DynamicObj>) (b) "Value should be a DynamicObj"
+
+]
+
 #if !FABLE_COMPILER
 // instance method TryGetTypedValue is not Fable-compatible
 let tests_TryGetTypedValue = testList "TryGetTypedValue" [
@@ -272,6 +388,8 @@ let tests_copyDynamicProperties = testList "CopyDynamicProperties" [
 ]
 
 let main = testList "Instance Methods" [
+    tests_TryGetValue
+    tests_GetValue
 
     #if !FABLE_COMPILER
     // instance method TryGetTypedValue is not Fable-compatible
