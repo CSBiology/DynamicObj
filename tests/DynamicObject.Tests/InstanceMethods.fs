@@ -488,6 +488,17 @@ let tests_Equals = testList "Equals" [
         a2.SetValue("b", 3)
         Expect.isFalse (a.Equals(a2)) "Values should not be equal"
 
+    testCase "nested DynamicObjs" <| fun _ ->
+        let a = DynamicObj()
+        let b = DynamicObj()
+        b.SetValue("c", 2)
+        a.SetValue("b", b)
+        let a2 = DynamicObj()
+        let b2 = DynamicObj()
+        b2.SetValue("c", 2)
+        a2.SetValue("b", b2)
+        Expect.isTrue (a.Equals(a2)) "Values should be equal"
+
 ]
 
 let tests_GetHashCode = testList "GetHashCode" [
@@ -509,6 +520,17 @@ let tests_GetHashCode = testList "GetHashCode" [
         let a2 = DynamicObj()
         a.SetValue("b", 3)
         Expect.notEqual (a.GetHashCode()) (a2.GetHashCode()) "Values should not be equal"
+
+    testCase "nested DynamicObjs" <| fun _ ->
+        let a = DynamicObj()
+        let b = DynamicObj()
+        b.SetValue("c", 2)
+        a.SetValue("b", b)
+        let a2 = DynamicObj()
+        let b2 = DynamicObj()
+        b2.SetValue("c", 2)
+        a2.SetValue("b", b2)
+        Expect.equal (a.GetHashCode()) (a2.GetHashCode()) "Values should be equal"
 ]
 
 let main = testList "Instance Methods" [

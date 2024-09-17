@@ -2,6 +2,12 @@
 
 open System.Collections.Generic
 
+/// <summary>
+/// This module contains lots of API functions for DynamicObj. 
+///
+/// These functions are not static methods on the DynamicObj type itself because that type is designed to be inherited from, 
+/// and a lot of these functions might not make sense as static methods on inheriting types.
+/// </summary>
 module DynObj =
 
     /// <summary>
