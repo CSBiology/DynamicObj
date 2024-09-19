@@ -1,4 +1,4 @@
-﻿module DynObjStaticMethods.Tests
+﻿module DynObj.Tests
 
 open System
 open System.Collections.Generic
@@ -736,7 +736,7 @@ let tests_print = testList "Print" [
         Expect.isTrue print "Print failed for issue 14"
 ]
 
-let main = testList "DynObj Static Methods" [
+let main = testList "DynObj (Module)" [
     tests_ofDict
     tests_ofSeq
     tests_ofList

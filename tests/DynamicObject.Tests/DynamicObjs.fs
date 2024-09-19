@@ -1,4 +1,4 @@
-﻿module InstanceMethods.Tests
+﻿module DynamicObj.Tests
 
 open System
 open Fable.Pyxpecto
@@ -533,7 +533,7 @@ let tests_GetHashCode = testList "GetHashCode" [
         Expect.equal (a.GetHashCode()) (a2.GetHashCode()) "Values should be equal"
 ]
 
-let main = testList "Instance Methods" [
+let main = testList "DynamicObj (Class)" [
     tests_TryGetValue
     tests_GetValue
 
