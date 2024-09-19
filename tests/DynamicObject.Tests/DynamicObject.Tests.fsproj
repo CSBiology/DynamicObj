@@ -11,8 +11,8 @@
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="Inheritance.fs" />
     <Compile Include="Interface.fs" />
-    <Compile Include="InstanceMethods.fs" />
-    <Compile Include="DynObjStaticMethods.fs" />
+    <Compile Include="DynamicObjs.fs" />
+    <Compile Include="DynObj.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 
