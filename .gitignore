@@ -198,3 +198,4 @@ dist
 /tests/**/js
 /tests/**/py
 /.venv
+/node_modules

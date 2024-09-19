@@ -51,9 +51,17 @@ module RunTests =
         |> Seq.iter dotnetRun
     }
 
-let runTests = BuildTask.create "RunTests" [clean; build; RunTests.runTestsJs; (*RunTests.runTestsJsNative; *)RunTests.runTestsPy;(*RunTests.runTestsPyNative; *)RunTests.runTestsDotnet] { 
-    ()
-}
+let runTests = BuildTask.createEmpty "RunTests" [
+    clean; 
+    build; 
+    RunTests.runTestsPy;
+    (*RunTests.runTestsPyNative; *)
+    RunTests.runTestsJs; 
+    (*RunTests.runTestsJsNative; *)
+    RunTests.runTestsDotnet
+    
+    ]
+
 
 
 // to do: use this once we have actual tests

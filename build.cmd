@@ -1,5 +1,4 @@
 @echo off
-cls
 
 set PYTHONIOENCODING=utf-8
 
