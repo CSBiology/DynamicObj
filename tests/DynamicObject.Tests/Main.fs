@@ -8,6 +8,7 @@ let all = testSequenced <| testList "DynamicObj" [
     DynObj.Tests.main
     Inheritance.Tests.main
     Interface.Tests.main
+    Serialization.Tests.main
 ]
 
 [<EntryPoint>]

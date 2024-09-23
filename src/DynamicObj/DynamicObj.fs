@@ -1,15 +1,18 @@
 ﻿namespace DynamicObj
 
-//open System.Dynamic
+#if !FABLE_COMPILER
+open System.Dynamic
+#endif
+
 open System.Collections.Generic
 open Fable.Core
 
 [<AttachMembers>]
 type DynamicObj() = 
     
-    //#if !FABLE_COMPILER
-    //inherit DynamicObject()
-    //#endif
+    #if !FABLE_COMPILER
+    inherit DynamicObject()
+    #endif
 
     let mutable properties = new Dictionary<string, obj>()
 
