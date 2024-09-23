@@ -14,7 +14,7 @@ module DynObj =
     /// Creates a new DynamicObj from a Dictionary containing dynamic properties.
     /// </summary>
     /// <param name="dynamicProperties">The dictionary with the dynamic properties</param>
-    let ofDict (dynamicProperties: Dictionary<string, obj>) = DynamicObj.fromDict dynamicProperties
+    let ofDict (dynamicProperties: Dictionary<string, obj>) = DynamicObj.ofDict dynamicProperties
 
     /// <summary>
     /// Creates a new DynamicObj from a sequence of key value pairs containing dynamic properties.
@@ -24,7 +24,7 @@ module DynObj =
         dynamicProperties
         |> dict
         |> Dictionary
-        |> DynamicObj.fromDict
+        |> DynamicObj.ofDict
 
     /// <summary>
     /// Creates a new DynamicObj from a list of key value pairs containing dynamic properties.
@@ -57,7 +57,7 @@ module DynObj =
             match kv.Value with
             | :? DynamicObj as valueS -> 
                 // is dynObj in second
-                match first.TryGetValue (kv.Key) with
+                match first.TryGetPropertyValue (kv.Key) with
                 | Some valueF -> 
                     let tmp = combine (unbox valueF) (unbox valueS)
                     first.SetValue(kv.Key,tmp)
@@ -71,7 +71,7 @@ module DynObj =
     /// <param name="name"></param>
     /// <param name="dynObj"></param>
     let inline tryGetTypedValue<'TPropertyValue> (propertyName:string) (dynObj : DynamicObj) : 'TPropertyValue option =
-        match (dynObj.TryGetValue propertyName) with
+        match (dynObj.TryGetPropertyValue propertyName) with
         | None -> None
         | Some o -> 
             match o with
@@ -159,7 +159,7 @@ module DynObj =
     /// <param name="propertyName">The name of the dynamic property to get</param>
     /// <param name="dynObj">The DynamicObj to get the property from</param>
     let tryGetValue (propertyName: string) (dynObj: DynamicObj) = 
-        dynObj.TryGetValue propertyName
+        dynObj.TryGetPropertyValue propertyName
 
     /// <summary>
     /// Removes any dynamic property with the given name from the input DynamicObj.
