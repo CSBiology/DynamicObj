@@ -4,124 +4,124 @@ open System
 open Fable.Pyxpecto
 open DynamicObj
 
-let tests_TryGetValue = testList "TryGetValue" [
+let tests_TryGetPropertyValue = testList "TryGetPropertyValue" [
     testCase "NonExisting" <| fun _ -> 
         let a = DynamicObj()
-        let b = a.TryGetValue "a"
+        let b = a.TryGetPropertyValue "a"
         Expect.isNone b "Value should not exist"
 
     testCase "Correct boxed Int" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b = a.TryGetValue "a"
+        a.SetProperty("a", 1)
+        let b = a.TryGetPropertyValue "a"
         Expect.equal (b) (Some (box 1)) "Value should be 1"
 
     testCase "Correct unboxed Int" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b = a.TryGetValue "a"
+        a.SetProperty("a", 1)
+        let b = a.TryGetPropertyValue "a"
         Expect.equal (b |> Option.map unbox<int>) (Some 1) "Value should be 1"
 
     testCase "Correct boxed String" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", "1")
-        let b = a.TryGetValue "a"
+        a.SetProperty("a", "1")
+        let b = a.TryGetPropertyValue "a"
         Expect.equal (b) (Some (box "1")) "Value should be '1'"
 
     testCase "Correct unboxed String" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", "1")
-        let b = a.TryGetValue "a"
+        a.SetProperty("a", "1")
+        let b = a.TryGetPropertyValue "a"
         Expect.equal (b |> Option.map unbox<string>) (Some "1") "Value should be '1'"
 
     testCase "Correct boxed List" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", [1; 2; 3])
-        let b = a.TryGetValue "a"
+        a.SetProperty("a", [1; 2; 3])
+        let b = a.TryGetPropertyValue "a"
         Expect.equal (b) (Some (box [1; 2; 3])) "Value should be [1; 2; 3]"
 
     testCase "Correct unboxed List" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", [1; 2; 3])
-        let b = a.TryGetValue "a"
+        a.SetProperty("a", [1; 2; 3])
+        let b = a.TryGetPropertyValue "a"
         Expect.equal (b |> Option.map unbox<int list>) (Some [1; 2; 3]) "Value should be [1; 2; 3]"
 
     testCase "Correct boxed DynamicObj" <| fun _ ->
         let a = DynamicObj()
         let b = DynamicObj()
-        a.SetValue("a", b)
-        let c = a.TryGetValue "a"
+        a.SetProperty("a", b)
+        let c = a.TryGetPropertyValue "a"
         Expect.equal (c) (Some (box b)) "Value should be a DynamicObj"
 
     testCase "Correct unboxed DynamicObj" <| fun _ ->
         let a = DynamicObj()
         let b = DynamicObj()
-        a.SetValue("a", b)
-        let c = a.TryGetValue "a"
+        a.SetProperty("a", b)
+        let c = a.TryGetPropertyValue "a"
         Expect.equal (c |> Option.map unbox<DynamicObj>) (Some b) "Value should be a DynamicObj"
 
 ]
 
-let tests_GetValue = testList "GetValue" [
+let tests_GetPropertyValue = testList "GetPropertyValue" [
     testCase "NonExisting" <| fun _ -> 
         let a = DynamicObj()
-        Expect.throws (fun () -> a.GetValue("b") |> ignore) "Value should not exist"
+        Expect.throws (fun () -> a.GetPropertyValue("b") |> ignore) "Value should not exist"
 
     testCase "Correct boxed Int" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b = a.GetValue "a"
+        a.SetProperty("a", 1)
+        let b = a.GetPropertyValue "a"
         Expect.equal (b) (box 1) "Value should be 1"
 
     testCase "Correct unboxed Int" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b = a.GetValue "a"
+        a.SetProperty("a", 1)
+        let b = a.GetPropertyValue "a"
         Expect.equal (b |> unbox<int>) (1) "Value should be 1"
 
     testCase "Correct boxed String" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", "1")
-        let b = a.GetValue "a"
+        a.SetProperty("a", "1")
+        let b = a.GetPropertyValue "a"
         Expect.equal (b) (box "1") "Value should be '1'"
 
     testCase "Correct unboxed String" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", "1")
-        let b = a.GetValue "a"
+        a.SetProperty("a", "1")
+        let b = a.GetPropertyValue "a"
         Expect.equal (b |> unbox<string>) ("1") "Value should be '1'"
 
     testCase "Correct boxed List" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", [1; 2; 3])
-        let b = a.GetValue "a"
+        a.SetProperty("a", [1; 2; 3])
+        let b = a.GetPropertyValue "a"
         Expect.equal (b) (box [1; 2; 3]) "Value should be [1; 2; 3]"
 
     testCase "Correct unboxed List" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", [1; 2; 3])
-        let b = a.GetValue "a"
+        a.SetProperty("a", [1; 2; 3])
+        let b = a.GetPropertyValue "a"
         Expect.equal (b |> unbox<int list>) ([1; 2; 3]) "Value should be [1; 2; 3]"
 
     testCase "Correct boxed DynamicObj" <| fun _ ->
         let a = DynamicObj()
         let b = DynamicObj()
-        a.SetValue("a", b)
-        let c = a.GetValue "a"
+        a.SetProperty("a", b)
+        let c = a.GetPropertyValue "a"
         Expect.equal (c) (box b) "Value should be a DynamicObj"
 
     testCase "Correct unboxed DynamicObj" <| fun _ ->
         let a = DynamicObj()
         let b = DynamicObj()
-        a.SetValue("a", b)
-        let c = a.GetValue "a"
+        a.SetProperty("a", b)
+        let c = a.GetPropertyValue "a"
         Expect.equal (c |> unbox<DynamicObj>) (b) "Value should be a DynamicObj"
 
 ]
 
 #if !FABLE_COMPILER
-// instance method TryGetTypedValue is not Fable-compatible
-let tests_TryGetTypedValue = testList "TryGetTypedValue" [
+// instance method TryGetTypedPropertyValue is not Fable-compatible
+let tests_TryGetTypedPropertyValue = testList "TryGetTypedPropertyValue" [
     
     testCase "typeof" <| fun _ -> 
         let a = typeof<int>
@@ -129,69 +129,69 @@ let tests_TryGetTypedValue = testList "TryGetTypedValue" [
 
     testCase "NonExisting" <| fun _ -> 
         let a = DynamicObj()
-        let b = a.TryGetTypedValue<int> "a"
+        let b = a.TryGetTypedPropertyValue<int> "a"
         Expect.isNone b "Value should not exist"
 
     testCase "Correct Int" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b = a.TryGetTypedValue<int> "a"
+        a.SetProperty("a", 1)
+        let b = a.TryGetTypedPropertyValue<int> "a"
         Expect.equal b (Some 1) "Value should be 1"
 
     testCase "Incorrect Int" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", "1")
-        let b = a.TryGetTypedValue<int> "a"
+        a.SetProperty("a", "1")
+        let b = a.TryGetTypedPropertyValue<int> "a"
         Expect.isNone b "Value should not be an int"
 
     testCase "Correct String" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", "1")
-        let b = a.TryGetTypedValue<string> "a"
+        a.SetProperty("a", "1")
+        let b = a.TryGetTypedPropertyValue<string> "a"
         Expect.equal b (Some "1") "Value should be '1'"
 
     testCase "Incorrect String" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b = a.TryGetTypedValue<string> "a"
+        a.SetProperty("a", 1)
+        let b = a.TryGetTypedPropertyValue<string> "a"
         Expect.isNone b "Value should not be a string"
 
     testCase "Correct List" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", [1; 2; 3])
-        let b = a.TryGetTypedValue<int list> "a"
+        a.SetProperty("a", [1; 2; 3])
+        let b = a.TryGetTypedPropertyValue<int list> "a"
         Expect.equal b (Some [1; 2; 3]) "Value should be [1; 2; 3]"
 
     testCase "Incorrect List" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", [1; 2; 3])
-        let b = a.TryGetTypedValue<string list> "a"
+        a.SetProperty("a", [1; 2; 3])
+        let b = a.TryGetTypedPropertyValue<string list> "a"
         Expect.isNone b "Value should not be a string list"
 
     testCase "Correct DynamicObj" <| fun _ ->
         let a = DynamicObj()
         let b = DynamicObj()
-        a.SetValue("a", b)
-        let c = a.TryGetTypedValue<DynamicObj> "a"
+        a.SetProperty("a", b)
+        let c = a.TryGetTypedPropertyValue<DynamicObj> "a"
         Expect.equal c (Some b) "Value should be a DynamicObj"
 
     testCase "Incorrect DynamicObj" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b = a.TryGetTypedValue<DynamicObj> "a"
+        a.SetProperty("a", 1)
+        let b = a.TryGetTypedPropertyValue<DynamicObj> "a"
         Expect.isNone b "Value should not be a DynamicObj"
 ]
 #endif
 
-let tests_TryGetStaticPropertyInfo = testList "TryGetStaticPropertyInfo" [
+let tests_TryGetStaticPropertyHelper = testList "TryGetStaticPropertyHelper" [
     testCase "NonExisting" <| fun _ -> 
         let a = DynamicObj()
-        let b = a.TryGetStaticPropertyInfo("a")
+        let b = a.TryGetStaticPropertyHelper("a")
         Expect.isNone b "Value should not exist"
 
     testCase "Properties dictionary is static property" <| fun _ -> 
         let a = DynamicObj()
-        let b =  Expect.wantSome (a.TryGetStaticPropertyInfo("Properties")) "Value should exist"
+        let b =  Expect.wantSome (a.TryGetStaticPropertyHelper("Properties")) "Value should exist"
         Expect.isTrue b.IsStatic "Properties should be static"
         Expect.isFalse b.IsDynamic "Properties should not be dynamic"
         Expect.isTrue b.IsMutable "Properties should be mutable"
@@ -199,20 +199,20 @@ let tests_TryGetStaticPropertyInfo = testList "TryGetStaticPropertyInfo" [
 
     testCase "dynamic property not retrieved as static" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        Expect.isNone (a.TryGetStaticPropertyInfo("a")) "dynamic property should not be retrieved via TryGetStaticPropertyInfo"
+        a.SetProperty("a", 1)
+        Expect.isNone (a.TryGetStaticPropertyHelper("a")) "dynamic property should not be retrieved via TryGetStaticPropertyInfo"
 ]
 
-let tests_TryGetDynamicPropertyInfo = testList "TryGetDynamicPropertyInfo" [
+let tests_TryGetDynamicPropertyHelper = testList "TryGetDynamicPropertyHelper" [
     testCase "NonExisting" <| fun _ -> 
         let a = DynamicObj()
-        let b = a.TryGetDynamicPropertyInfo("a")
+        let b = a.TryGetDynamicPropertyHelper("a")
         Expect.isNone b "Value should not exist"
 
     testCase "Existing dynamic property" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b =  Expect.wantSome (a.TryGetDynamicPropertyInfo("a")) "Value should exist"
+        a.SetProperty("a", 1)
+        let b =  Expect.wantSome (a.TryGetDynamicPropertyHelper("a")) "Value should exist"
         Expect.isFalse b.IsStatic "Properties should be static"
         Expect.isTrue b.IsDynamic "Properties should not be dynamic"
         Expect.isTrue b.IsMutable "Properties should be mutable"
@@ -220,19 +220,19 @@ let tests_TryGetDynamicPropertyInfo = testList "TryGetDynamicPropertyInfo" [
 
     testCase "static property not retrieved as dynamic" <| fun _ -> 
         let a = DynamicObj()
-        Expect.isNone (a.TryGetDynamicPropertyInfo("Properties")) "static property should not be retrieved via TryGetDynamicPropertyInfo"
+        Expect.isNone (a.TryGetDynamicPropertyHelper("Properties")) "static property should not be retrieved via TryGetDynamicPropertyInfo"
 ]
 
-let tests_TryGetPropertyInfo = testList "TryGetPropertyInfo" [
+let tests_TryGetPropertyHelper = testList "TryGetPropertyHelper" [
     testCase "NonExisting" <| fun _ -> 
         let a = DynamicObj()
-        let b = a.TryGetPropertyInfo("a")
+        let b = a.TryGetPropertyHelper("a")
         Expect.isNone b "Value should not exist"
 
     testCase "Existing dynamic property" <| fun _ -> 
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        let b =  Expect.wantSome (a.TryGetPropertyInfo("a")) "Value should exist"
+        a.SetProperty("a", 1)
+        let b =  Expect.wantSome (a.TryGetPropertyHelper("a")) "Value should exist"
         Expect.isFalse b.IsStatic "Properties should be static"
         Expect.isTrue b.IsDynamic "Properties should not be dynamic"
         Expect.isTrue b.IsMutable "Properties should be mutable"
@@ -240,34 +240,36 @@ let tests_TryGetPropertyInfo = testList "TryGetPropertyInfo" [
 
     testCase "Existing static property" <| fun _ -> 
         let a = DynamicObj()
-        let b =  Expect.wantSome (a.TryGetPropertyInfo("Properties")) "Value should exist"
+        let b =  Expect.wantSome (a.TryGetPropertyHelper("Properties")) "Value should exist"
         Expect.isTrue b.IsStatic "Properties should be static"
         Expect.isFalse b.IsDynamic "Properties should not be dynamic"
         Expect.isTrue b.IsMutable "Properties should be mutable"
         Expect.isFalse b.IsImmutable "Properties should not be immutable"
 ]
 
-let tests_SetValue = testList "SetValue" [
+let tests_SetProperty = testList "SetProperty" [
+
+    //TODO: static property accession!
 
     testCase "Same String" <| fun _ ->
         let a = DynamicObj ()
-        a.SetValue("aaa", 5)
+        a.SetProperty("aaa", 5)
         let b = DynamicObj ()
-        b.SetValue("aaa", 5)
+        b.SetProperty("aaa", 5)
         Expect.equal a b "Values should be equal"
         Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
 
     testCase "Different Strings" <| fun _ ->
         let a = DynamicObj ()
-        a.SetValue("aaa", 1212)
+        a.SetProperty("aaa", 1212)
         let b = DynamicObj ()
-        b.SetValue("aaa", 5)
+        b.SetProperty("aaa", 5)
         Expect.notEqual a b "Values should not be equal"
 
     testCase "String only on one" <| fun _ ->
         let a = DynamicObj ()
         let b = DynamicObj ()
-        b.SetValue("aaa", 5)
+        b.SetProperty("aaa", 5)
 
         Expect.notEqual a b "Values should not be equal"
         Expect.notEqual b a "Values should not be equal (Reversed equality)"
@@ -275,15 +277,15 @@ let tests_SetValue = testList "SetValue" [
     testCase "Same lists different keys" <| fun _ ->
         let a' = DynamicObj ()
         let b' = DynamicObj ()
-        a'.SetValue("quack!", [1; 2; 3])
-        b'.SetValue("quack!1", [1; 2; 3])
+        a'.SetProperty("quack!", [1; 2; 3])
+        b'.SetProperty("quack!1", [1; 2; 3])
         Expect.notEqual (a'.GetHashCode()) (b'.GetHashCode()) "Hash codes should not be equal"   
    
     testCase "Different lists" <| fun _ ->
         let a' = DynamicObj ()
         let b' = DynamicObj ()
-        a'.SetValue("quack!", [1; 2; 3])
-        b'.SetValue("quack!", [1; 2; 3; 4; 34])
+        a'.SetProperty("quack!", [1; 2; 3])
+        b'.SetProperty("quack!", [1; 2; 3; 4; 34])
         Expect.notEqual (a'.GetHashCode()) (b'.GetHashCode()) "Hash codes should not be equal"
 
     testCase "Nested Same List Same String" <| fun _ ->
@@ -292,11 +294,11 @@ let tests_SetValue = testList "SetValue" [
 
         let a' = DynamicObj ()
         let b' = DynamicObj ()
-        a'.SetValue("quack!", [1; 2; 3])
-        b'.SetValue("quack!", [1; 2; 3])
+        a'.SetProperty("quack!", [1; 2; 3])
+        b'.SetProperty("quack!", [1; 2; 3])
 
-        a.SetValue("aaa", a')
-        b.SetValue("aaa", b')
+        a.SetProperty("aaa", a')
+        b.SetProperty("aaa", b')
         Expect.equal a' b' "New Values should be equal"
         Expect.equal a b "Old Values should be equal"
         Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Old Hash codes should be equal"
@@ -308,25 +310,27 @@ let tests_SetValue = testList "SetValue" [
 
         let a' = DynamicObj ()
         let b' = DynamicObj ()
-        a'.SetValue("quack!", [1; 2; 3])
-        b'.SetValue("quack!", [1; 2; 3])
+        a'.SetProperty("quack!", [1; 2; 3])
+        b'.SetProperty("quack!", [1; 2; 3])
 
-        a.SetValue("aaa", a')
-        b.SetValue("aaa1", b')
+        a.SetProperty("aaa", a')
+        b.SetProperty("aaa1", b')
         Expect.equal a' b' "New Values should be equal"
         Expect.notEqual a b "Old Values should not be equal"
         Expect.equal (a'.GetHashCode()) (b'.GetHashCode()) "New Hash codes should be equal"
     ]
 
-let tests_Remove = testList "Remove" [
+let tests_RemoveProperty = testList "RemoveProperty" [
   
+    //TODO: static property removal!
+
     testCase "Remove" <| fun _ ->
         let a = DynamicObj ()
         let b = DynamicObj ()
 
-        a.SetValue("quack!", "hello")
+        a.SetProperty("quack!", "hello")
 
-        a.Remove "quack!" |> ignore
+        a.RemoveProperty "quack!" |> ignore
 
         Expect.equal a b "Values should be equal"
         Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
@@ -335,10 +339,10 @@ let tests_Remove = testList "Remove" [
         let a = DynamicObj ()
         let b = DynamicObj ()
 
-        a.SetValue("quack!", "hello")
-        b.SetValue("quack!", "hello")
+        a.SetProperty("quack!", "hello")
+        b.SetProperty("quack!", "hello")
 
-        a.Remove "quecky!" |> ignore
+        a.RemoveProperty "quecky!" |> ignore
 
         Expect.equal a b "Values should be equal"
         Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
@@ -347,10 +351,10 @@ let tests_Remove = testList "Remove" [
         let a = DynamicObj ()
         let b = DynamicObj ()
 
-        a.SetValue("quack!", "hello")
-        b.SetValue("quack!", "hello")
+        a.SetProperty("quack!", "hello")
+        b.SetProperty("quack!", "hello")
 
-        a.Remove "quack!" |> ignore
+        a.RemoveProperty "quack!" |> ignore
 
         Expect.notEqual a b "Values should be unequal"
         Expect.notEqual (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be unequal"
@@ -361,12 +365,12 @@ let tests_Remove = testList "Remove" [
 
         let a' = DynamicObj ()
         let b' = DynamicObj ()
-        a'.SetValue("quack!", [1; 2; 3])
-        b'.SetValue("quack!", [1; 2; 3])
+        a'.SetProperty("quack!", [1; 2; 3])
+        b'.SetProperty("quack!", [1; 2; 3])
 
-        a.SetValue("aaa", a')
-        a.Remove "quack!" |> ignore
-        b.SetValue("aaa", b')
+        a.SetProperty("aaa", a')
+        a.RemoveProperty "quack!" |> ignore
+        b.SetProperty("aaa", b')
 
         Expect.equal a b "Values should be equal"
         Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
@@ -377,12 +381,12 @@ let tests_Remove = testList "Remove" [
 
         let a' = DynamicObj ()
         let b' = DynamicObj ()
-        a'.SetValue("quack!", [1; 2; 3])
-        b'.SetValue("quack!", [1; 2; 3])
+        a'.SetProperty("quack!", [1; 2; 3])
+        b'.SetProperty("quack!", [1; 2; 3])
 
-        a.SetValue("aaa", a')
-        a'.Remove "quack!" |> ignore
-        b.SetValue("aaa", b')
+        a.SetProperty("aaa", a')
+        a'.RemoveProperty "quack!" |> ignore
+        b.SetProperty("aaa", b')
 
         Expect.notEqual a b "Values should be unequal"
         Expect.notEqual (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be unequal"
@@ -393,13 +397,13 @@ let tests_Remove = testList "Remove" [
 
         let a' = DynamicObj ()
         let b' = DynamicObj ()
-        a'.SetValue("quack!", [1; 2; 3])
-        b'.SetValue("quack!", [1; 2; 3])
+        a'.SetProperty("quack!", [1; 2; 3])
+        b'.SetProperty("quack!", [1; 2; 3])
 
-        a.SetValue("aaa", a')
-        a.Remove "quack!" |> ignore
-        b.SetValue("aaa", b')
-        b.Remove "quack!" |> ignore
+        a.SetProperty("aaa", a')
+        a.RemoveProperty "quack!" |> ignore
+        b.SetProperty("aaa", b')
+        b.RemoveProperty "quack!" |> ignore
 
         Expect.equal a b "Values should be equal"
         Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Hash codes should be equal"
@@ -409,8 +413,8 @@ let tests_Remove = testList "Remove" [
 let tests_GetPropertyHelpers = testList "GetPropertyHelpers" [
     testCase "GetPropertyHelpers" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        a.SetValue("b", 2)
+        a.SetProperty("a", 1)
+        a.SetProperty("b", 2)
         let properties = a.GetPropertyHelpers(true)
         let names = properties |> Seq.map (fun p -> p.Name)
         Expect.equal (Seq.toList names) ["a"; "b"] "Should have all properties"
@@ -419,8 +423,8 @@ let tests_GetPropertyHelpers = testList "GetPropertyHelpers" [
 let tests_GetProperties = testList "GetProperties" [
     testCase "GetProperties" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        a.SetValue("b", 2)
+        a.SetProperty("a", 1)
+        a.SetProperty("b", 2)
         let properties = a.GetProperties(true) |> List.ofSeq
         let expected = [
             System.Collections.Generic.KeyValuePair("a", box 1)
@@ -432,28 +436,28 @@ let tests_GetProperties = testList "GetProperties" [
 let tests_CopyDynamicPropertiesTo = testList "CopyDynamicPropertiesTo" [
     testCase "ExistingObject" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        a.SetValue("b", 2)
+        a.SetProperty("a", 1)
+        a.SetProperty("b", 2)
         let b = DynamicObj()
-        b.SetValue("c", 3)
+        b.SetProperty("c", 3)
         a.CopyDynamicPropertiesTo(b)
-        Expect.equal (b.GetValue("a")) 1 "Value a should be copied"
-        Expect.equal (b.GetValue("b")) 2 "Value b should be copied"
-        Expect.equal (b.GetValue("c")) 3 "Value c should be unaffected"
+        Expect.equal (b.GetPropertyValue("a")) 1 "Value a should be copied"
+        Expect.equal (b.GetPropertyValue("b")) 2 "Value b should be copied"
+        Expect.equal (b.GetPropertyValue("c")) 3 "Value c should be unaffected"
 
     testCase "NoOverwrite throws" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
+        a.SetProperty("a", 1)
         let b = DynamicObj()
-        b.SetValue("a", 3)
+        b.SetProperty("a", 3)
         let f = fun () -> a.CopyDynamicPropertiesTo(b)
         Expect.throws f "Should throw because property exists"
 
     testCase "Overwrite" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
+        a.SetProperty("a", 1)
         let b = DynamicObj()
-        b.SetValue("a", 3)
+        b.SetProperty("a", 3)
         Expect.notEqual a b "Values should not be equal before copying"
         a.CopyDynamicPropertiesTo(b, true)
         Expect.equal a b "Values should be equal"
@@ -462,8 +466,8 @@ let tests_CopyDynamicPropertiesTo = testList "CopyDynamicPropertiesTo" [
 let tests_CopyDynamicProperties = testList "CopyDynamicProperties" [
     testCase "NewObject" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("a", 1)
-        a.SetValue("b", 2)
+        a.SetProperty("a", 1)
+        a.SetProperty("b", 2)
         let b = a.CopyDynamicProperties()
         Expect.equal a b "Values should be equal"
 ]
@@ -471,32 +475,32 @@ let tests_CopyDynamicProperties = testList "CopyDynamicProperties" [
 let tests_Equals = testList "Equals" [
     testCase "Same Object" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("b", 2)
+        a.SetProperty("b", 2)
         Expect.isTrue (a.Equals(a)) "Values should be equal"
 
     testCase "Different Equal Objects" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("b", 2)
+        a.SetProperty("b", 2)
         let a2 = DynamicObj()
-        a2.SetValue("b", 2)
+        a2.SetProperty("b", 2)
         Expect.isTrue (a.Equals(a2)) "Values should be equal"
 
     testCase "Different Unequal Objects" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("b", 2)
+        a.SetProperty("b", 2)
         let a2 = DynamicObj()
-        a2.SetValue("b", 3)
+        a2.SetProperty("b", 3)
         Expect.isFalse (a.Equals(a2)) "Values should not be equal"
 
     testCase "nested DynamicObjs" <| fun _ ->
         let a = DynamicObj()
         let b = DynamicObj()
-        b.SetValue("c", 2)
-        a.SetValue("b", b)
+        b.SetProperty("c", 2)
+        a.SetProperty("b", b)
         let a2 = DynamicObj()
         let b2 = DynamicObj()
-        b2.SetValue("c", 2)
-        a2.SetValue("b", b2)
+        b2.SetProperty("c", 2)
+        a2.SetProperty("b", b2)
         Expect.isTrue (a.Equals(a2)) "Values should be equal"
 
 ]
@@ -504,49 +508,49 @@ let tests_Equals = testList "Equals" [
 let tests_GetHashCode = testList "GetHashCode" [
     testCase "Same Object" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("b", 2)
+        a.SetProperty("b", 2)
         Expect.equal (a.GetHashCode()) (a.GetHashCode()) "Values should be equal"
 
     testCase "Different Equal Objects" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("b", 2)
+        a.SetProperty("b", 2)
         let a2 = DynamicObj()
-        a2.SetValue("b", 2)
+        a2.SetProperty("b", 2)
         Expect.equal (a.GetHashCode()) (a2.GetHashCode()) "Values should be equal"
 
     testCase "Different Unequal Objects" <| fun _ ->
         let a = DynamicObj()
-        a.SetValue("b", 2)
+        a.SetProperty("b", 2)
         let a2 = DynamicObj()
-        a.SetValue("b", 3)
+        a.SetProperty("b", 3)
         Expect.notEqual (a.GetHashCode()) (a2.GetHashCode()) "Values should not be equal"
 
     testCase "nested DynamicObjs" <| fun _ ->
         let a = DynamicObj()
         let b = DynamicObj()
-        b.SetValue("c", 2)
-        a.SetValue("b", b)
+        b.SetProperty("c", 2)
+        a.SetProperty("b", b)
         let a2 = DynamicObj()
         let b2 = DynamicObj()
-        b2.SetValue("c", 2)
-        a2.SetValue("b", b2)
+        b2.SetProperty("c", 2)
+        a2.SetProperty("b", b2)
         Expect.equal (a.GetHashCode()) (a2.GetHashCode()) "Values should be equal"
 ]
 
 let main = testList "DynamicObj (Class)" [
-    tests_TryGetValue
-    tests_GetValue
+    tests_TryGetPropertyValue
+    tests_GetPropertyValue
 
     #if !FABLE_COMPILER
     // instance method TryGetTypedValue is not Fable-compatible
-    tests_TryGetTypedValue
+    tests_TryGetTypedPropertyValue
     #endif
 
-    tests_TryGetStaticPropertyInfo
-    tests_TryGetDynamicPropertyInfo
-    tests_TryGetPropertyInfo
-    tests_SetValue
-    tests_Remove
+    tests_TryGetStaticPropertyHelper
+    tests_TryGetDynamicPropertyHelper
+    tests_TryGetPropertyHelper
+    tests_SetProperty
+    tests_RemoveProperty
     tests_GetPropertyHelpers
     tests_GetProperties
     tests_CopyDynamicPropertiesTo
