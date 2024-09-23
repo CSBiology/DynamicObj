@@ -60,17 +60,17 @@ module DynObj =
                 match first.TryGetPropertyValue (kv.Key) with
                 | Some valueF -> 
                     let tmp = combine (unbox valueF) (unbox valueS)
-                    first.SetValue(kv.Key,tmp)
-                | None -> first.SetValue(kv.Key,valueS)
-            | _ -> first.SetValue(kv.Key,kv.Value)
+                    first.SetProperty(kv.Key,tmp)
+                | None -> first.SetProperty(kv.Key,valueS)
+            | _ -> first.SetProperty(kv.Key,kv.Value)
         first
 
     /// <summary>
-    /// Returns Some('TPropertyValue) when a dynamic property with the given name and type exists on the input DynamicObj, otherwise None.
+    /// Returns Some('TPropertyValue) when a dynamic (or static) property with the given name and type exists on the input, otherwise None.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="dynObj"></param>
-    let inline tryGetTypedValue<'TPropertyValue> (propertyName:string) (dynObj : DynamicObj) : 'TPropertyValue option =
+    /// <param name="propertyName">the name of the property to get</param>
+    /// <param name="dynObj">the input DynamicObj</param>
+    let inline tryGetTypedPropertyValue<'TPropertyValue> (propertyName:string) (dynObj : DynamicObj) : 'TPropertyValue option =
         match (dynObj.TryGetPropertyValue propertyName) with
         | None -> None
         | Some o -> 
@@ -79,105 +79,111 @@ module DynObj =
             | _ -> None
 
     /// <summary>
-    /// Sets the given dynamic property name and value on the given DynamicObj.
+    /// Sets the dynamic (or static) property value with the given name on the given DynamicObj, creating a new dynamic property if none exists.
     /// </summary>
     /// <param name="propertyName">The name of the dynamic property to set</param>
     /// <param name="propertyValue">The value of the dynamic property to set</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let setValue (propertyName:string) (propertyValue:'TPropertyValue) (dynObj : DynamicObj) =
-        dynObj.SetValue(propertyName,propertyValue)
+    let setProperty (propertyName:string) (propertyValue:'TPropertyValue) (dynObj : DynamicObj) =
+        dynObj.SetProperty(propertyName,propertyValue)
 
     /// <summary>
-    /// Sets the given dynamic property name and value on the given DynamicObj and returns it.
+    /// Sets the dynamic (or static) property value with the given name, creating a new dynamic property if none exists on the given DynamicObj and returns it.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to set</param>
-    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="propertyName">The name of the property to set</param>
+    /// <param name="propertyValue">The value of the property to set</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let withValue (propertyName:string) (propertyValue:'TPropertyValue) (dynObj: DynamicObj) =
-        setValue propertyName propertyValue dynObj
+    let withProperty (propertyName:string) (propertyValue:'TPropertyValue) (dynObj: DynamicObj) =
+        setProperty propertyName propertyValue dynObj
         dynObj
 
     /// <summary>
-    /// Sets the given dynamic property name and value on the given DynamicObj if the value is Some('TPropertyValue).
+    /// Sets the dynamic (or static) property value with the given name on the given DynamicObj if the value is Some('TPropertyValue), creating a new dynamic property if none exists.
     /// If the given propertyValue is None, does nothing to the input DynamicObj.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to set</param>
-    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="propertyName">The name of the property to set</param>
+    /// <param name="propertyValue">The value of the property to set</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let setValueOpt (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: DynamicObj) = 
+    let setOptionalProperty (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: DynamicObj) = 
         match propertyValue with
-        | Some pv -> dynObj |> setValue propertyName pv
+        | Some pv -> dynObj |> setProperty propertyName pv
         | None -> ()
 
     /// <summary>
-    /// Sets the given dynamic property name and value on the given DynamicObj if the value is Some('TPropertyValue) and returns it.
-    /// If the given propertyValue is None, returns the unchanged DynamicObj.
+    /// Sets the dynamic (or static) property value with the given name on the given DynamicObj if the value is Some('TPropertyValue), creating a new dynamic property if none exists, and returns it.
+    /// If the given propertyValue is None, does nothing to the input DynamicObj.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to set</param>
-    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="propertyName">The name of the property to set</param>
+    /// <param name="propertyValue">The value of the property to set</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let withValueOpt (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: DynamicObj) = 
+    let withOptionalProperty (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: DynamicObj) = 
         match propertyValue with
-        | Some pv -> dynObj |> withValue propertyName pv
+        | Some pv -> dynObj |> withProperty propertyName pv
         | None -> dynObj
 
     /// <summary>
-    /// Sets the given dynamic property name with the result of a mapping function applied to the given property value on the given DynamicObj if the value is Some('TPropertyValue).
+    /// Sets the given dynamic (or static) property with the result of a mapping function applied to the given property value on the given DynamicObj if the value is Some('TPropertyValue).
     /// If the given propertyValue is None, does nothing to the input DynamicObj.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to set</param>
-    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="propertyName">The name of the property to set</param>
+    /// <param name="propertyValue">The value of the property to set</param>
     /// <param name="mapping">A function to apply to the property value before setting it on the DynamicObj</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let setValueOptBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: DynamicObj) = 
+    let setOptionalPropertyBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: DynamicObj) = 
         match propertyValue with
-        | Some pv -> dynObj |> setValue propertyName (mapping pv)
+        | Some pv -> dynObj |> setProperty propertyName (mapping pv)
         | None -> ()
 
     /// <summary>
-    /// Sets the given dynamic property name with the result of a mapping function applied to the given property value on the given DynamicObj if the value is Some('TPropertyValue) and returns it.
+    /// Sets the given dynamic (or static) property with the result of a mapping function applied to the given property value on the given DynamicObj if the value is Some('TPropertyValue) and returns it.
     /// If the given propertyValue is None, returns the unchanged DynamicObj.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to set</param>
-    /// <param name="propertyValue">The value of the dynamic property to set</param>
+    /// <param name="propertyName">The name of the property to set</param>
+    /// <param name="propertyValue">The value of the property to set</param>
     /// <param name="mapping">A function to apply to the property value before setting it on the DynamicObj</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let withValueOptBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: DynamicObj) = 
+    let withOptionalPropertyBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: DynamicObj) = 
         match propertyValue with
-        | Some pv -> dynObj |> withValue propertyName (mapping pv)
+        | Some pv -> dynObj |> withProperty propertyName (mapping pv)
         | None -> dynObj
 
     /// <summary>
-    /// Returns Some(boxed value) if the DynamicObj contains a dynamic property with the given name, and None otherwise.
+    /// Returns Some(boxed property value) if a dynamic (or static) property with the given name exists on the input, otherwise None.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to get</param>
+    /// <param name="propertyName">The name of the property to get</param>
     /// <param name="dynObj">The DynamicObj to get the property from</param>
-    let tryGetValue (propertyName: string) (dynObj: DynamicObj) = 
+    let tryGetPropertyValue (propertyName: string) (dynObj: DynamicObj) = 
         dynObj.TryGetPropertyValue propertyName
 
     /// <summary>
     /// Removes any dynamic property with the given name from the input DynamicObj.
+    /// If the property is static and mutable, it will be set to null.
+    /// Static immutable properties cannot be removed.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to remove</param>
+    /// <param name="propertyName">The name of the property to remove</param>
     /// <param name="dynObj">The DynamicObj to remove the property from</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let remove (propertyName: string) (dynObj: DynamicObj) = 
-        DynamicObj.remove (dynObj, propertyName) |> ignore
+    /// <exception cref="System.MemberAccessException">Thrown if the dynamic property does not exist</exception>
+    let removeProperty (propertyName: string) (dynObj: DynamicObj) = 
+        dynObj.RemoveProperty(propertyName) |> ignore
 
     /// <summary>
-    /// Returns the input DynamicObj with any dynamic property with the given name removed.
+    /// Removes any dynamic property with the given name from the input DynamicObj and returns it.
+    /// If the property is static and mutable, it will be set to null.
+    /// Static immutable properties cannot be removed.
     /// </summary>
-    /// <param name="propertyName">The name of the dynamic property to remove</param>
+    /// <param name="propertyName">The name of the property to remove</param>
     /// <param name="dynObj">The DynamicObj to remove the property from</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
+    /// <exception cref="System.MemberAccessException">Thrown if the dynamic property does not exist</exception>
     let withoutProperty(propertyName: string) (dynObj: DynamicObj) = 
-        dynObj |> remove propertyName
+        dynObj |> removeProperty propertyName
         dynObj
 
     /// <summary>

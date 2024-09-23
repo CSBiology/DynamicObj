@@ -30,22 +30,22 @@ type DynamicObj() =
         obj
 
     /// <summary>
-    /// 
+    /// Returns Some(PropertyHelper) if a static property with the given name exists, otherwise None.
     /// </summary>
-    /// <param name="propertyName"></param>
+    /// <param name="propertyName">The name of the property to get the PropertyHelper for</param>
     member this.TryGetStaticPropertyHelper (propertyName: string) : PropertyHelper option  = 
         ReflectionUtils.tryGetStaticPropertyInfo this propertyName
 
     /// <summary>
-    /// 
+    /// Returns Some(PropertyHelper) if a dynamic property with the given name exists, otherwise None.
     /// </summary>
-    /// <param name="propertyName"></param>
+    /// <param name="propertyName">The name of the property to get the PropertyHelper for</param>
     member this.TryGetDynamicPropertyHelper (propertyName: string) : PropertyHelper option =
         #if FABLE_COMPILER_JAVASCRIPT  || FABLE_COMPILER_TYPESCRIPT
-        FableJS.tryGetDynamicPropertyHelper this name
+        FableJS.tryGetDynamicPropertyHelper this propertyName
         #endif
         #if FABLE_COMPILER_PYTHON
-        FablePy.tryGetDynamicPropertyHelper this name
+        FablePy.tryGetDynamicPropertyHelper this propertyName
         #endif
         #if !FABLE_COMPILER
         match properties.TryGetValue propertyName with            
@@ -64,9 +64,9 @@ type DynamicObj() =
         #endif
         
     /// <summary>
-    /// 
+    /// Returns Some(PropertyHelper) if a property (static or dynamic) with the given name exists, otherwise None.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="propertyName">The name of the property to get the PropertyHelper for</param>
     member this.TryGetPropertyHelper (propertyName: string) : PropertyHelper option =
         match this.TryGetStaticPropertyHelper propertyName with
         | Some pi -> Some pi
@@ -85,11 +85,11 @@ type DynamicObj() =
     /// Returns the boxed property value of the dynamic (or static) property with the given name.
     /// </summary>
     /// <param name="propertyName">the name of the property to get</param>
-    /// <exception cref="System.MissingMemberException">Thrown if the dynamic property does not exist</exception>
+    /// <exception cref="System.MissingMemberException">Thrown if no dynamic or static property with the given name exists</exception>
     member this.GetPropertyValue (propertyName: string) =
         match this.TryGetPropertyValue(propertyName) with
         | Some value -> value
-        | None -> raise <| System.MissingMemberException($"Property \"{propertyName}\" does not exist on object.")
+        | None -> raise <| System.MissingMemberException($"No dynamic or static property \"{propertyName}\" does exist on object.")
         
     #if !FABLE_COMPILER
     
@@ -106,7 +106,7 @@ type DynamicObj() =
         | None -> None
         | Some o ->      
             match o with
-            | :? 'a as o -> o |> Some
+            | :? 'TPropertyValue as o -> o |> Some
             | _ -> None
     #endif    
 
@@ -114,9 +114,9 @@ type DynamicObj() =
     /// <summary>
     /// Sets the dynamic (or static) property value with the given name, creating a new dynamic property if none exists.
     /// </summary>
-    /// <param name="propertyName"></param>
-    /// <param name="propertyValue"></param>
-    member this.SetPropertyValue (
+    /// <param name="propertyName">the name of the property to set</param>
+    /// <param name="propertyValue">the value of the property to set</param>
+    member this.SetProperty (
         propertyName: string,
         propertyValue: obj
     ) =
@@ -129,10 +129,10 @@ type DynamicObj() =
                 failwith $"Cannot set value for static, immutable property \"{propertyName}\""
         | None -> 
             #if FABLE_COMPILER_JAVASCRIPT  || FABLE_COMPILER_TYPESCRIPT
-            FableJS.setPropertyValue this name value
+            FableJS.setPropertyValue this propertyName propertyValue
             #endif
             #if FABLE_COMPILER_PYTHON
-            FablePy.setPropertyValue this name value
+            FablePy.setPropertyValue this propertyName propertyValue
             #endif
             #if !FABLE_COMPILER
             // Next check the Properties collection for member
@@ -146,7 +146,7 @@ type DynamicObj() =
     /// If the property is static and mutable, it will be set to null.
     /// Static immutable properties cannot be removed.
     /// </summary>
-    /// <param name="propertyName"></param>
+    /// <param name="propertyName">the name of the property to remove</param>
     /// <exception cref="System.MemberAccessException">Thrown if the dynamic property does not exist</exception>
     member this.RemoveProperty (propertyName: string) =
         match this.TryGetPropertyHelper propertyName with
@@ -158,9 +158,11 @@ type DynamicObj() =
         | None -> false
 
     /// <summary>
-    /// 
+    /// Returns PropertyHelpers for all dynamic properties of the DynamicObj.
+    ///
+    /// When includeInstanceProperties is set to true, instance properties (= 'static' properties on the class) are included in the result.
     /// </summary>
-    /// <param name="includeInstanceProperties"></param>
+    /// <param name="includeInstanceProperties">whether to include instance properties (= 'static' properties on the class)</param>
     member this.GetPropertyHelpers (includeInstanceProperties: bool) =
         #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT           
         FableJS.getPropertyHelpers this
@@ -193,8 +195,12 @@ type DynamicObj() =
         #endif
         |> Seq.filter (fun p -> p.Name.ToLower() <> "properties")
 
-    /// Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
-    /// Properties are returned as a key value pair of the member names and the boxed values
+    /// <summary>
+    /// Returns a sequence of all dynamic properties as a key value pair of the property names and the boxed property values.
+    ///
+    /// When includeInstanceProperties is set to true, instance properties (= 'static' properties on the class) are included in the result.
+    /// </summary>
+    /// <param name="includeInstanceProperties">whether to include instance properties (= 'static' properties on the class)</param>
     member this.GetProperties includeInstanceProperties : seq<KeyValuePair<string,obj>> =    
         this.GetPropertyHelpers(includeInstanceProperties)
         |> Seq.choose (fun kv -> 
@@ -204,43 +210,63 @@ type DynamicObj() =
                 None
         )
 
+    /// <summary>
+    /// Returns a sequence of all dynamic property names.
+    ///
+    /// When includeInstanceProperties is set to true, instance properties (= 'static' properties on the class) are included in the result.
+    /// </summary>
+    /// <param name="includeInstanceProperties"></param>
+    member this.GetPropertyNames(includeInstanceProperties) =
+        this.GetProperties(includeInstanceProperties)
+        |> Seq.map (fun kv -> kv.Key)
+
+    /// <summary>
     /// Copies all dynamic members of the DynamicObj to the target DynamicObj.
+    ///
+    /// If overWrite is set to true, existing properties on the target object will be overwritten.
+    ///
+    /// Note that this method will not perform nested checks, e.g. if a property is a DynamicObj itself, it will not be copied recursively.
+    /// </summary>
+    /// <param name="target">The target object to copy dynamic members to</param>
+    /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
     member this.CopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
-        let overWrite = Option.defaultValue false overWrite
+        let overWrite = defaultArg overWrite false 
         this.GetProperties(false)
         |> Seq.iter (fun kv ->
             match target.TryGetPropertyHelper kv.Key with
             | Some pi when overWrite -> pi.SetValue target kv.Value
             | Some _ -> failwith $"Property \"{kv.Key}\" already exists on target object and overWrite was not set to true."
-            | None -> target.SetPropertyValue(kv.Key,kv.Value)
+            | None -> target.SetProperty(kv.Key,kv.Value)
         )
 
+    /// <summary>
     /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    /// </summary>
     member this.CopyDynamicProperties() =
         let target = DynamicObj()
         this.CopyDynamicPropertiesTo(target)
         target
 
-    member this.GetPropertyNames(includeInstanceProperties) =
-        this.GetProperties(includeInstanceProperties)
-        |> Seq.map (fun kv -> kv.Key)
-
 
     /// <summary>
-    /// Operator to access a dynamic member by name
+    /// Operator to access a property by name
+    ///
+    /// This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
     /// </summary>
-    /// <remarks>This operator is not Fable-compatible</remarks>
+    /// <remarks>This method is not Fable-compatible and can therefore not be used in code that will be transpiled.</remarks>
     static member (?) (lookup:#DynamicObj,name:string) =
         match lookup.TryGetPropertyValue name with
         | Some(value) -> value
         | None -> raise <| System.MemberAccessException()        
 
     /// <summary>
-    /// Operator to set a dynamic member
+    /// Operator to set a property value
+    ///
+    /// This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
     /// </summary>
-    /// <remarks>This operator is not Fable-compatible</remarks>
+    /// <remarks>This method is not Fable-compatible and can therefore not be used in code that will be transpiled.</remarks>
     static member (?<-) (lookup:#DynamicObj,name:string,value:'v) =
-        lookup.SetPropertyValue (name,value)
+        lookup.SetProperty (name,value)
 
     override this.GetHashCode () =
         this.GetProperties(true)
