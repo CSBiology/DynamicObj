@@ -1,6 +1,8 @@
 ﻿namespace DynamicObj
 
 
+#if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT || !FABLE_COMPILER
+
 open Fable.Core
 
 module FableJS =
@@ -156,3 +158,5 @@ module FableJS =
         getPropertyHelpers o 
         |> Array.map (fun h -> h.Name)
 
+
+#endif

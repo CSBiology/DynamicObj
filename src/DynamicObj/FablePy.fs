@@ -1,6 +1,8 @@
 ﻿namespace DynamicObj
 
 
+#if FABLE_COMPILER_PYTHON || !FABLE_COMPILER
+
 open Fable.Core
 open System.Collections.Generic
 
@@ -209,3 +211,5 @@ module FablePy =
         getPropertyHelpers o 
         |> Array.map (fun h -> h.Name)
 
+
+#endif
