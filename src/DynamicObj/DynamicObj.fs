@@ -2,18 +2,23 @@
 
 #if !FABLE_COMPILER
 open System.Dynamic
+open Newtonsoft.Json
+open Newtonsoft.Json.Serialization
+open Newtonsoft.Json.Converters
+open Newtonsoft.Json.Linq
+open System.Runtime.Serialization
 #endif
 
 open System.Collections.Generic
 open Fable.Core
 
 [<AttachMembers>]
-type DynamicObj() = 
+type DynamicObj() =
     
     #if !FABLE_COMPILER
     inherit DynamicObject()
     #endif
-
+    
     let mutable properties = new Dictionary<string, obj>()
 
     /// <summary>
@@ -250,6 +255,32 @@ type DynamicObj() =
         this.CopyDynamicPropertiesTo(target)
         target
 
+    #if !FABLE_COMPILER
+    // Some necessary overrides for methods inherited from System.Dynamic.DynamicObject()
+    // 
+    // Needed mainly for making Newtonsoft.Json Serialization work
+    override this.TryGetMember(binder:GetMemberBinder,result:obj byref ) =     
+        match this.TryGetPropertyValue binder.Name with
+        | Some value -> result <- value; true
+        | None -> false
+
+    override this.TrySetMember(binder:SetMemberBinder, value:obj) =        
+        this.SetProperty(binder.Name,value)
+        true
+
+    /// Returns both instance and dynamic member names.
+    /// Important to return both so JSON serialization with Json.NET works.
+    override this.GetDynamicMemberNames() = this.GetPropertyNames(true)
+
+    //// potential deserialization support
+    //[<JsonExtensionData>]
+    //member private this._additionalData : IDictionary<string, JToken> = new Dictionary<string, JToken>()
+
+    //[<OnDeserialized>]
+    //member private this.OnDeserialized(context:StreamingContext) = ()
+    //    map over key value pairs in additional data, box the token values and set dynamic properties via SetProperty.
+
+    #endif
 
     /// <summary>
     /// Operator to access a property by name
