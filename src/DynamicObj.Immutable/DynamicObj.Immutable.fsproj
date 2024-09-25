@@ -30,7 +30,7 @@
   
   <ItemGroup>
     <PackageReference Include="Fable.Core" Version="4.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   
   <ItemGroup>
