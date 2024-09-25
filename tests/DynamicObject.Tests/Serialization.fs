@@ -5,10 +5,6 @@ open System.Collections.Generic
 open Fable.Pyxpecto
 open DynamicObj
 
-#if !FABLE_COMPILER
-open Newtonsoft.Json
-#endif
-
 open DynamicObj
 
 let test_dynobj = 
@@ -71,15 +67,29 @@ let test_derived_2 =
 #if !FABLE_COMPILER
 let tests_newtonsoft = testList "Newtonsoft (.NET)" [
     testCase "Serialize DynamicObj" <| fun _ ->
-        let actual = JsonConvert.SerializeObject(test_dynobj)
+        let actual = Newtonsoft.Json.JsonConvert.SerializeObject(test_dynobj)
         Expect.equal actual """{"dynamic_string":"yes","dynamic_number":69,"dynamic_boolean":true,"dynamic_array":["First","Second"],"dynamic_object":{"inner":"yup"}}""" ""
 
     testCase "Serialize simplederived class from DynamicObj" <| fun _ ->
-        let actual = JsonConvert.SerializeObject(test_derived_1)
+        let actual = Newtonsoft.Json.JsonConvert.SerializeObject(test_derived_1)
         Expect.equal actual """{"StaticProp":"lol","dynamicProp":42}""" ""
 
     testCase "Serialize complex derived class from DynamicObj" <| fun _ ->
-        let actual = JsonConvert.SerializeObject(test_derived_2)
+        let actual = Newtonsoft.Json.JsonConvert.SerializeObject(test_derived_2)
+        Expect.equal actual """{"StaticString":"lol","StaticNumber":42.0,"StaticBoolean":true,"StaticArray":["First","Second"],"StaticObject":{"StaticProp":"lol","dynamicProp":42},"dynamic_string":"yes","dynamic_number":69,"dynamic_boolean":true,"dynamic_array":["First","Second"],"dynamic_object":{"inner":"yup"}}""" ""
+]
+
+let tests_system_text_json = ptestList "System.Text.Json (.NET)" [
+    testCase "Serialize DynamicObj" <| fun _ ->
+        let actual = System.Text.Json.JsonSerializer.Serialize(test_dynobj)
+        Expect.equal actual """{"dynamic_string":"yes","dynamic_number":69,"dynamic_boolean":true,"dynamic_array":["First","Second"],"dynamic_object":{"inner":"yup"}}""" ""
+
+    testCase "Serialize simplederived class from DynamicObj" <| fun _ ->
+        let actual = System.Text.Json.JsonSerializer.Serialize(test_derived_1)
+        Expect.equal actual """{"StaticProp":"lol","dynamicProp":42}""" ""
+
+    testCase "Serialize complex derived class from DynamicObj" <| fun _ ->
+        let actual = System.Text.Json.JsonSerializer.Serialize(test_derived_2)
         Expect.equal actual """{"StaticString":"lol","StaticNumber":42.0,"StaticBoolean":true,"StaticArray":["First","Second"],"StaticObject":{"StaticProp":"lol","dynamicProp":42},"dynamic_string":"yes","dynamic_number":69,"dynamic_boolean":true,"dynamic_array":["First","Second"],"dynamic_object":{"inner":"yup"}}""" ""
 ]
 #endif
@@ -91,5 +101,6 @@ let main = testList "Serialization" [
     tests_custom
     #if !FABLE_COMPILER
     tests_newtonsoft
+    tests_system_text_json
     #endif
 ]

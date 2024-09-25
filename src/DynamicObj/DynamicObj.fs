@@ -2,11 +2,6 @@
 
 #if !FABLE_COMPILER
 open System.Dynamic
-open Newtonsoft.Json
-open Newtonsoft.Json.Serialization
-open Newtonsoft.Json.Converters
-open Newtonsoft.Json.Linq
-open System.Runtime.Serialization
 #endif
 
 open System.Collections.Generic

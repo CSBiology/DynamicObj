@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <ProjectReference Include="..\..\src\DynamicObj\DynamicObj.fsproj" />
   </ItemGroup>
 
