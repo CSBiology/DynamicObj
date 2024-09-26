@@ -1,61 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-root="https://csbiology.github.io/DynamicObj/">
 <head>
-    <meta charset="utf-8">
-    <title>DynamicObj (DynamicObj)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Timo Mühlhaus, Kevin Schneider, F# open source contributors">
-    <link rel="shortcut icon" type="image/x-icon" href="https://csbiology.github.io/DynamicObj//img/favicon.ico">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
-
-    <link type="text/css" rel="stylesheet" href="https://csbiology.github.io/DynamicObj/content/fsdocs-default.css" />
-    <link type="text/css" rel="stylesheet" href="https://csbiology.github.io/DynamicObj/content/fsdocs-custom.css" />
-    <script type="text/javascript" src="https://csbiology.github.io/DynamicObj/content/fsdocs-tips.js"></script>
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
-    <!-- END SEARCH BOX: this adds support for the search box -->
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors" name="author">
+    <!-- Opengraph properties (https://ogp.me/) -->
+    <meta property="og:site_name" content="DynamicObj">
+    <meta property="og:title" content="DynamicObj (DynamicObj)" />
+    <meta property="og:url" content="https://csbiology.github.io/DynamicObj/{{fsdocs-source-basename}}.html">
+    <meta property="og:type" content="website" />
+    <!-- Twitter cards (https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="https://csbiology.github.io/DynamicObj/">
+    <meta name="twitter:title" content="DynamicObj (DynamicObj)">
     
-</head> 
-
-<body>
-    <div class="columns is-fullheight m-0">
-        <div id="fsdocs-menu" class="column is-2 is-paddingless">
-            <aside class="menu">
-                <div class="container is-paddingless is-marginless has-background-dark">
-                    <a href="https://csbiology.github.io/DynamicObj/">
-                        <figure class="image is-128x128 container">
-                            <img src="https://csbiology.github.io/DynamicObj/img/logo.png">
-                        </figure>
-                    </a>
-                    <h2 class="title has-text-centered has-text-white pb-4">DynamicObj</h2>
-                </div>
-                <div class="content">
-                    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
-                    <div id="header">
-                        <div class="searchbox" id="fsdocs-searchbox">
-                            <label for="search-by">
-                                <i class="fas fa-search"></i>
-                            </label>
-                            <input data-search-input="" id="search-by" type="search" placeholder="Search..." class="input"/>
-                            <span data-search-clear="">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <!-- END SEARCH BOX: this adds support for the search box -->
-                    <ul class="navbar-nav">
-                        <li class="nav-header">Links</li>
-                        <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/blob/main/LICENSE">License (MIT)</a></li>
-                        <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/blob/main/RELEASE_NOTES.md">Release Notes</a></li>
-                        <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/">Source Repository</a></li>
-                        <li class="nav-header">
+    <title>DynamicObj (DynamicObj) | DynamicObj</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://csbiology.github.io/DynamicObj/img/favicon.ico" rel="icon" sizes="32x32" type="image/png"/>
+    <script type="application/javascript" src="https://csbiology.github.io/DynamicObj/content/fsdocs-theme-set-dark.js"></script>
+    <link href="https://csbiology.github.io/DynamicObj/content/fsdocs-default.css" rel="stylesheet" type="text/css"/>
+    <link href="https://csbiology.github.io/DynamicObj/content/fsdocs-theme.css" rel="stylesheet" type="text/css"/>
+    
+    
+</head>
+<body class="api-docs">
+<header>
+    <div class="start">
+        <div id="menu-toggle">
+            <iconify-icon class="icon closed" height="22" icon="eva:menu-fill" width="22"></iconify-icon>
+            <iconify-icon class="icon open" height="22" icon="mi:close" width="22"></iconify-icon>
+            <input type="checkbox" name="mobile-menu" />
+            <ul class="menu">
+                <li class="nav-header">Links</li>
+                <li class="nav-item"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/blob/main/LICENSE">License</a>
+                </li>
+                <li class="nav-item"><a class="nav-link"
+                                        href="https://github.com/CSBiology/DynamicObj/blob/main/RELEASE_NOTES.md">Release
+                    Notes</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/">Source
+                    Repository</a></li>
+                
+                <li class="nav-header">
   API Reference
 </li>             
 <li class="nav-item">
@@ -63,14 +52,45 @@
     All Namespaces
   </a>
 </li>
-                    </ul>
-                </div>
-            </aside>
+            </ul>
         </div>
-        <div class="column is-10 is-paddingless">
-            <div class="section pt-4">
-                <div class="container" id="fsdocs-content">
-                    <div>
+        <a href="https://csbiology.github.io/DynamicObj/">
+            <img alt="Header menu logo" src="https://csbiology.github.io/DynamicObj/img/logo.png">
+            <strong>DynamicObj</strong>
+        </a>
+    </div>
+    <div class="end">
+        <a href="https://github.com/CSBiology/DynamicObj/" target="_blank">
+            <iconify-icon icon="uil:github" width="26" height="26"></iconify-icon>
+        </a>
+        <iconify-icon id="search-btn" icon="carbon:search" class="search" width="24" height="24"></iconify-icon>
+        <fsdocs-theme-toggle></fsdocs-theme-toggle>
+    </div>
+</header>
+<aside id="fsdocs-main-menu">
+    <ul class="menu">
+        <li class="nav-header">Links</li>
+        <li class="nav-item"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/blob/main/LICENSE">License</a>
+        </li>
+        <li class="nav-item"><a class="nav-link"
+                                href="https://github.com/CSBiology/DynamicObj/blob/main/RELEASE_NOTES.md">Release
+            Notes</a></li>
+        <li class="nav-item"><a class="nav-link" href="https://github.com/CSBiology/DynamicObj/">Source
+            Repository</a></li>
+        
+        <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="https://csbiology.github.io/DynamicObj/reference/index.html">
+    All Namespaces
+  </a>
+</li>
+    </ul>
+</aside>
+<main>
+    <div id="content">
+        <div>
   <h2>
     DynamicObj Type
   </h2>
@@ -86,11 +106,11 @@
     </dt>
     <dt>
       Base Type: 
-      <code><a href="https://docs.microsoft.com/dotnet/api/system.dynamic.dynamicobject">DynamicObject</a></code>
+      <code><a href="https://learn.microsoft.com/dotnet/api/system.dynamic.dynamicobject">DynamicObject</a></code>
     </dt>
     <dt>
       All Interfaces: 
-      <code><a href="https://docs.microsoft.com/dotnet/api/system.dynamic.idynamicmetaobjectprovider">IDynamicMetaObjectProvider</a></code>
+      <code><a href="https://learn.microsoft.com/dotnet/api/system.dynamic.idynamicmetaobjectprovider">IDynamicMetaObjectProvider</a></code>
     </dt>
   </dl>
   <div class="fsdocs-xmldoc">
@@ -125,7 +145,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
+              <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
                 <p>
                   <a id="``.ctor``">
                     <a href="#``.ctor``">
@@ -134,7 +154,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="30">
+              <div class="fsdocs-tip" id="98">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>DynamicObj<span>()</span></span></code>
@@ -150,23 +170,6 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.#ctor`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.#ctor\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L16-16" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
-              </p>
-            </div>
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
@@ -200,7 +203,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+              <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
                 <p>
                   <a id="CopyDynamicProperties">
                     <a href="#CopyDynamicProperties">
@@ -209,7 +212,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="31">
+              <div class="fsdocs-tip" id="99">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.CopyDynamicProperties</span></code>
@@ -225,40 +228,39 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.CopyDynamicProperties`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.CopyDynamicProperties\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L111-111" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
-
-              </p>
-            </div>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.CopyDynamicProperties`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.CopyDynamicProperties\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L248-248" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                     Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '32', 32)" onmouseover="showTip(event, '32', 32)">
+              <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
                 <p>
                   <a id="CopyDynamicPropertiesTo">
                     <a href="#CopyDynamicPropertiesTo">
@@ -267,7 +269,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="32">
+              <div class="fsdocs-tip" id="100">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.CopyDynamicPropertiesTo</span></code>
@@ -280,7 +282,19 @@
                         target
                       </b>
                       :
-                      <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
+                      <code>'a</code>
+                       - 
+                      The target object to copy dynamic members to
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?overWrite
+                      </b>
+                      :
+                      <code>bool</code>
+                       - 
+                      Whether existing properties on the target object will be overwritten
                     </span>
                     <br/>
                   </ul>
@@ -290,41 +304,62 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.CopyDynamicPropertiesTo`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.CopyDynamicPropertiesTo\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L104-104" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.CopyDynamicPropertiesTo``1```')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.CopyDynamicPropertiesTo``1\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L235-235" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Copies all dynamic members of the DynamicObj to the target DynamicObj.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  target
-                </span>
-                :
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
+ If overWrite is set to true, existing properties on the target object will be overwritten.
+
+ Note that this method will not perform nested checks, e.g. if a property is a DynamicObj itself, it will not be copied recursively.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    target
+                  </span>
+                  :
+                  <code>'a</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The target object to copy dynamic members to
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ?overWrite
+                  </span>
+                  :
+                  <code>bool</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Whether existing properties on the target object will be overwritten
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '33', 33)" onmouseover="showTip(event, '33', 33)">
+              <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
                 <p>
                   <a id="GetProperties">
                     <a href="#GetProperties">
@@ -333,7 +368,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="33">
+              <div class="fsdocs-tip" id="101">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.GetProperties</span></code>
@@ -347,13 +382,15 @@
                       </b>
                       :
                       <code>bool</code>
+                       - 
+                      whether to include instance properties (= 'static' properties on the class)
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span>seq&lt;<span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<span>string,&#32;obj</span>&gt;</span>&gt;</span></code>
+                    <code><span><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<span>string,&#32;obj</span>&gt;</span>&#32;seq</span></code>
                   </span>
                   <br/>
                 </div>
@@ -361,73 +398,397 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.GetProperties`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.GetProperties\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L79-79" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Returns both instance and dynamic properties when passed true, only dynamic properties otherwise. 
- Properties are returned as a key value pair of the member names and the boxed values
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.GetProperties`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.GetProperties\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L207-207" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns a sequence of all dynamic properties as a key value pair of the property names and the boxed property values.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  includeInstanceProperties
-                </span>
-                :
-                <code>bool</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>seq&lt;<span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<span>string,&#32;obj</span>&gt;</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+ When includeInstanceProperties is set to true, instance properties (= 'static' properties on the class) are included in the result.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    includeInstanceProperties
+                  </span>
+                  :
+                  <code>bool</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    whether to include instance properties (= 'static' properties on the class)
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<span>string,&#32;obj</span>&gt;</span>&#32;seq</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
+              <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
                 <p>
-                  <a id="Remove">
-                    <a href="#Remove">
-                      <code><span>this.Remove</span></code>
+                  <a id="GetPropertyHelpers">
+                    <a href="#GetPropertyHelpers">
+                      <code><span>this.GetPropertyHelpers</span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="34">
+              <div class="fsdocs-tip" id="102">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.Remove</span></code>
+                  <code><span>this.GetPropertyHelpers</span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        name
+                        includeInstanceProperties
+                      </b>
+                      :
+                      <code>bool</code>
+                       - 
+                      whether to include instance properties (= 'static' properties on the class)
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;seq</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.GetPropertyHelpers`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.GetPropertyHelpers\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L169-169" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns PropertyHelpers for all dynamic properties of the DynamicObj.
+
+ When includeInstanceProperties is set to true, instance properties (= 'static' properties on the class) are included in the result.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    includeInstanceProperties
+                  </span>
+                  :
+                  <code>bool</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    whether to include instance properties (= 'static' properties on the class)
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;seq</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
+                <p>
+                  <a id="GetPropertyNames">
+                    <a href="#GetPropertyNames">
+                      <code><span>this.GetPropertyNames</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="103">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>this.GetPropertyNames</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        includeInstanceProperties
+                      </b>
+                      :
+                      <code>bool</code>
+                       - 
+                      
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>string&#32;seq</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.GetPropertyNames`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.GetPropertyNames\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L222-222" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns a sequence of all dynamic property names.
+
+ When includeInstanceProperties is set to true, instance properties (= 'static' properties on the class) are included in the result.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    includeInstanceProperties
+                  </span>
+                  :
+                  <code>bool</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>string&#32;seq</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+                <p>
+                  <a id="GetPropertyValue">
+                    <a href="#GetPropertyValue">
+                      <code><span>this.GetPropertyValue</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="104">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>this.GetPropertyValue</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        propertyName
                       </b>
                       :
                       <code>string</code>
+                       - 
+                      the name of the property to get
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>obj</code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.GetPropertyValue`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.GetPropertyValue\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L92-92" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns the boxed property value of the dynamic (or static) property with the given name.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    the name of the property to get
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code>obj</code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+              <table class="fsdocs-exception-list">
+                <tr>
+                  <td>
+                    <a href="https://learn.microsoft.com/dotnet/api/system.missingmemberexception">
+                      MissingMemberException
+                    </a>
+                  </td>
+                  <td>
+                    Thrown if no dynamic or static property with the given name exists
+                  </td>
+                </tr>
+              </table>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
+                <p>
+                  <a id="Properties">
+                    <a href="#Properties">
+                      <code><span>this.Properties</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="105">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>this.Properties</span></code>
+                  <br/>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:P:DynamicObj.DynamicObj.Properties`')">
+                <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'P:DynamicObj.DynamicObj.Properties\'/>')">
+                <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+              </div>
+              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L22-22" class="fsdocs-source-link" title="Source on GitHub">
+                <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+              </a>
+              <p class="fsdocs-summary">
+                 A dictionary of dynamic boxed properties
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
+                <p>
+                  <a id="RemoveProperty">
+                    <a href="#RemoveProperty">
+                      <code><span>this.RemoveProperty</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="106">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>this.RemoveProperty</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        propertyName
+                      </b>
+                      :
+                      <code>string</code>
+                       - 
+                      the name of the property to remove
                     </span>
                     <br/>
                   </ul>
@@ -442,78 +803,103 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.Remove`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.Remove\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L60-60" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code>bool</code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.RemoveProperty`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.RemoveProperty\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L154-154" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Removes any dynamic property with the given name from the input DynamicObj.
+ If the property is static and mutable, it will be set to null.
+ Static immutable properties cannot be removed.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    the name of the property to remove
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code>bool</code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+              <table class="fsdocs-exception-list">
+                <tr>
+                  <td>
+                    <a href="https://learn.microsoft.com/dotnet/api/system.memberaccessexception">
+                      MemberAccessException
+                    </a>
+                  </td>
+                  <td>
+                    Thrown if the dynamic property does not exist
+                  </td>
+                </tr>
+              </table>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
+              <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
                 <p>
-                  <a id="SetValue">
-                    <a href="#SetValue">
-                      <code><span>this.SetValue</span></code>
+                  <a id="SetProperty">
+                    <a href="#SetProperty">
+                      <code><span>this.SetProperty</span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="35">
+              <div class="fsdocs-tip" id="107">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.SetValue</span></code>
+                  <code><span>this.SetProperty</span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        name
+                        propertyName
                       </b>
                       :
                       <code>string</code>
+                       - 
+                      the name of the property to set
                     </span>
                     <br/>
                     <span>
                       <b>
-                        value
+                        propertyValue
                       </b>
                       :
-                      <code>'a</code>
+                      <code>obj</code>
+                       - 
+                      the value of the property to set
                     </span>
                     <br/>
                   </ul>
@@ -523,78 +909,89 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.SetValue``1```')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.SetValue``1\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L38-38" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Sets property value, creating a new property if none exists
-
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  value
-                </span>
-                :
-                <code>'a</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.SetProperty`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.SetProperty\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L122-122" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Sets the dynamic (or static) property value with the given name, creating a new dynamic property if none exists.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    the name of the property to set
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyValue
+                  </span>
+                  :
+                  <code>obj</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    the value of the property to set
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '36', 36)" onmouseover="showTip(event, '36', 36)">
+              <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
                 <p>
-                  <a id="TryGetTypedValue">
-                    <a href="#TryGetTypedValue">
-                      <code><span>this.TryGetTypedValue</span></code>
+                  <a id="TryGetDynamicPropertyHelper">
+                    <a href="#TryGetDynamicPropertyHelper">
+                      <code><span>this.TryGetDynamicPropertyHelper</span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="36">
+              <div class="fsdocs-tip" id="108">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.TryGetTypedValue</span></code>
+                  <code><span>this.TryGetDynamicPropertyHelper</span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        name
+                        propertyName
                       </b>
                       :
                       <code>string</code>
+                       - 
+                      The name of the property to get the PropertyHelper for
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span>'a&#32;option</span></code>
+                    <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;option</span></code>
                   </span>
                   <br/>
                 </div>
@@ -602,69 +999,161 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.TryGetTypedValue``1```')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.TryGetTypedValue``1\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L28-28" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Gets property value
-
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>'a&#32;option</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.TryGetDynamicPropertyHelper`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.TryGetDynamicPropertyHelper\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L46-46" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns Some(PropertyHelper) if a dynamic property with the given name exists, otherwise None.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The name of the property to get the PropertyHelper for
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;option</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '37', 37)" onmouseover="showTip(event, '37', 37)">
+              <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
                 <p>
-                  <a id="TryGetValue">
-                    <a href="#TryGetValue">
-                      <code><span>this.TryGetValue</span></code>
+                  <a id="TryGetPropertyHelper">
+                    <a href="#TryGetPropertyHelper">
+                      <code><span>this.TryGetPropertyHelper</span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="37">
+              <div class="fsdocs-tip" id="109">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.TryGetValue</span></code>
+                  <code><span>this.TryGetPropertyHelper</span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        name
+                        propertyName
+                      </b>
+                      :
+                      <code>string</code>
+                       - 
+                      The name of the property to get the PropertyHelper for
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;option</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.TryGetPropertyHelper`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.TryGetPropertyHelper\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L73-73" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns Some(PropertyHelper) if a property (static or dynamic) with the given name exists, otherwise None.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The name of the property to get the PropertyHelper for
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;option</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
+                <p>
+                  <a id="TryGetPropertyValue">
+                    <a href="#TryGetPropertyValue">
+                      <code><span>this.TryGetPropertyValue</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="110">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>this.TryGetPropertyValue</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        propertyName
                       </b>
                       :
                       <code>string</code>
@@ -682,44 +1171,224 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.TryGetValue`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.TryGetPropertyValue`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.TryGetPropertyValue\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L82-82" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns Some(boxed property value) if a dynamic (or static) property with the given name exists, otherwise None.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>obj&#32;option</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
+                <p>
+                  <a id="TryGetStaticPropertyHelper">
+                    <a href="#TryGetStaticPropertyHelper">
+                      <code><span>this.TryGetStaticPropertyHelper</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="111">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>this.TryGetStaticPropertyHelper</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        propertyName
+                      </b>
+                      :
+                      <code>string</code>
+                       - 
+                      The name of the property to get the PropertyHelper for
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;option</span></code>
+                  </span>
+                  <br/>
+                </div>
               </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.TryGetValue\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L19-19" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Gets property value
-
-              </p>
             </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>obj&#32;option</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.TryGetStaticPropertyHelper`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.TryGetStaticPropertyHelper\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L39-39" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns Some(PropertyHelper) if a static property with the given name exists, otherwise None.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The name of the property to get the PropertyHelper for
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-propertyhelper.html">PropertyHelper</a>&#32;option</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
+                <p>
+                  <a id="TryGetTypedPropertyValue">
+                    <a href="#TryGetTypedPropertyValue">
+                      <code><span>this.TryGetTypedPropertyValue</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="112">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>this.TryGetTypedPropertyValue</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        propertyName
+                      </b>
+                      :
+                      <code>string</code>
+                       - 
+                      the name of the property to get
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'TPropertyValue&#32;option</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.TryGetTypedPropertyValue``1```')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.TryGetTypedPropertyValue``1\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L106-106" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns Some('TPropertyValue) when a dynamic (or static) property with the given name and type exists, otherwise None.
+
+ This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
+ 
+                  </p>
+                </div>
+              </summary>
+              <p class="fsdocs-remarks">
+                This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
+              </p>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    propertyName
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    the name of the property to get
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>'TPropertyValue&#32;option</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
       </tbody>
@@ -744,19 +1413,19 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
+              <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
                 <p>
                   <a id="(?)">
                     <a href="#(?)">
-                      <code><span><span>lookup</span>&#32;?&#32;<span>name</span></span></code>
+                      <code><span>lookup&#32;?&#32;name</span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="38">
+              <div class="fsdocs-tip" id="113">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span><span>lookup</span>&#32;?&#32;<span>name</span></span></code>
+                  <code><span>lookup&#32;?&#32;name</span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -789,58 +1458,64 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.op_Dynamic``1```')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.op_Dynamic``1\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L94-94" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Operator to access a dynamic member by name
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.op_Dynamic``1```')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.op_Dynamic``1\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L286-286" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Operator to access a property by name
 
+ This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
+ 
+                  </p>
+                </div>
+              </summary>
+              <p class="fsdocs-remarks">
+                This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
               </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  lookup
-                </span>
-                :
-                <code>'a</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code>obj</code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    lookup
+                  </span>
+                  :
+                  <code>'a</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    name
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code>obj</code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
+              <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
                 <p>
                   <a id="(?<-)">
                     <a href="#(?<-)">
@@ -849,7 +1524,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="39">
+              <div class="fsdocs-tip" id="114">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>(?<-)&#32;<span><span>(<span>lookup,&#32;name,&#32;value</span>)</span></span></span></code>
@@ -888,94 +1563,94 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.op_DynamicAssignment``2```')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.op_DynamicAssignment``2\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L100-100" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Operator to set a dynamic member
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.op_DynamicAssignment``2```')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.op_DynamicAssignment``2\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L297-297" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Operator to set a property value
 
+ This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
+ 
+                  </p>
+                </div>
+              </summary>
+              <p class="fsdocs-remarks">
+                This method is not Fable-compatible and can therefore not be used in code that will be transpiled.
               </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  lookup
-                </span>
-                :
-                <code>'a</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  value
-                </span>
-                :
-                <code>'v</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    lookup
+                  </span>
+                  :
+                  <code>'a</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    name
+                  </span>
+                  :
+                  <code>string</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    value
+                  </span>
+                  :
+                  <code>'v</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
+              <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
                 <p>
-                  <a id="GetValue">
-                    <a href="#GetValue">
-                      <code><span>DynamicObj.GetValue<span><span>(<span>lookup,&#32;name</span>)</span></span></span></code>
+                  <a id="ofDict">
+                    <a href="#ofDict">
+                      <code><span>DynamicObj.ofDict&#32;<span>dynamicProperties</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="40">
+              <div class="fsdocs-tip" id="115">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>DynamicObj.GetValue<span><span>(<span>lookup,&#32;name</span>)</span></span></span></code>
+                  <code><span>DynamicObj.ofDict&#32;<span>dynamicProperties</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        lookup
+                        dynamicProperties
                       </b>
                       :
-                      <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        name
-                      </b>
-                      :
-                      <code>string</code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>string,&#32;obj</span>&gt;</span></code>
+                       - 
+                      The dictionary with the dynamic properties
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code>obj</code>
+                    <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
                   </span>
                   <br/>
                 </div>
@@ -983,163 +1658,73 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.GetValue`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.GetValue\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L116-116" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  lookup
-                </span>
-                :
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code>obj</code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-usage">
-            <div>
-              <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
-                <p>
-                  <a id="Remove">
-                    <a href="#Remove">
-                      <code><span>DynamicObj.Remove<span><span>(<span>lookup,&#32;name</span>)</span></span></span></code>
-                    </a>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.ofDict`')">
+                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.ofDict\'/>')">
+                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
+                  </div>
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L30-30" class="fsdocs-source-link" title="Source on GitHub">
+                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
                   </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="41">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span>DynamicObj.Remove<span><span>(<span>lookup,&#32;name</span>)</span></span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        lookup
-                      </b>
-                      :
-                      <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        name
-                      </b>
-                      :
-                      <code>string</code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>bool</code>
-                  </span>
-                  <br/>
+                  <p class="fsdocs-summary">
+                    
+ Creates a new DynamicObj from a Dictionary containing dynamic properties.
+ 
+                  </p>
                 </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.Remove`')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.Remove\'/>')">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L119-119" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github.png" class="normal"/>
-                <img src="https://csbiology.github.io/DynamicObj/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  lookup
-                </span>
-                :
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  name
-                </span>
-                :
-                <code>string</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code>bool</code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    dynamicProperties
+                  </span>
+                  :
+                  <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>string,&#32;obj</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The dictionary with the dynamic properties
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-dynamicobj.html">DynamicObj</a></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
-                </div>
-            </div>
-        </div>
         
     </div>
+</main>
+<aside id="fsdocs-page-menu">
+    <p id="on-this-page">On this page</p>
+    <div class="empty"></div>
+</aside>
+<dialog>
+    <input type="search" placeholder="Search docs" />
+    <div class="results">
+        <ul></ul>
+        <p class="empty">Type something to start searching.</p>
+    </div>
+</dialog>
+<script type="module" src="https://csbiology.github.io/DynamicObj/content/fsdocs-tips.js"></script>
+<script type="module" src="https://csbiology.github.io/DynamicObj/content/fsdocs-theme-toggle.js"></script>
+<script type="module" src="https://csbiology.github.io/DynamicObj/content/fsdocs-theme.js"></script>
+<script type="module" src="https://csbiology.github.io/DynamicObj/content/fsdocs-search.js"></script>
 
-    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
-    <script type="text/javascript">var fsdocs_search_baseurl = 'https://csbiology.github.io/DynamicObj/'</script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
-    <script type="text/javascript" src="https://csbiology.github.io/DynamicObj/content/fsdocs-search.js"></script>
-    <!-- END SEARCH BOX: this adds support for the search box -->
 </body>
-
 </html>

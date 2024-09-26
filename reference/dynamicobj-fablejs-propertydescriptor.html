@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Timo Mühlhaus, Kevin Schneider, F# open source contributors" name="author">
+    <meta content="Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors" name="author">
     <!-- Opengraph properties (https://ogp.me/) -->
     <meta property="og:site_name" content="DynamicObj">
-    <meta property="og:title" content="ImmutableDynamicObjExtensions (DynamicObj)" />
+    <meta property="og:title" content="PropertyDescriptor (DynamicObj)" />
     <meta property="og:url" content="https://csbiology.github.io/DynamicObj/{{fsdocs-source-basename}}.html">
     <meta property="og:type" content="website" />
     <!-- Twitter cards (https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="https://csbiology.github.io/DynamicObj/">
-    <meta name="twitter:title" content="ImmutableDynamicObjExtensions (DynamicObj)">
+    <meta name="twitter:title" content="PropertyDescriptor (DynamicObj)">
     
-    <title>ImmutableDynamicObjExtensions (DynamicObj) | DynamicObj</title>
+    <title>PropertyDescriptor (DynamicObj) | DynamicObj</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
     <div id="content">
         <div>
   <h2>
-    ImmutableDynamicObjExtensions Type
+    PropertyDescriptor Module
   </h2>
   <dl class="fsdocs-metadata">
     <dt>
@@ -102,11 +102,13 @@
       </a>
     </dt>
     <dt>
-      Assembly: DynamicObj.Immutable.dll
+      Assembly: DynamicObj.dll
     </dt>
     <dt>
-      Base Type: 
-      <code>obj</code>
+      Parent Module: 
+      <a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-fablejs.html">
+        FableJS
+      </a>
     </dt>
   </dl>
   <div class="fsdocs-xmldoc">
@@ -116,23 +118,15 @@
       </p>
     </div>
   </div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
   <div>
     <h3>
-      Static members
+      Functions and values
     </h3>
     <table class="table outer-list fsdocs-member-list">
       <thead>
         <tr>
           <td class="fsdocs-member-list-header">
-            Static member
+            Function or value
           </td>
           <td class="fsdocs-member-list-header">
             Description
@@ -143,150 +137,36 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '138', 138)" onmouseover="showTip(event, '138', 138)">
+              <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
                 <p>
-                  <a id="AddItem">
-                    <a href="#AddItem">
-                      <code><span>ImmutableDynamicObjExtensions.AddItem<span><span>(<span>this,&#32;name,&#32;newValue</span>)</span></span></span></code>
+                  <a id="containsGetter">
+                    <a href="#containsGetter">
+                      <code><span>containsGetter&#32;<span>o</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="138">
+              <div class="fsdocs-tip" id="41">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ImmutableDynamicObjExtensions.AddItem<span><span>(<span>this,&#32;name,&#32;newValue</span>)</span></span></span></code>
+                  <code><span>containsGetter&#32;<span>o</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        this
+                        o
                       </b>
                       :
-                      <code>'a</code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        name
-                      </b>
-                      :
-                      <code>string</code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        newValue
-                      </b>
-                      :
-                      <code>'b</code>
+                      <code>obj</code>
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code>'a</code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-member-xmldoc">
-            <details>
-              <summary>
-                <div class="fsdocs-summary">
-                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.ImmutableDynamicObjExtensions.AddItem``2```')">
-                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
-                  </div>
-                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.ImmutableDynamicObjExtensions.AddItem``2\'/>')">
-                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
-                  </div>
-                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj.Immutable/ImmutableDynamicObj.fs#L201-201" class="fsdocs-source-link" title="Source on GitHub">
-                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
-                  </a>
-                  <p class="fsdocs-summary">
-                     Returns an instance with:
- 1. this property added if it wasn't present
- 2. this property updated otherwise
- use this one only from C#
-                  </p>
-                </div>
-              </summary>
-              <dl class="fsdocs-params">
-                <dt class="fsdocs-param">
-                  <span class="fsdocs-param-name">
-                    this
-                  </span>
-                  :
-                  <code>'a</code>
-                </dt>
-                <dd class="fsdocs-param-docs"></dd>
-                <dt class="fsdocs-param">
-                  <span class="fsdocs-param-name">
-                    name
-                  </span>
-                  :
-                  <code>string</code>
-                </dt>
-                <dd class="fsdocs-param-docs"></dd>
-                <dt class="fsdocs-param">
-                  <span class="fsdocs-param-name">
-                    newValue
-                  </span>
-                  :
-                  <code>'b</code>
-                </dt>
-                <dd class="fsdocs-param-docs"></dd>
-              </dl>
-              <dl class="fsdocs-returns">
-                <dt>
-                  <span class="fsdocs-return-name">
-                    Returns: 
-                  </span>
-                  <code>'a</code>
-                </dt>
-                <dd class="fsdocs-return-docs"></dd>
-              </dl>
-            </details>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-usage">
-            <div>
-              <code onmouseout="hideTip(event, '139', 139)" onmouseover="showTip(event, '139', 139)">
-                <p>
-                  <a id="Format">
-                    <a href="#Format">
-                      <code><span>ImmutableDynamicObjExtensions.Format<span><span>(<span>this</span>)</span></span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="139">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span>ImmutableDynamicObjExtensions.Format<span><span>(<span>this</span>)</span></span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        this
-                      </b>
-                      :
-                      <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobj.html">ImmutableDynamicObj</a></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>string</code>
+                    <code>bool</code>
                   </span>
                   <br/>
                 </div>
@@ -297,10 +177,10 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  this
+                  o
                 </span>
                 :
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobj.html">ImmutableDynamicObj</a></code>
+                <code>obj</code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -309,7 +189,7 @@
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code>string</code>
+                <code>bool</code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -318,32 +198,37 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '140', 140)" onmouseover="showTip(event, '140', 140)">
+              <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
                 <p>
-                  <a id="Print">
-                    <a href="#Print">
-                      <code><span>ImmutableDynamicObjExtensions.Print<span><span>(<span>this</span>)</span></span></span></code>
+                  <a id="containsSetter">
+                    <a href="#containsSetter">
+                      <code><span>containsSetter&#32;<span>o</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="140">
+              <div class="fsdocs-tip" id="42">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ImmutableDynamicObjExtensions.Print<span><span>(<span>this</span>)</span></span></span></code>
+                  <code><span>containsSetter&#32;<span>o</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        this
+                        o
                       </b>
                       :
-                      <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobj.html">ImmutableDynamicObj</a></code>
+                      <code>obj</code>
                     </span>
                     <br/>
                   </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
                   <br/>
                 </div>
               </div>
@@ -353,46 +238,238 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  this
+                  o
                 </span>
                 :
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobj.html">ImmutableDynamicObj</a></code>
+                <code>obj</code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
             </dl>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '141', 141)" onmouseover="showTip(event, '141', 141)">
+              <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
                 <p>
-                  <a id="RemoveItem">
-                    <a href="#RemoveItem">
-                      <code><span>ImmutableDynamicObjExtensions.RemoveItem<span><span>(<span>this,&#32;name</span>)</span></span></span></code>
+                  <a id="isFunction">
+                    <a href="#isFunction">
+                      <code><span>isFunction&#32;<span>o</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="141">
+              <div class="fsdocs-tip" id="43">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ImmutableDynamicObjExtensions.RemoveItem<span><span>(<span>this,&#32;name</span>)</span></span></span></code>
+                  <code><span>isFunction&#32;<span>o</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        this
+                        o
                       </b>
                       :
-                      <code>'a</code>
+                      <code>obj</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
+                <p>
+                  <a id="isWritable">
+                    <a href="#isWritable">
+                      <code><span>isWritable&#32;<span>o</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="44">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>isWritable&#32;<span>o</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        o
+                      </b>
+                      :
+                      <code>obj</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
+                <p>
+                  <a id="tryGetIsWritable">
+                    <a href="#tryGetIsWritable">
+                      <code><span>tryGetIsWritable&#32;<span>o</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="45">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>tryGetIsWritable&#32;<span>o</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        o
+                      </b>
+                      :
+                      <code>obj</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>bool&#32;option</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span>bool&#32;option</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
+                <p>
+                  <a id="tryGetPropertyValue">
+                    <a href="#tryGetPropertyValue">
+                      <code><span>tryGetPropertyValue&#32;<span>o&#32;propName</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="46">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>tryGetPropertyValue&#32;<span>o&#32;propName</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        o
+                      </b>
+                      :
+                      <code>obj</code>
                     </span>
                     <br/>
                     <span>
                       <b>
-                        name
+                        propName
                       </b>
                       :
                       <code>string</code>
@@ -402,7 +479,7 @@
                   <br/>
                   <span>
                     Returns: 
-                    <code>'a</code>
+                    <code><span>obj&#32;option</span></code>
                   </span>
                   <br/>
                 </div>
@@ -410,59 +487,107 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <details>
-              <summary>
-                <div class="fsdocs-summary">
-                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.ImmutableDynamicObjExtensions.RemoveItem``1```')">
-                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
-                  </div>
-                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.ImmutableDynamicObjExtensions.RemoveItem``1\'/>')">
-                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
-                  </div>
-                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj.Immutable/ImmutableDynamicObj.fs#L209-209" class="fsdocs-source-link" title="Source on GitHub">
-                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  propName
+                </span>
+                :
+                <code>string</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span>obj&#32;option</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
+                <p>
+                  <a id="valueIsFunction">
+                    <a href="#valueIsFunction">
+                      <code><span>valueIsFunction&#32;<span>o</span></span></code>
+                    </a>
                   </a>
-                  <p class="fsdocs-summary">
-                     Returns an instance:
- 1. the same if there was no requested property
- 2. without the requested property if there was
- use this one only from C#
-                  </p>
-                </div>
-              </summary>
-              <dl class="fsdocs-params">
-                <dt class="fsdocs-param">
-                  <span class="fsdocs-param-name">
-                    this
-                  </span>
-                  :
-                  <code>'a</code>
-                </dt>
-                <dd class="fsdocs-param-docs"></dd>
-                <dt class="fsdocs-param">
-                  <span class="fsdocs-param-name">
-                    name
-                  </span>
-                  :
-                  <code>string</code>
-                </dt>
-                <dd class="fsdocs-param-docs"></dd>
-              </dl>
-              <dl class="fsdocs-returns">
-                <dt>
-                  <span class="fsdocs-return-name">
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="47">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>valueIsFunction&#32;<span>o</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        o
+                      </b>
+                      :
+                      <code>obj</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
                     Returns: 
+                    <code>bool</code>
                   </span>
-                  <code>'a</code>
-                </dt>
-                <dd class="fsdocs-return-docs"></dd>
-              </dl>
-            </details>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
         
     </div>

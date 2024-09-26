@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Timo Mühlhaus, Kevin Schneider, F# open source contributors" name="author">
+    <meta content="Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors" name="author">
     <!-- Opengraph properties (https://ogp.me/) -->
     <meta property="og:site_name" content="DynamicObj">
-    <meta property="og:title" content="ImmutableDynamicObjJsonConverter (DynamicObj)" />
+    <meta property="og:title" content="Dictionary (DynamicObj)" />
     <meta property="og:url" content="https://csbiology.github.io/DynamicObj/{{fsdocs-source-basename}}.html">
     <meta property="og:type" content="website" />
     <!-- Twitter cards (https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="https://csbiology.github.io/DynamicObj/">
-    <meta name="twitter:title" content="ImmutableDynamicObjJsonConverter (DynamicObj)">
+    <meta name="twitter:title" content="Dictionary (DynamicObj)">
     
-    <title>ImmutableDynamicObjJsonConverter (DynamicObj) | DynamicObj</title>
+    <title>Dictionary (DynamicObj) | DynamicObj</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
     <div id="content">
         <div>
   <h2>
-    ImmutableDynamicObjJsonConverter Type
+    Dictionary Module
   </h2>
   <dl class="fsdocs-metadata">
     <dt>
@@ -102,11 +102,13 @@
       </a>
     </dt>
     <dt>
-      Assembly: DynamicObj.Immutable.dll
+      Assembly: DynamicObj.dll
     </dt>
     <dt>
-      Base Type: 
-      <code><a href="https://learn.microsoft.com/dotnet/api/newtonsoft.json.jsonconverter">JsonConverter</a></code>
+      Parent Module: 
+      <a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-fablepy.html">
+        FablePy
+      </a>
     </dt>
   </dl>
   <div class="fsdocs-xmldoc">
@@ -116,21 +118,15 @@
       </p>
     </div>
   </div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
   <div>
     <h3>
-      Constructors
+      Functions and values
     </h3>
     <table class="table outer-list fsdocs-member-list">
       <thead>
         <tr>
           <td class="fsdocs-member-list-header">
-            Constructor
+            Function or value
           </td>
           <td class="fsdocs-member-list-header">
             Description
@@ -141,24 +137,44 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '142', 142)" onmouseover="showTip(event, '142', 142)">
+              <code onmouseout="hideTip(event, '68', 68)" onmouseover="showTip(event, '68', 68)">
                 <p>
-                  <a id="``.ctor``">
-                    <a href="#``.ctor``">
-                      <code><span>ImmutableDynamicObjJsonConverter<span>()</span></span></code>
+                  <a id="choose">
+                    <a href="#choose">
+                      <code><span>choose&#32;<span>f&#32;d</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="142">
+              <div class="fsdocs-tip" id="68">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ImmutableDynamicObjJsonConverter<span>()</span></span></code>
+                  <code><span>choose&#32;<span>f&#32;d</span></span></code>
                   <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        d
+                      </b>
+                      :
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobjjsonconverter.html">ImmutableDynamicObjJsonConverter</a></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'U</span>&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -166,12 +182,91 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  d
+                </span>
+                :
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobjjsonconverter.html">ImmutableDynamicObjJsonConverter</a></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'U</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '69', 69)" onmouseover="showTip(event, '69', 69)">
+                <p>
+                  <a id="ofSeq">
+                    <a href="#ofSeq">
+                      <code><span>ofSeq&#32;<span>s</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="69">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>ofSeq&#32;<span>s</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        s
+                      </b>
+                      :
+                      <code><span><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<span>'a,&#32;'b</span>&gt;</span>&#32;seq</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  s
+                </span>
+                :
+                <code><span><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.keyvaluepair-2">KeyValuePair</a>&lt;<span>'a,&#32;'b</span>&gt;</span>&#32;seq</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -180,6 +275,12 @@
       </tbody>
     </table>
   </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
   <div></div>
   <div></div>
 </div>
