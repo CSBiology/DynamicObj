@@ -245,15 +245,15 @@ from DynamicObj<br /><em>&lt;summary&gt;
 <div class="fsdocs-tip" id="fs20">val tryGetTypedPropertyValue: propertyName: string -&gt; dynObj: DynamicObj -&gt; &#39;TPropertyValue option<br /><em>&lt;summary&gt;
  Returns Some(&#39;TPropertyValue) when a dynamic (or static) property with the given name and type exists on the input, otherwise None.
  &lt;/summary&gt;<br />&lt;param name=&quot;propertyName&quot;&gt;the name of the property to get&lt;/param&gt;<br />&lt;param name=&quot;dynObj&quot;&gt;the input DynamicObj&lt;/param&gt;</em></div>
-<div class="fsdocs-tip" id="fs21">val withProperty: propertyName: string -&gt; propertyValue: &#39;TPropertyValue -&gt; dynObj: DynamicObj -&gt; DynamicObj<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs21">val withProperty: propertyName: string -&gt; propertyValue: &#39;TPropertyValue -&gt; dynObj: &#39;a -&gt; &#39;a (requires &#39;a :&gt; DynamicObj)<br /><em>&lt;summary&gt;
  Sets the dynamic (or static) property value with the given name, creating a new dynamic property if none exists on the given DynamicObj and returns it.
  &lt;/summary&gt;<br />&lt;param name=&quot;propertyName&quot;&gt;The name of the property to set&lt;/param&gt;<br />&lt;param name=&quot;propertyValue&quot;&gt;The value of the property to set&lt;/param&gt;<br />&lt;param name=&quot;dynObj&quot;&gt;The DynamicObj to set the property on&lt;/param&gt;<br />&lt;remarks&gt;This function mutates the input DynamicObj&lt;/remarks&gt;</em></div>
-<div class="fsdocs-tip" id="fs22">val withoutProperty: propertyName: string -&gt; dynObj: DynamicObj -&gt; DynamicObj<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs22">val withoutProperty: propertyName: string -&gt; dynObj: &#39;a -&gt; &#39;a (requires &#39;a :&gt; DynamicObj)<br /><em>&lt;summary&gt;
  Removes any dynamic property with the given name from the input DynamicObj and returns it.
  If the property is static and mutable, it will be set to null.
  Static immutable properties cannot be removed.
  &lt;/summary&gt;<br />&lt;param name=&quot;propertyName&quot;&gt;The name of the property to remove&lt;/param&gt;<br />&lt;param name=&quot;dynObj&quot;&gt;The DynamicObj to remove the property from&lt;/param&gt;<br />&lt;remarks&gt;This function mutates the input DynamicObj&lt;/remarks&gt;<br />&lt;exception cref=&quot;System.MemberAccessException&quot;&gt;Thrown if the dynamic property does not exist&lt;/exception&gt;</em></div>
-<div class="fsdocs-tip" id="fs23">val withOptionalProperty: propertyName: string -&gt; propertyValue: &#39;TPropertyValue option -&gt; dynObj: DynamicObj -&gt; DynamicObj<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs23">val withOptionalProperty: propertyName: string -&gt; propertyValue: &#39;TPropertyValue option -&gt; dynObj: &#39;a -&gt; &#39;a (requires &#39;a :&gt; DynamicObj)<br /><em>&lt;summary&gt;
  Sets the dynamic (or static) property value with the given name on the given DynamicObj if the value is Some(&#39;TPropertyValue), creating a new dynamic property if none exists, and returns it.
  If the given propertyValue is None, does nothing to the input DynamicObj.
  &lt;/summary&gt;<br />&lt;param name=&quot;propertyName&quot;&gt;The name of the property to set&lt;/param&gt;<br />&lt;param name=&quot;propertyValue&quot;&gt;The value of the property to set&lt;/param&gt;<br />&lt;param name=&quot;dynObj&quot;&gt;The DynamicObj to set the property on&lt;/param&gt;<br />&lt;remarks&gt;This function mutates the input DynamicObj&lt;/remarks&gt;</em></div>
