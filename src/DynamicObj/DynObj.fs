@@ -50,7 +50,7 @@ module DynObj =
     /// <param name="first"></param>
     /// <param name="second"></param>
     /// <remarks>This function mutates the first input DynamicObj</remarks>
-    let rec combine (first:DynamicObj) (second:DynamicObj) =
+    let rec combine (first:#DynamicObj) (second:#DynamicObj) =
         //printfn "Type %A" (first.GetType())
         /// Consider deep-copy of first
         for kv in (second.GetProperties true) do 
@@ -95,7 +95,7 @@ module DynObj =
     /// <param name="propertyValue">The value of the property to set</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let withProperty (propertyName:string) (propertyValue:'TPropertyValue) (dynObj: DynamicObj) =
+    let inline withProperty (propertyName:string) (propertyValue:'TPropertyValue) (dynObj: #DynamicObj) =
         setProperty propertyName propertyValue dynObj
         dynObj
 
@@ -120,7 +120,7 @@ module DynObj =
     /// <param name="propertyValue">The value of the property to set</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let withOptionalProperty (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: DynamicObj) = 
+    let inline withOptionalProperty (propertyName: string) (propertyValue: 'TPropertyValue option) (dynObj: #DynamicObj) = 
         match propertyValue with
         | Some pv -> dynObj |> withProperty propertyName pv
         | None -> dynObj
@@ -148,7 +148,7 @@ module DynObj =
     /// <param name="mapping">A function to apply to the property value before setting it on the DynamicObj</param>
     /// <param name="dynObj">The DynamicObj to set the property on</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
-    let withOptionalPropertyBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: DynamicObj) = 
+    let inline withOptionalPropertyBy (propertyName: string) (propertyValue: 'TPropertyValue option) (mapping: 'TPropertyValue -> 'UPropertyValue) (dynObj: #DynamicObj) = 
         match propertyValue with
         | Some pv -> dynObj |> withProperty propertyName (mapping pv)
         | None -> dynObj
@@ -182,7 +182,7 @@ module DynObj =
     /// <param name="dynObj">The DynamicObj to remove the property from</param>
     /// <remarks>This function mutates the input DynamicObj</remarks>
     /// <exception cref="System.MemberAccessException">Thrown if the dynamic property does not exist</exception>
-    let withoutProperty(propertyName: string) (dynObj: DynamicObj) = 
+    let inline withoutProperty(propertyName: string) (dynObj: #DynamicObj) = 
         dynObj |> removeProperty propertyName
         dynObj
 
