@@ -1,3 +1,10 @@
+### 4.0.0 (Released 2024-9-26)
+
+- [Rework API naming](https://github.com/CSBiology/DynamicObj/pull/36)
+- [Many improvements to DynObj API module](https://github.com/CSBiology/DynamicObj/pull/32)
+- [Fix serialization with Newtonsoft.Json](https://github.com/CSBiology/DynamicObj/pull/37)
+- [Add conditional compilation rules to transpilation-specific sections](https://github.com/CSBiology/DynamicObj/pull/38)
+
 ### 3.1.0+87113a4 (Released 2024-9-2)
 * Additions:
     * [[#e434c16](https://github.com/CSBiology/DynamicObj/commit/e434c162459b5c163bd387ef8b6aae4fbe6422cf)] add typed property retrieval function

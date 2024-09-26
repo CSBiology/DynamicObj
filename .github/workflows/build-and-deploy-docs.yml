@@ -3,6 +3,9 @@ name: build and deploy docs
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'docs/**'
 
 jobs:
   build-and-deploy-docs:

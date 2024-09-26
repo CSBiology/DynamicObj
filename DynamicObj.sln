@@ -34,11 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".proj", ".proj", "{C3CF2F15
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{42AA66FC-8928-4029-BF41-52C1B49DEEDF}"
 	ProjectSection(SolutionItems) = preProject
-		docs\content\fsdocs-custom.css = docs\content\fsdocs-custom.css
 		docs\index.fsx = docs\index.fsx
-		docs\_template.fsx = docs\_template.fsx
-		docs\_template.html = docs\_template.html
-		docs\_template.ipynb = docs\_template.ipynb
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpTests", "tests\CSharpTests\CSharpTests.csproj", "{D62D0901-DB69-4C64-AC63-FBBBDCF6BC7D}"

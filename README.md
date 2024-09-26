@@ -3,76 +3,19 @@ F# library supporting Dynamic Objects including inheritance in functional style.
 
 The library is compatible with [Fable](https://github.com/fable-compiler/Fable), allowing transpilation to `javascript` and `python`.
 
+The primary use case of DynamicObj is the **extension of F# classes with dynamic properties**.
+This is useful when you want to add arbitrarily typed properties to a class **at runtime**.
 
+> Why would you want to do that?
 
-## Usage example
+Yes, The type system is one of the core strengths of F#, and it is awesome.
+However, there are cases where a static domain model is either unfeasible or not flexible enough, especially when interfacing with dynamic languages such as JavaScript or Python.
 
-### Get started
+DynamicObj is transpilable into JS and Python via [Fable](https://github.com/fable-compiler/Fable), meaning you can use it to create classes that are usable in both .NET and those languages, while making their usage (e.g., the setting of dynamic properties) both safe in .NET and idiomatic in JS/Python.
 
-```fsharp
-#r "nuget: DynamicObj"
-#r "nuget: Fable.Core" // Needed if working with Fable
+## Docs
 
-open DynamicObj
-open Fable.Core // Needed if working with Fable
-
-[<AttachMembers>] // AttachMembers needed if working with Fable
-type Person(id : int, name : string) =
-    
-    // Include this in your class
-    inherit DynamicObj()
-
-    let mutable name = name
-
-    // Mutable property
-    member this.Name
-        with get() = name
-        and set(value) = name <- value
-
-    // Immutable property
-    member this.ID 
-        with get() = id
-
-let p = Person(1337,"John")
-```
-
-### Accessing static and dynamic properties
-
-```fsharp
-
-// Access Static Properties
-p.GetValue("Name") // val it: obj = "John"
-p.GetValue("ID")   // val it: obj = 1337
-
-
-// Overwrite mutable static property
-p.SetValue("Name","Jane") // val it: unit = ()
-// Overwrite immutable static property
-p.SetValue("ID",1234) // System.Exception: Cannot set value for static, immutable property "ID"
-// Set dynamic property
-p.SetValue("Address","FunStreet") // val it: unit = ()
-
-
-// Access Properties
-p.GetValue("Name")    // val it: obj = "Jane"
-p.Name                // val it: string = "Jane"
-p.GetValue("ID")      // val it: obj = 1337
-p.ID                  // val it: int = 1337
-p.GetValue("Address") // val it: obj = "FunStreet"
-```
-
-### Practical helpers
-
-```fsharp
-DynObj.format p
-|> printfn "%s"
-```
--> 
-```
-Name: Jane
-ID: 1337
-?Address: FunStreet
-```
+Documentation is hosted at https://csbiology.github.io/DynamicObj/
 
 ## Development
 

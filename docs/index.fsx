@@ -1,5 +1,5 @@
 (*** condition: prepare ***)
-#r "../bin/DynamicObj/netstandard2.0/DynamicObj.dll"
+#r "../src/DynamicObj/bin/Release/netstandard2.0/DynamicObj.dll"
 
 (*** condition: ipynb ***)
 #if IPYNB
@@ -8,270 +8,134 @@
 
 
 (**
-[![Binder]({{root}}img/badge-binder.svg)](https://mybinder.org/v2/gh/CSBiology/DynamicObj/gh-pages?filepath={{fsdocs-source-basename}}.ipynb)&emsp;
-[![Script]({{root}}img/badge-script.svg)]({{root}}{{fsdocs-source-basename}}.fsx)&emsp;
-[![Notebook]({{root}}img/badge-notebook.svg)]({{root}}{{fsdocs-source-basename}}.ipynb)
-
 # DynamicObj
 
-F# library supporting Dynamic Objects including inheritance in functional style.
+The primary use case of DynamicObj is the **extension of F# classes with dynamic properties**.
+This is useful when you want to add arbitrarily typed properties to a class **at runtime**.
 
-#### Table of contents
+> Why would you want to do that?
 
-- [DynamicObj (mutable)](#DynamicObj-mutable)
-    - [Simple inheritance pattern for DynamicObj](#Simple-inheritance-pattern-for-DynamicObj)
-    - [Nesting DynamicObjs](#Nesting-DynamicObjs)
-- [ImmutableDynamicObj](#ImmutableDynamicObj)
-    - [Simple inheritance pattern for ImmutableDynamicObj](#Simple-inheritance-pattern-for-ImmutableDynamicObj)
-    - [Nesting ImmutableDynamicObjs](#Nesting-ImmutableDynamicObjs)
+Yes, The type system is one of the core strengths of F#, and it is awesome.
+However, there are cases where a static domain model is either unfeasible or not flexible enough, especially when interfacing with dynamic languages such as JavaScript or Python.
 
-# DynamicObj (mutable)
+DynamicObj is transpilable into JS and Python via [Fable](https://github.com/fable-compiler/Fable), meaning you can use it to create classes that are usable in both .NET and those languages, while making their usage (e.g., the setting of dynamic properties) both safe in .NET and idiomatic in JS/Python.
 
-`DynamicObj` builds on ´System.Dynamic´ but adds object inheritance.
-
-One main use case of this library is the dynamic generation of JSON objects - especially nested objects with optional properties - aimed to be used from javascript wuith the init/style pattern:
-
-Use it for your custom types via inheritance:
-
-## Simple inheritance pattern for DynamicObj
+## Get started
 
 *)
-#r "nuget: Newtonsoft.JSON, 13.0.1"
-open Newtonsoft.Json
-open DynamicObj
 
-type A() = 
+#r "nuget: Fable.Core" // Needed if working with Fable
+
+open DynamicObj
+open Fable.Core // Needed if working with Fable
+
+[<AttachMembers>] // AttachMembers needed if working with Fable
+type Person(id : int, name : string) =
+    
+    // Include this in your class
     inherit DynamicObj()
 
-    static member init
-        (
-            ?SomeProp: int
-        ) =
-            A()
-            |> A.style
-                (
-                    ?SomeProp  = SomeProp
-                )
+    // Mutable static property
+    let mutable _name = name
+    member this.Name
+        with get() = _name
+        and set(value) = _name <- value
 
-    static member style
-        (
-            ?SomeProp: int
-        ) =
-            fun (a:A) ->
+    // Immutable static property
+    member this.ID 
+        with get() = id
 
-                SomeProp |> DynObj.setValueOpt a "some_prop"
-
-                a
+let p = Person(1337,"John")
 
 (**
-You can use the `DynObj.print` function to look at the dynamic members of the object:
+### Accessing static and dynamic properties
+
+Any class inheriting from `DynamicObj` can have static and dynamic properties, and both are accessible via various instance methods.
+
+### Access Static Properties:
+*)
+p.Name
+(***include-it***)
+p.GetPropertyValue("Name")
+(***include-it***)
+
+(**
+### Overwrite mutable static property
+*)
+p.SetProperty("Name","Jane")
+p.GetPropertyValue("Name")
+(***include-it***)
+
+(**
+### You cannot overwrite mutable static properties
 *)
 
-let aformat = A.init(42) |> DynObj.format
-
-(*** condition: ipynb ***)
-#if IPYNB
-aformat
-#endif // IPYNB
-
-(***include-value:aformat***)
+(***do-not-eval***)
+p.SetProperty("ID",1234) // throws an excpection
+(***)
+p.GetPropertyValue("ID")
+(***include-it***)
 
 (**
-And this is how the serialized JSON looks like:
+### Set dynamic properties
+*)
+p.SetProperty("Address","FunStreet")
+p.GetPropertyValue("Address")
+(***include-it***)
+
+(**
+### Safe and typed access to dynamic properties
+
+Note that all properties returted by `GetPropertyValue` are boxed in .NET.
+
+If you want to get the value in a typed manner, you can use the `TryGetTypedPropertyValue` method:
 *)
 
-
-let aSerialized =
-    A.init(42)
-    |> JsonConvert.SerializeObject
-
-(*** condition: ipynb ***)
-#if IPYNB
-aSerialized
-#endif // IPYNB
-
-(***include-value:aSerialized***)
-
+p.TryGetTypedPropertyValue<string>("Name")
+(***include-it***)
+p.TryGetTypedPropertyValue<int>("Name")
+(***include-it***)
+p.TryGetTypedPropertyValue<string>("I Do Not Exist")
+(***include-it***)
 (**
-## Nesting DynamicObjs
+**Attention: the TryGetTypedPropertyValue<'T> method is not transpilable via Fable as it can only provide access to the types known at transpilation.
+However, You can use the respective [module function](#the-dynobj-module) to transpile typed dynamic member access.**
+*)
+    
+(**
+## The DynObj module
+
+This module provides a lot of API functions that are not not desired as static methods on `DynamicObj`, as it would be confusing if they ended up on inheriting classes.
+
+It also supports pipeline chaining.
 *)
 
-type MyComplexJSONType() =
-    inherit DynamicObj()
+p
+|> DynObj.tryGetTypedPropertyValue<int> "ID"
+(***include-it***)
 
-    static member init
-        (
-            ?PropA: int [],
-            ?PropB: A
-        ) =
-            MyComplexJSONType()
-            |> MyComplexJSONType.style
-                (
-                    ?PropA  = PropA,
-                    ?PropB  = PropB
-                )
+p
+|> DynObj.withProperty "Another" "prop"
+|> DynObj.withProperty "Yes" 42
+|> DynObj.withoutProperty "Address"
+|> DynObj.withOptionalProperty "Maybe" (Some "yes")
+|> DynObj.withOptionalProperty "Maybe not" None
+|> DynObj.format
+(***include-it***)
 
-    static member style
-        (
-            ?PropA: int [],
-            ?PropB: A
-        ) =
-            fun (t:MyComplexJSONType) ->
 
-                PropA |> DynObj.setValueOpt t "prop_a"
-                PropB |> DynObj.setValueOpt t "prop_b"
-
-                t
-
-let complex =
-    MyComplexJSONType.init(
-        PropA = [|42;1337|],
-        PropB = A.init(68) // nested dynamic objects
-    )
-
-let complexSerialized = 
-    complex
-    |> JsonConvert.SerializeObject
 
 (**
-You can use the `DynObj.print` function to look at the dynamic members of the object:
-*)
+## Serialization
 
-complex |> DynObj.print
-
-(***include-output***)
-
-(**
-And this is how the serialized JSON looks like:
-*)
-
-(*** condition: ipynb ***)
-#if IPYNB
-complexSerialized
-#endif // IPYNB
-
-(***include-value:complexSerialized***)
-
-(**
+Serialization to a JSON string that contains both static and dynamic properties is supported out-of-the-box when using [Newtonsoft.Json]():
 
 *)
 
-(**
-## Simple inheritance pattern for ImmutableDynamicObj
+#r "nuget: Newtonsoft.Json"
 
-*)
-#r "nuget: Newtonsoft.JSON, 12.0.3"
 open Newtonsoft.Json
-open DynamicObj
 
-type ImmutableA() = 
-    inherit ImmutableDynamicObj()
-
-    static member init
-        (
-            ?SomeProp: int
-        ) =
-            ImmutableA()
-            |> ImmutableA.style
-                (
-                    ?SomeProp  = SomeProp
-                )
-
-    static member style
-        (
-            ?SomeProp: int
-        ) =
-            fun (a:ImmutableA) ->
-                a 
-                |> ImmutableDynamicObj.addOpt "some_prop" SomeProp
-
-
-(**
-You can use the `ImmutableDynamicObj.print` function to look at the dynamic members of the object:
-*)
-
-ImmutableA.init(42) |> ImmutableDynamicObj.print
-
-(***include-output***)
-
-(**
-And this is how the serialized JSON looks like:
-*)
-
-
-let immutableASerialized =
-    ImmutableA.init(42)
-    |> JsonConvert.SerializeObject
-
-(*** condition: ipynb ***)
-#if IPYNB
-immutableASerialized
-#endif // IPYNB
-
-(***include-value:immutableASerialized***)
-
-(**
-## Nesting DynamicObjs
-
-`DynamicObj.Operators` adds usefull operators for adding properties:
-*)
-
-open DynamicObj.Operators
-
-type ImmutableMyComplexJSONType() =
-    inherit ImmutableDynamicObj()
-
-    static member init
-        (
-            ?PropA: int [],
-            ?PropB: A
-        ) =
-            ImmutableMyComplexJSONType()
-            |> ImmutableMyComplexJSONType.style
-                (
-                    ?PropA  = PropA,
-                    ?PropB  = PropB
-                )
-
-    static member style
-        (
-            ?PropA: int [],
-            ?PropB: A
-        ) =
-            fun (t:ImmutableMyComplexJSONType) ->
-                t
-                ++? ("prop_a", PropA)
-                ++? ("prop_b", PropB)
-
-let immutableComplex =
-    ImmutableMyComplexJSONType.init(
-        PropA = [|42;1337|],
-        PropB = A.init(68) // nested dynamic objects
-    )
-
-let immutableComplexSerialized = 
-    immutableComplex
-    |> JsonConvert.SerializeObject
-
-(**
-You can use the `DynObj.print` function to look at the dynamic members of the object:
-*)
-
-complex |> DynObj.print
-
-(***include-output***)
-
-(**
-And this is how the serialized JSON looks like:
-*)
-
-(*** condition: ipynb ***)
-#if IPYNB
-immutableComplexSerialized
-#endif // IPYNB
-
-(***include-value:immutableComplexSerialized***)
-
-(**
-
-*)
+p
+|> JsonConvert.SerializeObject
+(***include-it***)
