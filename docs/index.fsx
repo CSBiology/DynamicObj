@@ -1,12 +1,6 @@
 (*** condition: prepare ***)
 #r "../src/DynamicObj/bin/Release/netstandard2.0/DynamicObj.dll"
 
-(*** condition: ipynb ***)
-#if IPYNB
-#r "nuget: DynamicObj, {{fsdocs-package-version}}"
-#endif // IPYNB
-
-
 (**
 # DynamicObj
 
