@@ -51,6 +51,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "DynamicObject.Immutable.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0867002-4410-4E5F-BE71-46ABBE93ED07}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpConsole", "tests\FSharpConsole\FSharpConsole.fsproj", "{AF8AE8C7-B7C9-4CAC-9FE4-F5BCF015798D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{0F6A539F-82D2-4BDC-8BF0-F2D261873B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F6A539F-82D2-4BDC-8BF0-F2D261873B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F6A539F-82D2-4BDC-8BF0-F2D261873B92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF8AE8C7-B7C9-4CAC-9FE4-F5BCF015798D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF8AE8C7-B7C9-4CAC-9FE4-F5BCF015798D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF8AE8C7-B7C9-4CAC-9FE4-F5BCF015798D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF8AE8C7-B7C9-4CAC-9FE4-F5BCF015798D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +98,7 @@ Global
 		{5E7DAC28-7752-4209-B3BB-6DCE54C28AD8} = {E0867002-4410-4E5F-BE71-46ABBE93ED07}
 		{39192F2D-164B-4905-A7D7-5C5B0FFCD2BB} = {988D804A-3A42-4E46-B233-B64F5C22524B}
 		{0F6A539F-82D2-4BDC-8BF0-F2D261873B92} = {988D804A-3A42-4E46-B233-B64F5C22524B}
+		{AF8AE8C7-B7C9-4CAC-9FE4-F5BCF015798D} = {988D804A-3A42-4E46-B233-B64F5C22524B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F5C3597-4524-4A4E-94EC-44857BD0BCEC}

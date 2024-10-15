@@ -50,7 +50,7 @@ module DynObj =
     /// <param name="first"></param>
     /// <param name="second"></param>
     /// <remarks>This function mutates the first input DynamicObj</remarks>
-    let rec combine (first:#DynamicObj) (second:#DynamicObj) =
+    let rec combine (first:DynamicObj) (second:DynamicObj) =
         //printfn "Type %A" (first.GetType())
         /// Consider deep-copy of first
         for kv in (second.GetProperties true) do 
