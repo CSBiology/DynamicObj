@@ -1,3 +1,7 @@
+### 4.0.2 (Released 2024-10-15)
+
+- Undo `DynObj.combine` working with `#DynamicObj` as input - this caused issues with ncombining nested DOs of types that inherited from DynamicObj. The type signature has been fixed to `DynamicObj` (without the flexible `#`)
+
 ### 4.0.1 (Released 2024-10-15)
 
 - Fix DynObj functions not being inlined ([#39](https://github.com/CSBiology/DynamicObj/issues/39))
