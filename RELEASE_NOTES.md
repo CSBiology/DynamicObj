@@ -1,3 +1,7 @@
+### 4.0.1 (Released 2024-10-15)
+
+- Fix DynObj functions not being inlined ([#39](https://github.com/CSBiology/DynamicObj/issues/39))
+
 ### 4.0.0 (Released 2024-9-26)
 
 - [Rework API naming](https://github.com/CSBiology/DynamicObj/pull/36)
