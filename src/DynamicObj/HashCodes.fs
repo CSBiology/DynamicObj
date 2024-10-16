@@ -15,7 +15,10 @@ let hashDateTime (dt : System.DateTime) : int =
     
 
 let hash obj =
-    obj.GetHashCode()
+    if obj = null then 
+        0
+    else
+        obj.GetHashCode()
 
 let boxHashOption (a: 'a option) : obj =
     if a.IsSome then a.Value.GetHashCode() else (0).GetHashCode()

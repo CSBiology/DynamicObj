@@ -68,6 +68,13 @@ let tests_remove = testList "Remove" [
        
         Expect.equal p.FirstName null "Static property should "
 
+    testCase "Remove Static HashCodeDoesNotFail" <| fun _ ->
+        let p = Person("123","John")
+
+        p.RemoveProperty("FirstName") |> ignore
+        
+        p.GetHashCode() |> ignore
+
     testCase "Remove Static Immutable" <| fun _ ->
         let p = Person("123","John")
         let f = fun () -> p.RemoveProperty("Id") |> ignore

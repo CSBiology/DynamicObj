@@ -535,6 +535,21 @@ let tests_GetHashCode = testList "GetHashCode" [
         b2.SetProperty("c", 2)
         a2.SetProperty("b", b2)
         Expect.equal (a.GetHashCode()) (a2.GetHashCode()) "Values should be equal"
+
+    testCase "null Value same key" <| fun _ ->
+        let a = DynamicObj()
+        a.SetProperty("b", null)
+        let b = DynamicObj()
+        b.SetProperty("b", null)
+        Expect.equal (a.GetHashCode()) (b.GetHashCode()) "Values should be equal"
+
+    testCase "null Value different key" <| fun _ ->
+        let a = DynamicObj()
+        a.SetProperty("b", null)
+        let b = DynamicObj()
+        a.SetProperty("c", null)
+        Expect.notEqual (a.GetHashCode()) (b.GetHashCode()) "Values should not be equal"
+
 ]
 
 let main = testList "DynamicObj (Class)" [
