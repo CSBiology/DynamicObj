@@ -1,3 +1,6 @@
+### 4.0.3+36c543f (Released 2024-10-16)
+- fix GetHashCode member failing for null property values 
+
 ### 4.0.2 (Released 2024-10-15)
 
 - Undo `DynObj.combine` working with `#DynamicObj` as input - this caused issues with ncombining nested DOs of types that inherited from DynamicObj. The type signature has been fixed to `DynamicObj` (without the flexible `#`)
