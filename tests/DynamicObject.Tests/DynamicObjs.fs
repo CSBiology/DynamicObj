@@ -433,25 +433,17 @@ let tests_GetProperties = testList "GetProperties" [
         Expect.equal properties expected "Should have all properties"
 ]
 
-let tests_CopyDynamicPropertiesTo = testList "CopyDynamicPropertiesTo" [
+let tests_ShallowCopyDynamicPropertiesTo = testList "ShallowCopyDynamicPropertiesTo" [
     testCase "ExistingObject" <| fun _ ->
         let a = DynamicObj()
         a.SetProperty("a", 1)
         a.SetProperty("b", 2)
         let b = DynamicObj()
         b.SetProperty("c", 3)
-        a.CopyDynamicPropertiesTo(b)
+        a.ShallowCopyDynamicPropertiesTo(b)
         Expect.equal (b.GetPropertyValue("a")) 1 "Value a should be copied"
         Expect.equal (b.GetPropertyValue("b")) 2 "Value b should be copied"
         Expect.equal (b.GetPropertyValue("c")) 3 "Value c should be unaffected"
-
-    testCase "NoOverwrite throws" <| fun _ ->
-        let a = DynamicObj()
-        a.SetProperty("a", 1)
-        let b = DynamicObj()
-        b.SetProperty("a", 3)
-        let f = fun () -> a.CopyDynamicPropertiesTo(b)
-        Expect.throws f "Should throw because property exists"
 
     testCase "Overwrite" <| fun _ ->
         let a = DynamicObj()
@@ -459,17 +451,38 @@ let tests_CopyDynamicPropertiesTo = testList "CopyDynamicPropertiesTo" [
         let b = DynamicObj()
         b.SetProperty("a", 3)
         Expect.notEqual a b "Values should not be equal before copying"
-        a.CopyDynamicPropertiesTo(b, true)
+        a.ShallowCopyDynamicPropertiesTo(b, true)
         Expect.equal a b "Values should be equal"
+
+    testCase "copies are only references" <| fun _ ->
+        let a = DynamicObj()
+        let inner = DynamicObj()
+        inner.SetProperty("inner", 1)
+        a.SetProperty("nested", inner)
+        let b = DynamicObj()
+        a.ShallowCopyDynamicPropertiesTo(b)
+        Expect.equal a b "Value should be copied"
+        inner.SetProperty("another", 2)
+        Expect.equal a b "copied value was not mutated via reference"
 ]
 
-let tests_CopyDynamicProperties = testList "CopyDynamicProperties" [
+let tests_ShallowCopyDynamicProperties = testList "ShallowCopyDynamicProperties" [
     testCase "NewObject" <| fun _ ->
         let a = DynamicObj()
         a.SetProperty("a", 1)
         a.SetProperty("b", 2)
-        let b = a.CopyDynamicProperties()
+        let b = a.ShallowCopyDynamicProperties()
         Expect.equal a b "Values should be equal"
+
+    testCase "copies are only references" <| fun _ ->
+        let a = DynamicObj()
+        let inner = DynamicObj()
+        inner.SetProperty("inner", 1)
+        a.SetProperty("nested", inner)
+        let b = a.ShallowCopyDynamicProperties()
+        Expect.equal a b "Value should be copied"
+        inner.SetProperty("another", 2)
+        Expect.equal a b "copied value was not mutated via reference"
 ]
 
 let tests_Equals = testList "Equals" [
@@ -568,8 +581,8 @@ let main = testList "DynamicObj (Class)" [
     tests_RemoveProperty
     tests_GetPropertyHelpers
     tests_GetProperties
-    tests_CopyDynamicPropertiesTo
-    tests_CopyDynamicProperties
+    tests_ShallowCopyDynamicPropertiesTo
+    tests_ShallowCopyDynamicProperties
     tests_Equals
     tests_GetHashCode
 ]

@@ -224,30 +224,36 @@ type DynamicObj() =
         |> Seq.map (fun kv -> kv.Key)
 
     /// <summary>
-    /// Copies all dynamic members of the DynamicObj to the target DynamicObj.
+    /// Copies all dynamic members of the source DynamicObj to the target DynamicObj.
+    ///
+    /// Note that this function does not attempt to do any deep copying. 
+    /// The dynamic properties of the source will be copied as references to the target. 
+    /// If any of those properties are mutable or themselves DynamicObj instances, changes to the properties on the source will be reflected in the target.
     ///
     /// If overWrite is set to true, existing properties on the target object will be overwritten.
-    ///
-    /// Note that this method will not perform nested checks, e.g. if a property is a DynamicObj itself, it will not be copied recursively.
     /// </summary>
     /// <param name="target">The target object to copy dynamic members to</param>
     /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
-    member this.CopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
+    member this.ShallowCopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
         let overWrite = defaultArg overWrite false 
         this.GetProperties(false)
         |> Seq.iter (fun kv ->
             match target.TryGetPropertyHelper kv.Key with
             | Some pi when overWrite -> pi.SetValue target kv.Value
-            | Some _ -> failwith $"Property \"{kv.Key}\" already exists on target object and overWrite was not set to true."
+            | Some _ -> ()
             | None -> target.SetProperty(kv.Key,kv.Value)
         )
 
     /// <summary>
     /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    ///
+    /// Note that this function does not attempt to do any deep copying. 
+    /// The dynamic properties of the source will be copied as references to the target. 
+    /// If any of those properties are mutable or themselves DynamicObj instances, changes to the properties on the source will be reflected in the target.
     /// </summary>
-    member this.CopyDynamicProperties() =
+    member this.ShallowCopyDynamicProperties() =
         let target = DynamicObj()
-        this.CopyDynamicPropertiesTo(target)
+        this.ShallowCopyDynamicPropertiesTo(target)
         target
 
     #if !FABLE_COMPILER
