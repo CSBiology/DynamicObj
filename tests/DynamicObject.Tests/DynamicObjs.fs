@@ -3,6 +3,7 @@
 open System
 open Fable.Pyxpecto
 open DynamicObj
+open TestUtils
 
 let tests_TryGetPropertyValue = testList "TryGetPropertyValue" [
     testCase "NonExisting" <| fun _ -> 
@@ -485,6 +486,120 @@ let tests_ShallowCopyDynamicProperties = testList "ShallowCopyDynamicProperties"
         Expect.equal a b "copied value was not mutated via reference"
 ]
 
+let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
+
+    let constructClone (props: seq<string*obj>) =
+        let original = DynamicObj()
+        props
+        |> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
+        let clone = original.DeepCopyDynamicProperties()
+        original, clone
+
+    let bulkMutate (props: seq<string*obj>) (dyn: DynamicObj) =
+        props |> Seq.iter (fun (propertyName, propertyValue) -> dyn.SetProperty(propertyName, propertyValue))
+
+    testList "DynamicObj" [
+        testList "Cloneable dynamic properties" [
+            testCase "primitives" <| fun _ ->
+                let originalProps = [ 
+                    "int", box 1
+                    "float", box 1.0
+                    "bool", box true
+                    "string", box "hello"
+                    "char", box 'a'
+                    "byte", box (byte 1)
+                    "sbyte", box (sbyte -1)
+                    "int16", box (int16 -1)
+                    "uint16", box (uint16 1)
+                    "int32", box (int32 -1)
+                    "uint32", box (uint32 1u)
+                    "int64", box (int64 -1L)
+                    "uint64", box (uint64 1UL)
+                    "single", box (single 1.0f)
+                    "decimal", box (decimal 1M) 
+                ]
+                let original, clone = constructClone originalProps
+                let mutatedProps = [ 
+                    "int", box 2
+                    "float", box 2.0
+                    "bool", box false
+                    "string", box "bye"
+                    "char", box 'b'
+                    "byte", box (byte 2)
+                    "sbyte", box (sbyte -2)
+                    "int16", box (int16 -2)
+                    "uint16", box (uint16 2)
+                    "int32", box (int32 -2)
+                    "uint32", box (uint32 2u)
+                    "int64", box (int64 -2L)
+                    "uint64", box (uint64 2UL)
+                    "single", box (single 2.0f)
+                    "decimal", box (decimal 2M) 
+                ]
+                bulkMutate mutatedProps original
+                Expect.notEqual original clone "Original and clone should not be equal after mutating primitive props on original"
+                Expect.sequenceEqual (original.GetProperties(true) |> Seq.map (fun p -> p.Key, p.Value)) mutatedProps "Original should have mutated properties"
+                Expect.sequenceEqual (clone.GetProperties(true) |> Seq.map (fun p -> p.Key, p.Value)) originalProps "Clone should have original properties"
+            testCase "DynamicObj" <| fun _ ->
+                let inner = DynamicObj() |> DynObj.withProperty "inner int" 2
+                let original, clone = constructClone ["dyn", inner]
+                inner.SetProperty("inner int", 1)
+                Expect.notEqual original clone "Original and clone should not be equal after mutating DynamicObj prop on original"
+                Expect.equal (original |> DynObj.getNestedPropAs<int> ["dyn";"inner int"]) 1 "Original should have mutated properties"
+                Expect.equal (clone |> DynObj.getNestedPropAs<int> ["dyn";"inner int"]) 2 "Clone should have original properties"
+            testCase "Nested DynamicObj" <| fun _ ->
+                let first_level = DynamicObj() |> DynObj.withProperty "lvl1" 1
+                let second_level = DynamicObj() |> DynObj.withProperty "lvl2" 2
+                first_level.SetProperty("second_level", second_level)
+                let original, clone = constructClone ["first_level", first_level]
+                second_level.SetProperty("lvl2", -1)
+                Expect.notEqual original clone "Original and clone should not be equal after mutating DynamicObj prop on original"
+                Expect.equal (original |> DynObj.getNestedPropAs<int> ["first_level";"second_level";"lvl2"]) -1 "Original should have mutated properties"
+                Expect.equal (clone |> DynObj.getNestedPropAs<int> ["first_level";"second_level";"lvl2"]) 2 "Clone should have original properties"
+            testCase "DynamicObj array" <| fun _ ->
+                let item1 = DynamicObj() |> DynObj.withProperty "item" 1
+                let item2 = DynamicObj() |> DynObj.withProperty "item" 2
+                let item3 = DynamicObj() |> DynObj.withProperty "item" 3
+                let arr = [|item1; item2; item3|]
+                let original, clone = constructClone ["arr", box arr]
+                item1.SetProperty("item", -1)
+                item2.SetProperty("item", -1)
+                item3.SetProperty("item", -1)
+                let originalProp = original |> DynObj.getNestedPropAs<DynamicObj array> ["arr"] |> Array.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn)
+                let clonedProp = clone |> DynObj.getNestedPropAs<DynamicObj array> ["arr"] |> Array.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn)
+                Expect.notEqual original clone "Original and clone should not be equal after mutating DynamicObj prop on original"
+                Expect.sequenceEqual originalProp [|-1; -1; -1|]  "Original should have mutated properties"
+                Expect.equal clonedProp [|1; 2; 3|] "Clone should have original properties"
+            testCase "<DynamicObj list" <| fun _ ->
+                ()
+            testCase "DynamicObj ResizeArray" <| fun _ ->
+                ()
+        ]
+        testList "Un-Cloneable dynamic properties" [
+            testCase "Class with mutable fields is reference equal" <| fun _ ->
+                ()
+        ]
+    ]
+    testList "Derived class" [
+        testList "Cloneable dynamic properties" [
+            testCase "primitives" <| fun _ ->
+                ()
+            testCase "DynamicObj" <| fun _ ->
+                ()
+            testCase "DynamicObj array" <| fun _ ->
+                ()
+            testCase "<DynamicObj list" <| fun _ ->
+                ()
+            testCase "DynamicObj ResizeArray" <| fun _ ->
+                ()
+        ]
+        testList "Un-Cloneable dynamic properties" [
+            testCase "Class with mutable fields is reference equal" <| fun _ ->
+                ()
+        ]
+    ]
+]
+
 let tests_Equals = testList "Equals" [
     testCase "Same Object" <| fun _ ->
         let a = DynamicObj()
@@ -583,6 +698,7 @@ let main = testList "DynamicObj (Class)" [
     tests_GetProperties
     tests_ShallowCopyDynamicPropertiesTo
     tests_ShallowCopyDynamicProperties
+    tests_DeepCopyDynamicProperties
     tests_Equals
     tests_GetHashCode
 ]

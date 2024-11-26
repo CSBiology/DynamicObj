@@ -245,6 +245,36 @@ type DynamicObj() =
         )
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target">The target object to copy dynamic members to</param>
+    /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
+    member this.DeepCopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
+        let overWrite = defaultArg overWrite false
+        let rec tryDeepCopyObj (o:obj) =
+            match o with
+            | :? DynamicObj as dyn ->
+                let newDyn = DynamicObj()
+                for kv in (dyn.GetProperties(false)) do
+                    newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
+                box newDyn
+            | :? array<DynamicObj> as dyns ->
+                box [|for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj|]
+            | :? list<DynamicObj> as dyns ->
+                box [for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]
+            | :? ResizeArray<DynamicObj> as dyns ->
+                box (ResizeArray([for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]))
+            //| :? System.ICloneable as clonable -> clonable.Clone()
+            | _ -> o
+
+        this.GetProperties(false)
+        |> Seq.iter (fun kv ->
+            match target.TryGetPropertyHelper kv.Key with
+            | Some pi when overWrite -> pi.SetValue target (tryDeepCopyObj kv.Value)
+            | Some _ -> ()
+            | None -> target.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
+        )
+    /// <summary>
     /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
     ///
     /// Note that this function does not attempt to do any deep copying. 
@@ -254,6 +284,11 @@ type DynamicObj() =
     member this.ShallowCopyDynamicProperties() =
         let target = DynamicObj()
         this.ShallowCopyDynamicPropertiesTo(target)
+        target
+
+    member this.DeepCopyDynamicProperties() =
+        let target = DynamicObj()
+        this.DeepCopyDynamicPropertiesTo(target)
         target
 
     #if !FABLE_COMPILER

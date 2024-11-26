@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="TestUtils.fs" />
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="Inheritance.fs" />
     <Compile Include="Interface.fs" />
