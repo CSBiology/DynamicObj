@@ -486,6 +486,22 @@ let tests_ShallowCopyDynamicProperties = testList "ShallowCopyDynamicProperties"
         Expect.equal a b "copied value was not mutated via reference"
 ]
 
+type DerivedClass(stat: string, dyn: string) as this =
+    inherit DynamicObj()
+    do
+        this.SetProperty("dyn", dyn)
+    member this.Stat = stat
+
+type DerivedClassCloneable(stat: string, dyn: string) as this =
+    inherit DynamicObj()
+    do
+        this.SetProperty("dyn", dyn)
+    member this.Stat = stat
+    interface ICloneable with
+        member this.Clone() =
+            let dyn = this.GetPropertyValue("dyn") |> unbox<string>
+            DerivedClassCloneable(stat, dyn)
+
 let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
 
     let constructClone (props: seq<string*obj>) =
@@ -497,6 +513,7 @@ let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
 
     let bulkMutate (props: seq<string*obj>) (dyn: DynamicObj) =
         props |> Seq.iter (fun (propertyName, propertyValue) -> dyn.SetProperty(propertyName, propertyValue))
+
 
     testList "DynamicObj" [
         testList "Cloneable dynamic properties" [
@@ -534,7 +551,7 @@ let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
                     "int64", box (int64 -2L)
                     "uint64", box (uint64 2UL)
                     "single", box (single 2.0f)
-                    "decimal", box (decimal 2M) 
+                    "decimal", box (decimal 2M)
                 ]
                 bulkMutate mutatedProps original
                 Expect.notEqual original clone "Original and clone should not be equal after mutating primitive props on original"
@@ -570,7 +587,7 @@ let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
                 Expect.notEqual original clone "Original and clone should not be equal after mutating DynamicObj prop on original"
                 Expect.sequenceEqual originalProp [|-1; -1; -1|]  "Original should have mutated properties"
                 Expect.equal clonedProp [|1; 2; 3|] "Clone should have original properties"
-            testCase "<DynamicObj list" <| fun _ ->
+            testCase "DynamicObj list" <| fun _ ->
                 ()
             testCase "DynamicObj ResizeArray" <| fun _ ->
                 ()
@@ -588,7 +605,7 @@ let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
                 ()
             testCase "DynamicObj array" <| fun _ ->
                 ()
-            testCase "<DynamicObj list" <| fun _ ->
+            testCase "DynamicObj list" <| fun _ ->
                 ()
             testCase "DynamicObj ResizeArray" <| fun _ ->
                 ()

@@ -253,8 +253,21 @@ type DynamicObj() =
         let overWrite = defaultArg overWrite false
         let rec tryDeepCopyObj (o:obj) =
             match o with
+            | :? int     | :? float   | :? bool    
+            | :? string  | :? char    | :? byte    
+            | :? sbyte   | :? int16   | :? uint16  
+            | :? int32   | :? uint32  | :? int64   
+            | :? uint64  | :? single  
+                -> o
+
+            #if !FABLE_COMPILER_PYTHON
+            // https://github.com/fable-compiler/Fable/issues/3971
+            | :? decimal -> o
+            #endif
+
             | :? DynamicObj as dyn ->
                 let newDyn = DynamicObj()
+                // might want to keep instance props as dynamic props on copy
                 for kv in (dyn.GetProperties(false)) do
                     newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
                 box newDyn
@@ -264,7 +277,12 @@ type DynamicObj() =
                 box [for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]
             | :? ResizeArray<DynamicObj> as dyns ->
                 box (ResizeArray([for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]))
-            //| :? System.ICloneable as clonable -> clonable.Clone()
+
+            #if !FABLE_COMPILER_PYTHON
+            // https://github.com/fable-compiler/Fable/issues/3972
+            | :? System.ICloneable as clonable -> clonable.Clone()
+            #endif
+
             | _ -> o
 
         this.GetProperties(false)
