@@ -9,10 +9,25 @@
 
   <ItemGroup>
     <Compile Include="TestUtils.fs" />
+    <Compile Include="DynamicObjs\RemoveProperty.fs" />
+    <Compile Include="DynamicObjs\SetProperty.fs" />
+    <Compile Include="DynamicObjs\GetHashcode.fs" />
+    <Compile Include="DynamicObjs\Equals.fs" />
+    <Compile Include="DynamicObjs\GetPropertyValue.fs" />
+    <Compile Include="DynamicObjs\TryGetPropertyValue.fs" />
+    <Compile Include="DynamicObjs\TryGetTypedPropertyValue.fs" />
+    <Compile Include="DynamicObjs\TryGetStaticPropertyHelper.fs" />
+    <Compile Include="DynamicObjs\TryGetDynamicPropertyHelper.fs" />
+    <Compile Include="DynamicObjs\TryGetPropertyHelper.fs" />
+    <Compile Include="DynamicObjs\GetPropertyHelpers.fs" />
+    <Compile Include="DynamicObjs\GetProperties.fs" />
+    <Compile Include="DynamicObjs\ShallowCopyDynamicPropertiesTo.fs" />
+    <Compile Include="DynamicObjs\ShallowCopyDynamicProperties.fs" />
+    <Compile Include="DynamicObjs\DeepCopyDynamicProperties.fs" />
+    <Compile Include="DynamicObjs\Main.fs" />
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="Inheritance.fs" />
     <Compile Include="Interface.fs" />
-    <Compile Include="DynamicObjs.fs" />
     <Compile Include="DynObj.fs" />
     <Compile Include="Serialization.fs" />
     <Compile Include="Main.fs" />

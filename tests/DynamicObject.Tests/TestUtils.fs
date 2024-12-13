@@ -1,6 +1,42 @@
 ﻿module TestUtils
 
+open System
 open DynamicObj
+open Fable.Core
+
+[<AttachMembers>]
+type MutableClass(stat:string) =     
+    let mutable s = stat
+    member this.stat with get() = s and set v = s <- v
+
+[<AttachMembers>]
+type DerivedClass(stat: string, dyn: string) as this =
+    inherit DynamicObj()
+    do
+        this.SetProperty("dyn", dyn)
+    member this.stat = stat
+
+[<AttachMembers>]
+type DerivedClassCloneable(stat: string, dyn: string) as this =
+    inherit DynamicObj()
+    do
+        this.SetProperty("dyn", dyn)
+    member this.stat = stat
+    interface ICloneable with
+        member this.Clone() =
+            let dyn = this.GetPropertyValue("dyn") |> unbox<string>
+            DerivedClassCloneable(stat, dyn)
+
+let constructDeepCopiedClone (props: seq<string*obj>) =
+    let original = DynamicObj()
+    props
+    |> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
+    let clone = original.DeepCopyDynamicProperties()
+    original, clone
+
+let bulkMutate (props: seq<string*obj>) (dyn: #DynamicObj) =
+    props |> Seq.iter (fun (propertyName, propertyValue) -> dyn.SetProperty(propertyName, propertyValue))
+
 
 let firstDiff s1 s2 =
     let s1 = Seq.append (Seq.map Some s1) (Seq.initInfinite (fun _ -> None))
@@ -32,3 +68,7 @@ module Expect =
       | i,Some a,None ->
         failwithf "%s. Sequence actual longer than expected, at pos %i found item %O."
           message i a
+
+    let referenceEqual actual expected message =
+        if not (LanguagePrimitives.PhysicalEquality actual expected) then
+            failwith message

@@ -245,7 +245,31 @@ type DynamicObj() =
         )
 
     /// <summary>
+    /// Attempts to perform a deep copy of the DynamicObj.
     /// 
+    /// On the deep copy, as many properties as possible are re-instantiated as new objects, meaning the 
+    /// copy has as little reference equal properties as possible.
+    /// 
+    /// The nature of DynamicObj however means that it is impossible to reliably deep copy all properties, as
+    /// their type is not known on runtime and the contructors of the types are not known.
+    ///
+    /// The following cases are handled (in this precedence):
+    ///
+    /// - Basic F# types (int, float, bool, string, char, byte, sbyte, int16, uint16, int32, uint32, int64, uint64, single, decimal)
+    ///
+    /// - array&lt;DynamicObj&gt;, list&lt;DynamicObj&gt;, ResizeArray&lt;DynamicObj&gt;: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
+    ///
+    /// - System.ICloneable: If the property implements ICloneable, the Clone() method is called on the property.
+    ///
+    /// - DynamicObj (and derived classes): properties that are themselves DynamicObj instances are deep copied recursively.
+    ///   if a derived class has static properties (e.g. instance properties), these will be copied as dynamic properties on the new instance.
+    ///
+    /// Note on Classes that inherit from DynamicObj:
+    ///
+    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
+    /// The deep coopied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
+    /// and then passing them to the class constructor if needed.
     /// </summary>
     /// <param name="target">The target object to copy dynamic members to</param>
     /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
@@ -253,6 +277,9 @@ type DynamicObj() =
         let overWrite = defaultArg overWrite false
         let rec tryDeepCopyObj (o:obj) =
             match o with
+
+            // might be that we do not need this case, however if we remove it, some types will match the 
+            // ICloneable case in transpiled code, which we'd like to prevent, so well keep it for now.
             | :? int     | :? float   | :? bool    
             | :? string  | :? char    | :? byte    
             | :? sbyte   | :? int16   | :? uint16  
@@ -265,12 +292,6 @@ type DynamicObj() =
             | :? decimal -> o
             #endif
 
-            | :? DynamicObj as dyn ->
-                let newDyn = DynamicObj()
-                // might want to keep instance props as dynamic props on copy
-                for kv in (dyn.GetProperties(false)) do
-                    newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
-                box newDyn
             | :? array<DynamicObj> as dyns ->
                 box [|for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj|]
             | :? list<DynamicObj> as dyns ->
@@ -283,9 +304,15 @@ type DynamicObj() =
             | :? System.ICloneable as clonable -> clonable.Clone()
             #endif
 
+            | :? DynamicObj as dyn ->
+                let newDyn = DynamicObj()
+                // might want to keep instance props as dynamic props on copy
+                for kv in (dyn.GetProperties(true)) do
+                    newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
+                box newDyn
             | _ -> o
 
-        this.GetProperties(false)
+        this.GetProperties(true)
         |> Seq.iter (fun kv ->
             match target.TryGetPropertyHelper kv.Key with
             | Some pi when overWrite -> pi.SetValue target (tryDeepCopyObj kv.Value)
