@@ -125,7 +125,7 @@ let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
                 Expect.referenceEqual originalProp clonedProp "Original and cloned property should be reference equal"
         ]
     ]
-    testList "Derived class" [
+    testList "Derived class implementing ICloneable" [
         testList "Cloneable dynamic properties" [
             testCase "primitives" <| fun _ ->
                 ()
@@ -147,7 +147,23 @@ let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
                 ()
         ]
     ]
-    testList "Derived class implementing ICloneable" [
+    testList "Derived class" [
+        testList "SpecialCases" [
+            testCase "copy has instance prop as dynamic prop" <| fun _ ->
+                let original = DerivedClass(stat = "stat", dyn = "dyn")
+                let clone = original.DeepCopyDynamicProperties()
+                let clonedProps = clone.GetProperties(false) |> Seq.map (fun p -> p.Key, p.Value)
+                Expect.containsAll clonedProps ["stat","stat"] "Clone should have static prop from derived class as dynamic prop"
+            testCase "mutable instance prop is reference equal on clone" <| fun _ ->
+                let original = DerivedClass(stat = "stat", dyn = "dyn")
+                let mut = MutableClass("initial")
+                original.SetProperty("mutable", mut)
+                let clone = original.DeepCopyDynamicProperties()
+                mut.stat <- "mutated"
+                let originalProp = original |> DynObj.getNestedPropAs<MutableClass>["mutable"]
+                let clonedProp = clone |> DynObj.getNestedPropAs<MutableClass> ["mutable"]
+                Expect.equal originalProp clonedProp "Original and clone should be equal after mutating mutable field on original"
+        ]
         testList "Cloneable dynamic properties" [
             testCase "primitives" <| fun _ ->
                 let originalProps = [ 
@@ -216,18 +232,77 @@ let tests_DeepCopyDynamicProperties = testList "DeepCopyDynamicProperties" [
                     "Clone should have original and static properties"
                 Expect.isTrue (original.GetType() = typeof<DerivedClass>) "Original is of type DerivedClass"
                 Expect.isTrue (clone.GetType() = typeof<DynamicObj>) "Clone is of type DynamicObj"
+
             testCase "DynamicObj" <| fun _ ->
-                ()
+                let inner = DynamicObj() |> DynObj.withProperty "inner int" 2
+                let original = DerivedClass(stat = "stat", dyn = "dyn")
+                original.SetProperty("inner", inner)
+                let clone = original.DeepCopyDynamicProperties()
+                inner.SetProperty("inner int", 1)
+
+                Expect.equal (original |> DynObj.getNestedPropAs<int> ["inner";"inner int"]) 1 "Original should have mutated properties"
+                Expect.equal (clone |> DynObj.getNestedPropAs<int> ["inner";"inner int"]) 2 "Clone should have original properties"
+            
             testCase "DynamicObj array" <| fun _ ->
-                ()
+                let item1 = DynamicObj() |> DynObj.withProperty "item" 1
+                let item2 = DynamicObj() |> DynObj.withProperty "item" 2
+                let item3 = DynamicObj() |> DynObj.withProperty "item" 3
+                let arr = [|item1; item2; item3|]
+                let original = DerivedClass(stat = "stat", dyn = "dyn")
+                original.SetProperty("arr", arr)
+                let clone = original.DeepCopyDynamicProperties()
+                item1.SetProperty("item", -1)
+                item2.SetProperty("item", -1)
+                item3.SetProperty("item", -1)
+                let originalProp = original |> DynObj.getNestedPropAs<DynamicObj array> ["arr"] |> Array.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn)
+                let clonedProp = clone |> DynObj.getNestedPropAs<DynamicObj array> ["arr"] |> Array.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn)
+                Expect.sequenceEqual originalProp [|-1; -1; -1|]  "Original should have mutated properties"
+                Expect.sequenceEqual clonedProp [|1; 2; 3|] "Clone should have original properties"
+            
             testCase "DynamicObj list" <| fun _ ->
-                ()
+                let item1 = DynamicObj() |> DynObj.withProperty "item" 1
+                let item2 = DynamicObj() |> DynObj.withProperty "item" 2
+                let item3 = DynamicObj() |> DynObj.withProperty "item" 3
+                let l = [item1; item2; item3]
+                let original = DerivedClass(stat = "stat", dyn = "dyn")
+                original.SetProperty("list", l)
+                let clone = original.DeepCopyDynamicProperties()
+                item1.SetProperty("item", -1)
+                item2.SetProperty("item", -1)
+                item3.SetProperty("item", -1)
+                let originalProp = original |> DynObj.getNestedPropAs<DynamicObj list> ["list"] |> List.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn)
+                let clonedProp = clone |> DynObj.getNestedPropAs<DynamicObj list> ["list"] |> List.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn)
+                Expect.sequenceEqual originalProp [-1; -1; -1]  "Original should have mutated properties"
+                Expect.sequenceEqual clonedProp [1; 2; 3] "Clone should have original properties"
+            
             testCase "DynamicObj ResizeArray" <| fun _ ->
-                ()
+                let item1 = DynamicObj() |> DynObj.withProperty "item" 1
+                let item2 = DynamicObj() |> DynObj.withProperty "item" 2
+                let item3 = DynamicObj() |> DynObj.withProperty "item" 3
+                let r = ResizeArray([item1; item2; item3])
+                let original = DerivedClass(stat = "stat", dyn = "dyn")
+                original.SetProperty("resizeArr", r)
+                let clone = original.DeepCopyDynamicProperties()
+                item1.SetProperty("item", -1)
+                item2.SetProperty("item", -1)
+                item3.SetProperty("item", -1)
+                let originalProp = original |> DynObj.getNestedPropAs<ResizeArray<DynamicObj>> ["resizeArr"] |> Seq.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn) |> ResizeArray
+                let clonedProp = clone |> DynObj.getNestedPropAs<ResizeArray<DynamicObj>> ["resizeArr"] |> Seq.map (fun dyn -> DynObj.getNestedPropAs<int> ["item"] dyn) |> ResizeArray
+                Expect.sequenceEqual originalProp (ResizeArray[-1; -1; -1])  "Original should have mutated properties"
+                Expect.sequenceEqual clonedProp (ResizeArray[1; 2; 3]) "Clone should have original properties"
         ]
         testList "Un-Cloneable dynamic properties" [
             testCase "Class with mutable fields is reference equal" <| fun _ ->
-                ()
+                let item = MutableClass("initial")
+                let original = DerivedClass(stat = "stat", dyn = "dyn")
+                original.SetProperty("item", item)
+                let clone = original.DeepCopyDynamicProperties()
+                item.stat <- "mutated"
+                let originalProp = original |> DynObj.getNestedPropAs<MutableClass>["item"]
+                let clonedProp = clone |> DynObj.getNestedPropAs<MutableClass> ["item"]
+                Expect.equal originalProp.stat "mutated" "Original property has mutated value"
+                Expect.equal clonedProp.stat "mutated" "Cloned property has mutated value"
+                Expect.referenceEqual originalProp clonedProp "Original and cloned property should be reference equal"
         ]
     ]
 ]

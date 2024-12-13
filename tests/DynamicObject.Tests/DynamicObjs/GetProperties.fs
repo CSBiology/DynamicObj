@@ -15,7 +15,7 @@ let tests_GetProperties = testList "GetProperties" [
             System.Collections.Generic.KeyValuePair("b", box 2)
         ]
         Expect.sequenceEqual properties expected "Should have all properties"
-    testCase "returns static instance members when wanted" <| fun _ ->
+    testCase "returns static instance members of derived class when wanted" <| fun _ ->
         let a = DerivedClass(stat = "stat", dyn = "dyn")
         let properties = a.GetProperties(true) |> List.ofSeq |> List.sortBy (fun kv -> kv.Key)
         let expected = 
