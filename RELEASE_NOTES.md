@@ -1,3 +1,15 @@
+### 5.0.0 (Released 2024-12-17)
+
+Breaking changes.
+
+- Refactor and improve `Copy` methods on `DynamicObj`:
+  - `ShallowCopyDynamicProperties`: Copies all dynamic properties to a **new** `DynamicObj` instance without trying to prevent reference equality.
+  - `ShallowCopyDynamicPropertiesTo`: Copies all dynamic properties to a **target** `DynamicObj` instance without trying to prevent reference equality.
+  - `DeepCopyProperties`: Recursively deep copy a `DynamicObj` instance (or derived class) with **all** (static and dynamic) properties. Reinstantiation - and therefore prevention of reference equality - is possible for `DynamicObj`, `array|list|ResizeArray<DynamicObj>`, and classes implementing `System.Icloneable`
+  - `DeepCopyPropertiesTo`: Recursively deep copies **all** (static and dynamic) properties to a **target** `DynamicObj` instance (or derived class). Reinstantiation - and therefore prevention of reference equality - is possible for `DynamicObj`, `array|list|ResizeArray<DynamicObj>`, and classes implementing `System.Icloneable`
+- `Copy` method was therefore removed
+- Expose `CopyUtils` class that contains our generic deep copy attempt
+
 ### 4.0.3+36c543f (Released 2024-10-16)
 - fix GetHashCode member failing for null property values 
 
