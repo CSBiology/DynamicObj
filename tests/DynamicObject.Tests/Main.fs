@@ -4,7 +4,7 @@ open Fable.Pyxpecto
 
 let all = testSequenced <| testList "DynamicObj" [
     ReflectionUtils.Tests.main
-    DynamicObj.Tests.main
+    DynamicObjs.Tests.main
     DynObj.Tests.main
     Inheritance.Tests.main
     Interface.Tests.main
