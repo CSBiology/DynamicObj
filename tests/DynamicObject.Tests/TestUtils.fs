@@ -22,17 +22,19 @@ type DerivedClassCloneable(stat: string, dyn: string) as this =
     do
         this.SetProperty("dyn", dyn)
     member this.stat = stat
+    member this.FormatStat() = $"stat: {this.stat}"
+    member this.PrintStat() = this.FormatStat() |> printfn "%s"
     interface ICloneable with
         member this.Clone() =
             let dyn = this.GetPropertyValue("dyn") |> unbox<string>
             DerivedClassCloneable(stat, dyn)
 
-let constructDeepCopiedClone (props: seq<string*obj>) =
+let constructDeepCopiedClone<'T> (props: seq<string*obj>) =
     let original = DynamicObj()
     props
     |> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
     let clone = original.DeepCopyDynamicProperties()
-    original, clone
+    original, clone |> unbox<'T>
 
 let bulkMutate (props: seq<string*obj>) (dyn: #DynamicObj) =
     props |> Seq.iter (fun (propertyName, propertyValue) -> dyn.SetProperty(propertyName, propertyValue))

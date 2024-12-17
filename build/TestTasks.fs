@@ -22,7 +22,7 @@ module RunTests =
     let runTestsJs = BuildTask.create "runTestsJS" [clean; build] {
         for path in ProjectInfo.fableTestProjects do
             // transpile js files from fsharp code
-            run dotnet $"fable {path} -o {path}/js" ""
+            run dotnet $"fable {path} -o {path}/js --noCache" ""
             // run mocha in target path to execute tests
             // "--timeout 20000" is used, because json schema validation takes a bit of time.
             run node $"{path}/js/Main.js" ""
@@ -40,7 +40,7 @@ module RunTests =
     let runTestsPy = BuildTask.create "runTestsPy" [clean; build] {
         for path in ProjectInfo.fableTestProjects do
             //transpile py files from fsharp code
-            run dotnet $"fable {path} -o {path}/py --lang python" ""
+            run dotnet $"fable {path} -o {path}/py --lang python --noCache" ""
             // run pyxpecto in target path to execute tests in python
             run python $"{path}/py/main.py" ""
     }

@@ -245,6 +245,64 @@ type DynamicObj() =
         )
 
     /// <summary>
+    /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    ///
+    /// Note that this function does not attempt to do any deep copying. 
+    /// The dynamic properties of the source will be copied as references to the target. 
+    /// If any of those properties are mutable or themselves DynamicObj instances, changes to the properties on the source will be reflected in the target.
+    /// </summary>
+    member this.ShallowCopyDynamicProperties() =
+        let target = DynamicObj()
+        this.ShallowCopyDynamicPropertiesTo(target, true)
+        target
+
+    // internal helper function to deep copy a boxed object (if possible)
+    static member internal tryDeepCopyObj (o:obj) =
+        let rec tryDeepCopyObj (o:obj) =
+            match o with
+
+            // might be that we do not need this case, however if we remove it, some types will match the 
+            // ICloneable case in transpiled code, which we'd like to prevent, so well keep it for now.
+            | :? int     | :? float   | :? bool    
+            | :? string  | :? char    | :? byte    
+            | :? sbyte   | :? int16   | :? uint16  
+            | :? int32   | :? uint32  | :? int64   
+            | :? uint64  | :? single  
+                -> o
+
+            #if !FABLE_COMPILER_PYTHON
+            // https://github.com/fable-compiler/Fable/issues/3971
+            | :? decimal -> o
+            #endif
+
+            | :? array<DynamicObj> as dyns ->
+                box [|for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj|]
+            | :? list<DynamicObj> as dyns ->
+                box [for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]
+            | :? ResizeArray<DynamicObj> as dyns ->
+                box (ResizeArray([for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]))
+            #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+            | o when FableJS.Interfaces.implementsICloneable o -> FableJS.Interfaces.cloneICloneable o
+            #endif
+            #if FABLE_COMPILER_PYTHON
+            // https://github.com/fable-compiler/Fable/issues/3972
+            | o when FablePy.Interfaces.implementsICloneable o -> FablePy.Interfaces.cloneICloneable o
+            #endif
+            #if !FABLE_COMPILER
+            | :? System.ICloneable as clonable -> clonable.Clone()
+            #endif
+
+            | :? DynamicObj as dyn ->
+                let newDyn = DynamicObj()
+                // might want to keep instance props as dynamic props on copy
+                for kv in (dyn.GetProperties(true)) do
+                    newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
+                box newDyn
+            | _ -> o
+
+        tryDeepCopyObj o
+
+    /// <summary>
     /// Attempts to deep copy the properties of the DynamicObj onto the target.
     /// 
     /// As many properties as possible are re-instantiated as new objects, meaning the 
@@ -275,61 +333,14 @@ type DynamicObj() =
     /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
     member this.DeepCopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
         let overWrite = defaultArg overWrite false
-        let rec tryDeepCopyObj (o:obj) =
-            match o with
-
-            // might be that we do not need this case, however if we remove it, some types will match the 
-            // ICloneable case in transpiled code, which we'd like to prevent, so well keep it for now.
-            | :? int     | :? float   | :? bool    
-            | :? string  | :? char    | :? byte    
-            | :? sbyte   | :? int16   | :? uint16  
-            | :? int32   | :? uint32  | :? int64   
-            | :? uint64  | :? single  
-                -> o
-
-            #if !FABLE_COMPILER_PYTHON
-            // https://github.com/fable-compiler/Fable/issues/3971
-            | :? decimal -> o
-            #endif
-
-            | :? array<DynamicObj> as dyns ->
-                box [|for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj|]
-            | :? list<DynamicObj> as dyns ->
-                box [for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]
-            | :? ResizeArray<DynamicObj> as dyns ->
-                box (ResizeArray([for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]))
-
-            #if !FABLE_COMPILER_PYTHON
-            // https://github.com/fable-compiler/Fable/issues/3972
-            | :? System.ICloneable as clonable -> clonable.Clone()
-            #endif
-
-            | :? DynamicObj as dyn ->
-                let newDyn = DynamicObj()
-                // might want to keep instance props as dynamic props on copy
-                for kv in (dyn.GetProperties(true)) do
-                    newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
-                box newDyn
-            | _ -> o
 
         this.GetProperties(true)
         |> Seq.iter (fun kv ->
             match target.TryGetPropertyHelper kv.Key with
-            | Some pi when overWrite -> pi.SetValue target (tryDeepCopyObj kv.Value)
+            | Some pi when overWrite -> pi.SetValue target (DynamicObj.tryDeepCopyObj kv.Value)
             | Some _ -> ()
-            | None -> target.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
+            | None -> target.SetProperty(kv.Key, DynamicObj.tryDeepCopyObj kv.Value)
         )
-    /// <summary>
-    /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
-    ///
-    /// Note that this function does not attempt to do any deep copying. 
-    /// The dynamic properties of the source will be copied as references to the target. 
-    /// If any of those properties are mutable or themselves DynamicObj instances, changes to the properties on the source will be reflected in the target.
-    /// </summary>
-    member this.ShallowCopyDynamicProperties() =
-        let target = DynamicObj()
-        this.ShallowCopyDynamicPropertiesTo(target)
-        target
 
     /// <summary>
     /// Attempts to perform a deep copy of the DynamicObj.
@@ -360,10 +371,7 @@ type DynamicObj() =
     /// </summary>
     /// <param name="target">The target object to copy dynamic members to</param>
     /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
-    member this.DeepCopyDynamicProperties() =
-        let target = DynamicObj()
-        this.DeepCopyDynamicPropertiesTo(target)
-        target
+    member this.DeepCopyDynamicProperties() = DynamicObj.tryDeepCopyObj this
 
     #if !FABLE_COMPILER
     // Some necessary overrides for methods inherited from System.Dynamic.DynamicObject()
