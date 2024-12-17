@@ -205,9 +205,9 @@
             <div>
               <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
                 <p>
-                  <a id="DeepCopyDynamicProperties">
-                    <a href="#DeepCopyDynamicProperties">
-                      <code><span>this.DeepCopyDynamicProperties</span></code>
+                  <a id="DeepCopyProperties">
+                    <a href="#DeepCopyProperties">
+                      <code><span>this.DeepCopyProperties</span></code>
                     </a>
                   </a>
                 </p>
@@ -215,7 +215,7 @@
               <div class="fsdocs-tip" id="104">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.DeepCopyDynamicProperties</span></code>
+                  <code><span>this.DeepCopyProperties</span></code>
                   <br/>
                   <br/>
                   <span>
@@ -231,10 +231,10 @@
             <details>
               <summary>
                 <div class="fsdocs-summary">
-                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.DeepCopyDynamicProperties`')">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.DynamicObj.DeepCopyProperties`')">
                     <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
                   </div>
-                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.DeepCopyDynamicProperties\'/>')">
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.DeepCopyProperties\'/>')">
                     <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
                   </div>
                   <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L328-328" class="fsdocs-source-link" title="Source on GitHub">
@@ -242,7 +242,7 @@
                   </a>
                   <p class="fsdocs-summary">
                     
- Attempts to perform a deep copy of the DynamicObj.
+ Recursively deep copy a `DynamicObj` instance (or derived class) with **all** (static and dynamic) properties. Reinstantiation - and therefore prevention of reference equality - is possible for `DynamicObj`, `array|list|ResizeArray<DynamicObj>`, and classes implementing `System.Icloneable`
  
  On the deep copy, as many properties as possible are re-instantiated as new objects, meaning the 
  copy has as little reference equal properties as possible.
@@ -288,9 +288,9 @@
             <div>
               <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
                 <p>
-                  <a id="DeepCopyDynamicPropertiesTo">
-                    <a href="#DeepCopyDynamicPropertiesTo">
-                      <code><span>this.DeepCopyDynamicPropertiesTo</span></code>
+                  <a id="DeepCopyPropertiesTo">
+                    <a href="#DeepCopyPropertiesTo">
+                      <code><span>this.DeepCopyPropertiesTo</span></code>
                     </a>
                   </a>
                 </p>
@@ -298,7 +298,7 @@
               <div class="fsdocs-tip" id="105">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.DeepCopyDynamicPropertiesTo</span></code>
+                  <code><span>this.DeepCopyPropertiesTo</span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -333,10 +333,10 @@
             <details>
               <summary>
                 <div class="fsdocs-summary">
-                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.DeepCopyDynamicPropertiesTo``1```')">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:DynamicObj.DynamicObj.DeepCopyPropertiesTo``1```')">
                     <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
                   </div>
-                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.DeepCopyDynamicPropertiesTo``1\'/>')">
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.DeepCopyPropertiesTo``1\'/>')">
                     <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
                   </div>
                   <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L288-288" class="fsdocs-source-link" title="Source on GitHub">
@@ -344,7 +344,7 @@
                   </a>
                   <p class="fsdocs-summary">
                     
- Attempts to deep copy the properties of the DynamicObj onto the target.
+ Recursively deep copies **all** (static and dynamic) properties to a **target** `DynamicObj` instance (or derived class). Reinstantiation - and therefore prevention of reference equality - is possible for `DynamicObj`, `array|list|ResizeArray<DynamicObj>`, and classes implementing `System.Icloneable`
  
  As many properties as possible are re-instantiated as new objects, meaning the 
  copy has as little reference equal properties as possible.
@@ -1044,7 +1044,7 @@
                     <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
                   </a>
                   <p class="fsdocs-summary">
-                     Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+                     Copies all dynamic properties to a new `DynamicObj` instance without trying to prevent reference equality.
 
  Note that this function does not attempt to do any deep copying. 
  The dynamic properties of the source will be copied as references to the target. 
@@ -1125,7 +1125,7 @@
                   </a>
                   <p class="fsdocs-summary">
                     
- Copies all dynamic members of the source DynamicObj to the target DynamicObj.
+ Copies all dynamic properties to a target `DynamicObj` instance without trying to prevent reference equality.
 
  Note that this function does not attempt to do any deep copying. 
  The dynamic properties of the source will be copied as references to the target. 
