@@ -1,4 +1,4 @@
-﻿module DynamicObj.Tests.Equals
+﻿module Equals
 
 open Fable.Pyxpecto
 open DynamicObj

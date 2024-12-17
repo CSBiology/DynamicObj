@@ -1,4 +1,4 @@
-﻿module DynamicObj.Tests.TryGetPropertyHelper
+﻿module TryGetPropertyHelper
 
 open Fable.Pyxpecto
 open DynamicObj

@@ -1,4 +1,4 @@
-﻿module DynamicObj.Tests.GetHashCode
+﻿module GetHashCode
 
 open Fable.Pyxpecto
 open DynamicObj

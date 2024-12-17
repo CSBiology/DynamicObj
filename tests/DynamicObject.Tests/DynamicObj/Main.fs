@@ -1,7 +1,6 @@
-﻿module DynamicObjs.Tests
+﻿module DynamicObj.Tests
 
 open Fable.Pyxpecto
-open DynamicObj.Tests
 
 let main = testList "DynamicObj (Class)" [
 

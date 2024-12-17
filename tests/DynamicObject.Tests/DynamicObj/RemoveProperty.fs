@@ -1,4 +1,4 @@
-﻿module DynamicObj.Tests.RemoveProperty
+﻿module RemoveProperty
 
 open Fable.Pyxpecto
 open DynamicObj

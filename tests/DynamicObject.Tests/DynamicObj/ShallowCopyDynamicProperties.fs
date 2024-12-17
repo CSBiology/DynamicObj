@@ -1,4 +1,4 @@
-﻿module DynamicObj.Tests.ShallowCopyDynamicProperties
+﻿module ShallowCopyDynamicProperties
 
 open Fable.Pyxpecto
 open DynamicObj
