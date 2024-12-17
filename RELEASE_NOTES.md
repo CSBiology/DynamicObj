@@ -1,4 +1,4 @@
-### 5.0.0 (Released 2024-12-17)
+### 5.0.0+72c94fff (Released 2024-12-17)
 
 Breaking changes.
 
