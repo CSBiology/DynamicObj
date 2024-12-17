@@ -224,7 +224,7 @@ type DynamicObj() =
         |> Seq.map (fun kv -> kv.Key)
 
     /// <summary>
-    /// Copies all dynamic members of the source DynamicObj to the target DynamicObj.
+    /// Copies all dynamic properties to a target `DynamicObj` instance without trying to prevent reference equality.
     ///
     /// Note that this function does not attempt to do any deep copying. 
     /// The dynamic properties of the source will be copied as references to the target. 
@@ -245,7 +245,7 @@ type DynamicObj() =
         )
 
     /// <summary>
-    /// Returns a new DynamicObj with only the dynamic properties of the original DynamicObj (sans instance properties).
+    /// Copies all dynamic properties to a new `DynamicObj` instance without trying to prevent reference equality.
     ///
     /// Note that this function does not attempt to do any deep copying. 
     /// The dynamic properties of the source will be copied as references to the target. 
@@ -257,7 +257,7 @@ type DynamicObj() =
         target
 
     /// <summary>
-    /// Attempts to deep copy the properties of the DynamicObj onto the target.
+    /// Recursively deep copies **all** (static and dynamic) properties to a **target** `DynamicObj` instance (or derived class). Reinstantiation - and therefore prevention of reference equality - is possible for `DynamicObj`, `array|list|ResizeArray&lt;DynamicObj&gt;`, and classes implementing `System.Icloneable`
     /// 
     /// As many properties as possible are re-instantiated as new objects, meaning the 
     /// copy has as little reference equal properties as possible.
@@ -285,7 +285,7 @@ type DynamicObj() =
     /// </summary>
     /// <param name="target">The target object to copy dynamic members to</param>
     /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
-    member this.DeepCopyDynamicPropertiesTo(target:#DynamicObj, ?overWrite) =
+    member this.DeepCopyPropertiesTo(target:#DynamicObj, ?overWrite) =
         let overWrite = defaultArg overWrite false
 
         this.GetProperties(true)
@@ -297,7 +297,7 @@ type DynamicObj() =
         )
 
     /// <summary>
-    /// Attempts to perform a deep copy of the DynamicObj.
+    /// Recursively deep copy a `DynamicObj` instance (or derived class) with **all** (static and dynamic) properties. Reinstantiation - and therefore prevention of reference equality - is possible for `DynamicObj`, `array|list|ResizeArray&lt;DynamicObj&gt;`, and classes implementing `System.Icloneable`
     /// 
     /// On the deep copy, as many properties as possible are re-instantiated as new objects, meaning the 
     /// copy has as little reference equal properties as possible.
@@ -325,7 +325,7 @@ type DynamicObj() =
     /// </summary>
     /// <param name="target">The target object to copy dynamic members to</param>
     /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
-    member this.DeepCopyDynamicProperties() = CopyUtils.tryDeepCopyObj this
+    member this.DeepCopyProperties() = CopyUtils.tryDeepCopyObj this
 
     #if !FABLE_COMPILER
     // Some necessary overrides for methods inherited from System.Dynamic.DynamicObject()

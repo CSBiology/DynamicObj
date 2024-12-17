@@ -23,7 +23,7 @@
     <Compile Include="DynamicObj\GetProperties.fs" />
     <Compile Include="DynamicObj\ShallowCopyDynamicPropertiesTo.fs" />
     <Compile Include="DynamicObj\ShallowCopyDynamicProperties.fs" />
-    <Compile Include="DynamicObj\DeepCopyDynamicProperties.fs" />
+    <Compile Include="DynamicObj\DeepCopyProperties.fs" />
     <Compile Include="DynamicObj\Main.fs" />
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="Inheritance.fs" />

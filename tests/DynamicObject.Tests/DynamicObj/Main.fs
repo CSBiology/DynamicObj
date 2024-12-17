@@ -26,5 +26,5 @@ let main = testList "DynamicObj (Class)" [
 
     ShallowCopyDynamicPropertiesTo.tests_ShallowCopyDynamicPropertiesTo
     ShallowCopyDynamicProperties.tests_ShallowCopyDynamicProperties
-    DeepCopyDynamicProperties.tests_DeepCopyDynamicProperties
+    DeepCopyProperties.tests_DeepCopyProperties
 ]

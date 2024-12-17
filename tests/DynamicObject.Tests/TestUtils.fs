@@ -33,7 +33,7 @@ let constructDeepCopiedClone<'T> (props: seq<string*obj>) =
     let original = DynamicObj()
     props
     |> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
-    let clone = original.DeepCopyDynamicProperties()
+    let clone = original.DeepCopyProperties()
     original, clone |> unbox<'T>
 
 let bulkMutate (props: seq<string*obj>) (dyn: #DynamicObj) =
