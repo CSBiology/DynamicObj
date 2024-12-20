@@ -36,6 +36,9 @@ let constructDeepCopiedClone<'T> (props: seq<string*obj>) =
     let clone = original.DeepCopyProperties()
     original, clone |> unbox<'T>
 
+let constructDeepCopiedObj<'T> (original: 'T) =
+    original, (CopyUtils.tryDeepCopyObj original |> unbox<'T>)
+
 let bulkMutate (props: seq<string*obj>) (dyn: #DynamicObj) =
     props |> Seq.iter (fun (propertyName, propertyValue) -> dyn.SetProperty(propertyName, propertyValue))
 
@@ -73,4 +76,8 @@ module Expect =
 
     let referenceEqual actual expected message =
         if not (LanguagePrimitives.PhysicalEquality actual expected) then
+            failwith message
+
+    let notReferenceEqual actual expected message =
+        if (LanguagePrimitives.PhysicalEquality actual expected) then
             failwith message

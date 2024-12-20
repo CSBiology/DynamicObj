@@ -9,6 +9,13 @@
 
   <ItemGroup>
     <Compile Include="TestUtils.fs" />
+    <Compile Include="CopyUtils.tryDeepCopyObj\Primitives.fs" />
+    <Compile Include="CopyUtils.tryDeepCopyObj\ResizeArrays.fs" />
+    <Compile Include="CopyUtils.tryDeepCopyObj\Dictionaries.fs" />
+    <Compile Include="CopyUtils.tryDeepCopyObj\DynamicObjCollections.fs" />
+    <Compile Include="CopyUtils.tryDeepCopyObj\ICloneable.fs" />
+    <Compile Include="CopyUtils.tryDeepCopyObj\DynamicObj.fs" />
+    <Compile Include="CopyUtils.tryDeepCopyObj\Main.fs" />
     <Compile Include="DynamicObj\RemoveProperty.fs" />
     <Compile Include="DynamicObj\SetProperty.fs" />
     <Compile Include="DynamicObj\GetHashcode.fs" />
