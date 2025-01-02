@@ -13,18 +13,33 @@
 open Fable.Pyxpecto
 open DynamicObj
 
-type T(dyn:string, stat:string) as this=
-    inherit DynamicObj()
+let constructDeepCopiedClone<'T> (props: seq<string*obj>) =
+    let original = DynamicObj()
+    props
+    |> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
+    let clone : 'T = original.DeepCopyProperties() |> unbox<'T>
+    original, clone 
 
-    do 
-        this.SetProperty("Dyn", dyn)
+let originalProps = [ 
+    "int", box 1
+    "float", box 1.0
+    "bool", box true
+    "string", box "hello"
+    "char", box 'a'
+    "byte", box (byte 1)
+    "sbyte", box (sbyte -1)
+    "int16", box (int16 -1)
+    "uint16", box (uint16 1)
+    "int32", box (int32 -1)
+    "uint32", box (uint32 1u)
+    "int64", box (int64 -1L)
+    "uint64", box (uint64 1UL)
+    "single", box (single 1.0f)
+    "decimal", box (decimal 1M) 
+]
+let original = DynamicObj()
 
-    member this.Stat = stat
+originalProps
+|> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
 
-let first = T("dyn1", "stat1")
-let second = T("dyn2", "stat2")
-
-let _ = second.ShallowCopyDynamicPropertiesTo(first)
-
-first |> DynObj.print
-second |> DynObj.print
+let clone = original.DeepCopyProperties()

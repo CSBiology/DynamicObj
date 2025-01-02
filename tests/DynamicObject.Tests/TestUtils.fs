@@ -33,8 +33,8 @@ let constructDeepCopiedClone<'T> (props: seq<string*obj>) =
     let original = DynamicObj()
     props
     |> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
-    let clone = original.DeepCopyProperties()
-    original, clone |> unbox<'T>
+    let clone : 'T = original.DeepCopyProperties() |> unbox<'T>
+    original, clone 
 
 let constructDeepCopiedObj<'T> (original: 'T) =
     original, (CopyUtils.tryDeepCopyObj original |> unbox<'T>)

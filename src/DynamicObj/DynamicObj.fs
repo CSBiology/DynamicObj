@@ -413,8 +413,10 @@ and CopyUtils =
             | :? uint
             | :? int64
             | :? uint64
+            #if !FABLE_COMPILER
             | :? nativeint
             | :? unativeint
+            #endif
             | :? float
             | :? float32
             | :? char
@@ -426,6 +428,10 @@ and CopyUtils =
             // https://github.com/fable-compiler/Fable/issues/3971
             | :? decimal -> o
             #endif
+
+            #if !FABLE_COMPILER
+
+            // we can do some more type checking in F# land
 
             // ResizeArrays are mutable and we need to copy them. For primitives, we can do this easily.
             | :? ResizeArray<bool>       as r -> ResizeArray(r) |> box
@@ -632,7 +638,7 @@ and CopyUtils =
             | :? Dictionary<unativeint,char>         as dict -> Dictionary<unativeint,char>(dict) |> box
             | :? Dictionary<unativeint,string>       as dict -> Dictionary<unativeint,string>(dict) |> box
             | :? Dictionary<unativeint,unit>         as dict -> Dictionary<unativeint,unit>(dict) |> box
-            
+
             | :? Dictionary<float,bool>         as dict -> Dictionary<float,bool>(dict) |> box
             | :? Dictionary<float,byte>         as dict -> Dictionary<float,byte>(dict) |> box
             | :? Dictionary<float,sbyte>        as dict -> Dictionary<float,sbyte>(dict) |> box
@@ -854,6 +860,8 @@ and CopyUtils =
                 for kv in dict do newDict.Add(tryDeepCopyObj kv.Key :?> DynamicObj, tryDeepCopyObj kv.Value :?> DynamicObj)
                 newDict |> box
 
+            #endif
+
             // These collections of DynamicObj can be cloned recursively
             | :? ResizeArray<DynamicObj> as dyns ->
                 box (ResizeArray([for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]))
@@ -878,7 +886,7 @@ and CopyUtils =
                 let newDyn = DynamicObj()
                 // might want to keep instance props as dynamic props on copy
                 for kv in (dyn.GetProperties(true)) do
-                    newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value :?> DynamicObj)
+                    newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
                 box newDyn
             | _ -> o
 
