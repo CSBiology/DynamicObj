@@ -267,7 +267,7 @@ type DynamicObj() =
     ///
     /// The following cases are handled (in this precedence):
     ///
-    /// - Basic F# types (int, float, bool, string, char, byte, sbyte, int16, uint16, int32, uint32, int64, uint64, single, decimal)
+    /// - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
     ///
     /// - ResizeArrays and Dictionaries containing any combination of basic F# types
     ///
@@ -311,7 +311,7 @@ type DynamicObj() =
     ///
     /// The following cases are handled (in this precedence):
     ///
-    /// - Basic F# types (int, float, bool, string, char, byte, sbyte, int16, uint16, int32, uint32, int64, uint64, single, decimal)
+    /// - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
     ///
     /// - ResizeArrays and Dictionaries containing any combination of basic F# types
     ///
@@ -433,6 +433,10 @@ and CopyUtils =
 
             // we can do some more type checking in F# land
 
+            // ResizeArray typematches are all translated as `isArrayLike` in Fable JS/Py, so all these cases are the same in transpiled code.
+            // However this is fine, as we can transpile one single case (the `ResizeArray<DynamicObj>` case) that recursively applies `tryDeepCopyObj` on all items.
+            // That way, everything is fine in the untyped world, and we can keep the boxed types in F#.
+
             // ResizeArrays are mutable and we need to copy them. For primitives, we can do this easily.
             | :? ResizeArray<bool>       as r -> ResizeArray(r) |> box
             | :? ResizeArray<byte>       as r -> ResizeArray(r) |> box
@@ -450,8 +454,10 @@ and CopyUtils =
             | :? ResizeArray<char>       as r -> ResizeArray(r) |> box
             | :? ResizeArray<string>     as r -> ResizeArray(r) |> box
             | :? ResizeArray<unit>       as r -> ResizeArray(r) |> box
+            | :? ResizeArray<decimal>    as r -> ResizeArray(r) |> box
 
             // Dictionaries are mutable and we need to copy them. For primitives, we can do this easily, it is just a lot of work to write man
+            // Fable does simply not compile these typechecks, i guess because everything is an object/dictionary in JS/PY.
             | :? Dictionary<bool,bool>         as dict -> Dictionary<bool,bool>(dict) |> box
             | :? Dictionary<bool,byte>         as dict -> Dictionary<bool,byte>(dict) |> box
             | :? Dictionary<bool,sbyte>        as dict -> Dictionary<bool,sbyte>(dict) |> box
@@ -468,6 +474,7 @@ and CopyUtils =
             | :? Dictionary<bool,char>         as dict -> Dictionary<bool,char>(dict) |> box
             | :? Dictionary<bool,string>       as dict -> Dictionary<bool,string>(dict) |> box
             | :? Dictionary<bool,unit>         as dict -> Dictionary<bool,unit>(dict) |> box
+            | :? Dictionary<bool,decimal>      as dict -> Dictionary<bool,decimal>(dict) |> box
             
             | :? Dictionary<byte,bool>         as dict -> Dictionary<byte,bool>(dict) |> box
             | :? Dictionary<byte,byte>         as dict -> Dictionary<byte,byte>(dict) |> box
@@ -485,6 +492,7 @@ and CopyUtils =
             | :? Dictionary<byte,char>         as dict -> Dictionary<byte,char>(dict) |> box
             | :? Dictionary<byte,string>       as dict -> Dictionary<byte,string>(dict) |> box
             | :? Dictionary<byte,unit>         as dict -> Dictionary<byte,unit>(dict) |> box
+            | :? Dictionary<byte,decimal>      as dict -> Dictionary<byte,decimal>(dict) |> box
             
             | :? Dictionary<sbyte,bool>         as dict -> Dictionary<sbyte,bool>(dict) |> box
             | :? Dictionary<sbyte,byte>         as dict -> Dictionary<sbyte,byte>(dict) |> box
@@ -502,6 +510,7 @@ and CopyUtils =
             | :? Dictionary<sbyte,char>         as dict -> Dictionary<sbyte,char>(dict) |> box
             | :? Dictionary<sbyte,string>       as dict -> Dictionary<sbyte,string>(dict) |> box
             | :? Dictionary<sbyte,unit>         as dict -> Dictionary<sbyte,unit>(dict) |> box
+            | :? Dictionary<sbyte,decimal>      as dict -> Dictionary<sbyte,decimal>(dict) |> box
             
             | :? Dictionary<int16,bool>         as dict -> Dictionary<int16,bool>(dict) |> box
             | :? Dictionary<int16,byte>         as dict -> Dictionary<int16,byte>(dict) |> box
@@ -519,6 +528,7 @@ and CopyUtils =
             | :? Dictionary<int16,char>         as dict -> Dictionary<int16,char>(dict) |> box
             | :? Dictionary<int16,string>       as dict -> Dictionary<int16,string>(dict) |> box
             | :? Dictionary<int16,unit>         as dict -> Dictionary<int16,unit>(dict) |> box
+            | :? Dictionary<int16,decimal>      as dict -> Dictionary<int16,decimal>(dict) |> box
             
             | :? Dictionary<uint16,bool>         as dict -> Dictionary<uint16,bool>(dict) |> box
             | :? Dictionary<uint16,byte>         as dict -> Dictionary<uint16,byte>(dict) |> box
@@ -536,6 +546,7 @@ and CopyUtils =
             | :? Dictionary<uint16,char>         as dict -> Dictionary<uint16,char>(dict) |> box
             | :? Dictionary<uint16,string>       as dict -> Dictionary<uint16,string>(dict) |> box
             | :? Dictionary<uint16,unit>         as dict -> Dictionary<uint16,unit>(dict) |> box
+            | :? Dictionary<uint16,decimal>      as dict -> Dictionary<uint16,decimal>(dict) |> box
             
             | :? Dictionary<int,bool>         as dict -> Dictionary<int,bool>(dict) |> box
             | :? Dictionary<int,byte>         as dict -> Dictionary<int,byte>(dict) |> box
@@ -553,6 +564,7 @@ and CopyUtils =
             | :? Dictionary<int,char>         as dict -> Dictionary<int,char>(dict) |> box
             | :? Dictionary<int,string>       as dict -> Dictionary<int,string>(dict) |> box
             | :? Dictionary<int,unit>         as dict -> Dictionary<int,unit>(dict) |> box
+            | :? Dictionary<int,decimal>      as dict -> Dictionary<int,decimal>(dict) |> box
             
             | :? Dictionary<uint,bool>         as dict -> Dictionary<uint,bool>(dict) |> box
             | :? Dictionary<uint,byte>         as dict -> Dictionary<uint,byte>(dict) |> box
@@ -570,6 +582,7 @@ and CopyUtils =
             | :? Dictionary<uint,char>         as dict -> Dictionary<uint,char>(dict) |> box
             | :? Dictionary<uint,string>       as dict -> Dictionary<uint,string>(dict) |> box
             | :? Dictionary<uint,unit>         as dict -> Dictionary<uint,unit>(dict) |> box
+            | :? Dictionary<uint,decimal>      as dict -> Dictionary<uint,decimal>(dict) |> box
             
             | :? Dictionary<int64,bool>         as dict -> Dictionary<int64,bool>(dict) |> box
             | :? Dictionary<int64,byte>         as dict -> Dictionary<int64,byte>(dict) |> box
@@ -587,6 +600,7 @@ and CopyUtils =
             | :? Dictionary<int64,char>         as dict -> Dictionary<int64,char>(dict) |> box
             | :? Dictionary<int64,string>       as dict -> Dictionary<int64,string>(dict) |> box
             | :? Dictionary<int64,unit>         as dict -> Dictionary<int64,unit>(dict) |> box
+            | :? Dictionary<int64,decimal>      as dict -> Dictionary<int64,decimal>(dict) |> box
             
             | :? Dictionary<uint64,bool>         as dict -> Dictionary<uint64,bool>(dict) |> box
             | :? Dictionary<uint64,byte>         as dict -> Dictionary<uint64,byte>(dict) |> box
@@ -604,6 +618,7 @@ and CopyUtils =
             | :? Dictionary<uint64,char>         as dict -> Dictionary<uint64,char>(dict) |> box
             | :? Dictionary<uint64,string>       as dict -> Dictionary<uint64,string>(dict) |> box
             | :? Dictionary<uint64,unit>         as dict -> Dictionary<uint64,unit>(dict) |> box
+            | :? Dictionary<uint64,decimal>      as dict -> Dictionary<uint64,decimal>(dict) |> box
             
             | :? Dictionary<nativeint,bool>         as dict -> Dictionary<nativeint,bool>(dict) |> box
             | :? Dictionary<nativeint,byte>         as dict -> Dictionary<nativeint,byte>(dict) |> box
@@ -621,6 +636,7 @@ and CopyUtils =
             | :? Dictionary<nativeint,char>         as dict -> Dictionary<nativeint,char>(dict) |> box
             | :? Dictionary<nativeint,string>       as dict -> Dictionary<nativeint,string>(dict) |> box
             | :? Dictionary<nativeint,unit>         as dict -> Dictionary<nativeint,unit>(dict) |> box
+            | :? Dictionary<nativeint,decimal>      as dict -> Dictionary<nativeint,decimal>(dict) |> box
             
             | :? Dictionary<unativeint,bool>         as dict -> Dictionary<unativeint,bool>(dict) |> box
             | :? Dictionary<unativeint,byte>         as dict -> Dictionary<unativeint,byte>(dict) |> box
@@ -638,6 +654,7 @@ and CopyUtils =
             | :? Dictionary<unativeint,char>         as dict -> Dictionary<unativeint,char>(dict) |> box
             | :? Dictionary<unativeint,string>       as dict -> Dictionary<unativeint,string>(dict) |> box
             | :? Dictionary<unativeint,unit>         as dict -> Dictionary<unativeint,unit>(dict) |> box
+            | :? Dictionary<unativeint,decimal>      as dict -> Dictionary<unativeint,decimal>(dict) |> box
 
             | :? Dictionary<float,bool>         as dict -> Dictionary<float,bool>(dict) |> box
             | :? Dictionary<float,byte>         as dict -> Dictionary<float,byte>(dict) |> box
@@ -655,6 +672,7 @@ and CopyUtils =
             | :? Dictionary<float,char>         as dict -> Dictionary<float,char>(dict) |> box
             | :? Dictionary<float,string>       as dict -> Dictionary<float,string>(dict) |> box
             | :? Dictionary<float,unit>         as dict -> Dictionary<float,unit>(dict) |> box
+            | :? Dictionary<float,decimal>      as dict -> Dictionary<float,decimal>(dict) |> box
             
             | :? Dictionary<float32,bool>         as dict -> Dictionary<float32,bool>(dict) |> box
             | :? Dictionary<float32,byte>         as dict -> Dictionary<float32,byte>(dict) |> box
@@ -672,6 +690,7 @@ and CopyUtils =
             | :? Dictionary<float32,char>         as dict -> Dictionary<float32,char>(dict) |> box
             | :? Dictionary<float32,string>       as dict -> Dictionary<float32,string>(dict) |> box
             | :? Dictionary<float32,unit>         as dict -> Dictionary<float32,unit>(dict) |> box
+            | :? Dictionary<float32,decimal>      as dict -> Dictionary<float32,decimal>(dict) |> box
             
             | :? Dictionary<char,bool>         as dict -> Dictionary<char,bool>(dict) |> box
             | :? Dictionary<char,byte>         as dict -> Dictionary<char,byte>(dict) |> box
@@ -689,6 +708,7 @@ and CopyUtils =
             | :? Dictionary<char,char>         as dict -> Dictionary<char,char>(dict) |> box
             | :? Dictionary<char,string>       as dict -> Dictionary<char,string>(dict) |> box
             | :? Dictionary<char,unit>         as dict -> Dictionary<char,unit>(dict) |> box
+            | :? Dictionary<char,decimal>      as dict -> Dictionary<char,decimal>(dict) |> box
             
             | :? Dictionary<string,bool>         as dict -> Dictionary<string,bool>(dict) |> box
             | :? Dictionary<string,byte>         as dict -> Dictionary<string,byte>(dict) |> box
@@ -706,6 +726,7 @@ and CopyUtils =
             | :? Dictionary<string,char>         as dict -> Dictionary<string,char>(dict) |> box
             | :? Dictionary<string,string>       as dict -> Dictionary<string,string>(dict) |> box
             | :? Dictionary<string,unit>         as dict -> Dictionary<string,unit>(dict) |> box
+            | :? Dictionary<string,decimal>      as dict -> Dictionary<string,decimal>(dict) |> box
             
             | :? Dictionary<unit,bool>         as dict -> Dictionary<unit,bool>(dict) |> box
             | :? Dictionary<unit,byte>         as dict -> Dictionary<unit,byte>(dict) |> box
@@ -723,6 +744,25 @@ and CopyUtils =
             | :? Dictionary<unit,char>         as dict -> Dictionary<unit,char>(dict) |> box
             | :? Dictionary<unit,string>       as dict -> Dictionary<unit,string>(dict) |> box
             | :? Dictionary<unit,unit>         as dict -> Dictionary<unit,unit>(dict) |> box
+            | :? Dictionary<unit,decimal>      as dict -> Dictionary<unit,decimal>(dict) |> box
+
+            | :? Dictionary<decimal,bool>         as dict -> Dictionary<decimal,bool>(dict) |> box
+            | :? Dictionary<decimal,byte>         as dict -> Dictionary<decimal,byte>(dict) |> box
+            | :? Dictionary<decimal,sbyte>        as dict -> Dictionary<decimal,sbyte>(dict) |> box
+            | :? Dictionary<decimal,int16>        as dict -> Dictionary<decimal,int16>(dict) |> box
+            | :? Dictionary<decimal,uint16>       as dict -> Dictionary<decimal,uint16>(dict) |> box
+            | :? Dictionary<decimal,int>          as dict -> Dictionary<decimal,int>(dict) |> box
+            | :? Dictionary<decimal,uint>         as dict -> Dictionary<decimal,uint>(dict) |> box
+            | :? Dictionary<decimal,int64>        as dict -> Dictionary<decimal,int64>(dict) |> box
+            | :? Dictionary<decimal,uint64>       as dict -> Dictionary<decimal,uint64>(dict) |> box
+            | :? Dictionary<decimal,nativeint>    as dict -> Dictionary<decimal,nativeint>(dict) |> box
+            | :? Dictionary<decimal,unativeint>   as dict -> Dictionary<decimal,unativeint>(dict) |> box
+            | :? Dictionary<decimal,float>        as dict -> Dictionary<decimal,float>(dict) |> box
+            | :? Dictionary<decimal,float32>      as dict -> Dictionary<decimal,float32>(dict) |> box
+            | :? Dictionary<decimal,char>         as dict -> Dictionary<decimal,char>(dict) |> box
+            | :? Dictionary<decimal,string>       as dict -> Dictionary<decimal,string>(dict) |> box
+            | :? Dictionary<decimal,unit>         as dict -> Dictionary<decimal,unit>(dict) |> box
+            | :? Dictionary<decimal,decimal>      as dict -> Dictionary<decimal,decimal>(dict) |> box
 
             // same for dictionaries containing DynamicObj as value
             | :? Dictionary<bool,DynamicObj>         as dict -> 
@@ -859,14 +899,39 @@ and CopyUtils =
                 let newDict = Dictionary<DynamicObj,DynamicObj>()
                 for kv in dict do newDict.Add(tryDeepCopyObj kv.Key :?> DynamicObj, tryDeepCopyObj kv.Value :?> DynamicObj)
                 newDict |> box
+            #endif
 
+            // native fallbacks for matching Map/dict, see https://github.com/CSBiology/DynamicObj/issues/47
+
+            #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
+            | o when FableJS.Dictionaries.isMap o -> 
+                let o = o |> unbox<Dictionary<obj,obj>>
+                let newDict = Dictionary<obj,obj>()
+                for kv in o do newDict.Add(tryDeepCopyObj kv.Key, tryDeepCopyObj kv.Value)
+                newDict |> box
+            | o when FableJS.Dictionaries.isMap o -> 
+                let o = o |> unbox<Dictionary<obj,obj>>
+                let newDict = Dictionary<obj,obj>()
+                for kv in o do newDict.Add(tryDeepCopyObj kv.Key, tryDeepCopyObj kv.Value)
+                newDict |> box
+            #endif
+            #if FABLE_COMPILER_PYTHON
+            // https://github.com/fable-compiler/Fable/issues/3972
+            | o when FablePy.Dictionaries.isDict o ->
+                let o = o |> unbox<Dictionary<obj,obj>>
+                let newDict = Dictionary<obj,obj>()
+                for kv in o do newDict.Add(tryDeepCopyObj kv.Key, tryDeepCopyObj kv.Value)
+                newDict |> box
             #endif
 
             // These collections of DynamicObj can be cloned recursively
             | :? ResizeArray<DynamicObj> as dyns ->
                 box (ResizeArray([for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]))
+            #if !FABLE_COMPILER
+            // this gets compiled to isArrayLike just the same as ResizeArray, but generates a slightly different result handling, so we only transpile the above.
             | :? array<DynamicObj> as dyns ->
                 box [|for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj|]
+            #endif
             | :? list<DynamicObj> as dyns ->
                 box [for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]
 

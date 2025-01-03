@@ -10,7 +10,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "bool" <| fun _ -> 
         let arr = ResizeArray([true; false])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- false
         Expect.sequenceEqual original (ResizeArray([false; false])) "Original schould have been mutated"
@@ -18,7 +18,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "byte" <| fun _ -> 
         let arr = ResizeArray([1uy; 2uy])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2uy
         Expect.sequenceEqual original (ResizeArray([2uy; 2uy])) "Original schould have been mutated"
@@ -26,7 +26,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "sbyte" <| fun _ -> 
         let arr = ResizeArray([1y; 2y])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2y
         Expect.sequenceEqual original (ResizeArray([2y; 2y])) "Original schould have been mutated"
@@ -34,7 +34,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "int16" <| fun _ -> 
         let arr = ResizeArray([1s; 2s])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2s
         Expect.sequenceEqual original (ResizeArray([2s; 2s])) "Original schould have been mutated"
@@ -42,7 +42,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "uint16" <| fun _ ->
         let arr = ResizeArray([1us; 2us])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2us
         Expect.sequenceEqual original (ResizeArray([2us; 2us])) "Original schould have been mutated"
@@ -50,7 +50,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "int" <| fun _ -> 
         let arr = ResizeArray([1; 2])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2
         Expect.sequenceEqual original (ResizeArray([2; 2])) "Original schould have been mutated"
@@ -58,7 +58,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "uint" <| fun _ -> 
         let arr = ResizeArray([1u; 2u])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2u
         Expect.sequenceEqual original (ResizeArray([2u; 2u])) "Original schould have been mutated"
@@ -66,7 +66,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "int64" <| fun _ -> 
         let arr = ResizeArray([1L; 2L])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2L
         Expect.sequenceEqual original (ResizeArray([2L; 2L])) "Original schould have been mutated"
@@ -74,7 +74,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "uint64" <| fun _ -> 
         let arr = ResizeArray([1uL; 2uL])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2uL
         Expect.sequenceEqual original (ResizeArray([2uL; 2uL])) "Original schould have been mutated"
@@ -82,7 +82,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "float" <| fun _ -> 
         let arr = ResizeArray([1.0; 2.0])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2.0
         Expect.sequenceEqual original (ResizeArray([2.0; 2.0])) "Original schould have been mutated"
@@ -90,7 +90,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "float32" <| fun _ -> 
         let arr = ResizeArray([1.0f; 2.0f])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2.0f
         Expect.sequenceEqual original (ResizeArray([2.0f; 2.0f])) "Original schould have been mutated"
@@ -98,7 +98,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "char" <| fun _ -> 
         let arr = ResizeArray(['A'; 'B'])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 'B'
         Expect.sequenceEqual original (ResizeArray(['B'; 'B'])) "Original schould have been mutated"
@@ -106,7 +106,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "string" <| fun _ -> 
         let arr = ResizeArray(["Hi"; "Bye"])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- "Bye"
         Expect.sequenceEqual original (ResizeArray(["Bye"; "Bye"])) "Original schould have been mutated"
@@ -114,9 +114,11 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "unit" <| fun _ -> 
         let arr = ResizeArray([(); ()])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
-        arr.Add(())
+        // transpilation fun
+        let arr2 = ResizeArray([()])
+        arr.Add(arr2[0])
         Expect.sequenceEqual original (ResizeArray([(); (); ()])) "Original schould have been mutated"
         Expect.sequenceEqual copy (ResizeArray([(); ()])) "Clone should not be affected by original mutation"
         
@@ -126,7 +128,7 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     testCase "decimal" <| fun _ -> 
         let arr = ResizeArray([1.0M; 2.0M])
         let original, copy = constructDeepCopiedObj arr
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
         arr[0] <- 2.0M
         Expect.sequenceEqual original (ResizeArray([2.0M; 2.0M])) "Original schould have been mutated"
@@ -136,11 +138,11 @@ let tests_DeepCopyResizeArrays = testList "ResizeArrays" [
     #if !FABLE_COMPILER
     testCase "nativeint" <| fun _ -> 
         let original, copy = constructDeepCopiedObj (ResizeArray([System.IntPtr(1); System.IntPtr(2)]))
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
     testCase "unativeint" <| fun _ -> 
         let original, copy = constructDeepCopiedObj (ResizeArray([System.UIntPtr(1u); System.UIntPtr(2u)]))
-        Expect.equal copy original "Expected values of copy and original to be equal"
+        Expect.sequenceEqual copy original "Expected values of copy and original to be equal"
         Expect.notReferenceEqual copy original "Expected values of copy and original to be not reference equal"
     #endif
 ]

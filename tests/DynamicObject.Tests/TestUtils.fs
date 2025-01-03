@@ -59,6 +59,13 @@ module DynObj =
             | _ -> failwith "Empty property list"
         getProp dyn props
 
+#if FABLE_COMPILER_PYTHON
+module Py =
+    [<Emit("$0 is $1")>]
+    let isReferenceEqual o1 o2 : bool =
+        nativeOnly
+#endif
+
 module Expect =
     /// Expects the `actual` sequence to equal the `expected` one.
     let sequenceEqual actual expected message =
@@ -74,10 +81,22 @@ module Expect =
         failwithf "%s. Sequence actual longer than expected, at pos %i found item %O."
           message i a
 
+
+
     let referenceEqual actual expected message =
+        #if FABLE_COMPILER_PYTHON
+        if not (Py.isReferenceEqual actual expected) then
+            failwith message
+        #else
         if not (LanguagePrimitives.PhysicalEquality actual expected) then
             failwith message
+        #endif
 
     let notReferenceEqual actual expected message =
+        #if FABLE_COMPILER_PYTHON
+        if (Py.isReferenceEqual actual expected) then
+            failwith message
+        #else
         if (LanguagePrimitives.PhysicalEquality actual expected) then
             failwith message
+        #endif
