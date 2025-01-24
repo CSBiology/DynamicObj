@@ -909,7 +909,7 @@ and CopyUtils =
                 let newDict = Dictionary<obj,obj>()
                 for kv in o do newDict.Add(tryDeepCopyObj kv.Key, tryDeepCopyObj kv.Value)
                 newDict |> box
-            | o when FableJS.Dictionaries.isMap o -> 
+            | o when FableJS.Dictionaries.isDict o -> 
                 let o = o |> unbox<Dictionary<obj,obj>>
                 let newDict = Dictionary<obj,obj>()
                 for kv in o do newDict.Add(tryDeepCopyObj kv.Key, tryDeepCopyObj kv.Value)
