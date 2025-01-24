@@ -283,16 +283,21 @@ type DynamicObj() =
     /// Note on Classes that inherit from DynamicObj:
     ///
     /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
-    /// The deep coopied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
     /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
     /// and then passing them to the class constructor if needed.
     /// </summary>
     /// <param name="target">The target object to copy dynamic members to</param>
-    /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
-    member this.DeepCopyPropertiesTo(target:#DynamicObj, ?overWrite) =
+    /// <param name="overWrite">Whether existing properties on the target object will be overwritten. Default is false</param>
+    /// <param name="includeInstanceProperties">Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance. Default is true</param>
+    member this.DeepCopyPropertiesTo(
+        target:#DynamicObj, 
+        ?overWrite: bool, 
+        ?includeInstanceProperties:bool
+    ) =
         let overWrite = defaultArg overWrite false
-
-        this.GetProperties(true)
+        let includeInstanceProperties = defaultArg includeInstanceProperties true
+        this.GetProperties(includeInstanceProperties)
         |> Seq.iter (fun kv ->
             match target.TryGetPropertyHelper kv.Key with
             | Some pi when overWrite -> pi.SetValue target (CopyUtils.tryDeepCopyObj kv.Value)
@@ -327,19 +332,20 @@ type DynamicObj() =
     /// Note on Classes that inherit from DynamicObj:
     ///
     /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
-    /// The deep coopied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
     /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
     /// and then passing them to the class constructor if needed.
     /// </summary>
-    /// <param name="target">The target object to copy dynamic members to</param>
-    /// <param name="overWrite">Whether existing properties on the target object will be overwritten</param>
-    member this.DeepCopyProperties() = CopyUtils.tryDeepCopyObj this
+    /// <param name="includeInstanceProperties">Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance. Default is true</param>
+    member this.DeepCopyProperties(?includeInstanceProperties:bool) = 
+        let includeInstanceProperties = defaultArg includeInstanceProperties true
+        CopyUtils.tryDeepCopyObj(this, includeInstanceProperties)
 
     #if !FABLE_COMPILER
     // Some necessary overrides for methods inherited from System.Dynamic.DynamicObject()
     // 
     // Needed mainly for making Newtonsoft.Json Serialization work
-    override this.TryGetMember(binder:GetMemberBinder,result:obj byref ) =     
+    override this.TryGetMember(binder:GetMemberBinder,result:obj byref) =     
         match this.TryGetPropertyValue binder.Name with
         | Some value -> result <- value; true
         | None -> false
@@ -396,8 +402,39 @@ type DynamicObj() =
 
 and CopyUtils =
 
-    /// internal helper function to deep copy a boxed object (if possible)
-    static member tryDeepCopyObj (o:obj) =
+    /// <summary>
+    /// function to deep copy a boxed object (if possible)
+
+    /// The following cases are handled (in this precedence):
+    ///
+    /// - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
+    ///
+    /// - ResizeArrays and Dictionaries containing any combination of basic F# types
+    ///
+    /// - Dictionaries containing DynamicObj as keys or values in any combination with DynamicObj or basic F# types as keys or values
+    ///
+    /// - array&lt;DynamicObj&gt;, list&lt;DynamicObj&gt;, ResizeArray&lt;DynamicObj&gt;: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
+    ///
+    /// - System.ICloneable: If the property implements ICloneable, the Clone() method is called on the property.
+    ///
+    /// - DynamicObj (and derived classes): properties that are themselves DynamicObj instances are deep copied recursively.
+    ///   if a derived class has static properties (e.g. instance properties), these will be copied as dynamic properties on the new instance.
+    ///
+    /// Note on Classes that inherit from DynamicObj:
+    ///
+    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
+    /// The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
+    /// and then passing them to the class constructor if needed.
+    /// </summary>
+    /// <param name="o">The object that should be deep copied</param>
+    /// <param name="includeInstanceProperties">Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance for matched DynamicObj. Default is true</param>
+    static member tryDeepCopyObj(
+        o:obj,
+        ?includeInstanceProperties:bool
+    ) =
+        let includeInstanceProperties = defaultArg includeInstanceProperties true
+
         let rec tryDeepCopyObj (o:obj) =
             match o with
 
@@ -949,8 +986,7 @@ and CopyUtils =
 
             | :? DynamicObj as dyn ->
                 let newDyn = DynamicObj()
-                // might want to keep instance props as dynamic props on copy
-                for kv in (dyn.GetProperties(true)) do
+                for kv in (dyn.GetProperties(includeInstanceProperties)) do
                     newDyn.SetProperty(kv.Key, tryDeepCopyObj kv.Value)
                 box newDyn
             | _ -> o

@@ -217,3 +217,33 @@ module DynObj =
     /// </summary>
     /// <param name="dynObj">The DynamicObj for which to print a formatted string for</param>
     let print (dynObj:DynamicObj) = printfn "%s" (dynObj |> format)
+
+    /// <summary>
+    /// function to deep copy a boxed object (if possible)
+    ///
+    /// The following cases are handled (in this precedence):
+    ///
+    /// - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
+    ///
+    /// - ResizeArrays and Dictionaries containing any combination of basic F# types
+    ///
+    /// - Dictionaries containing DynamicObj as keys or values in any combination with DynamicObj or basic F# types as keys or values
+    ///
+    /// - array&lt;DynamicObj&gt;, list&lt;DynamicObj&gt;, ResizeArray&lt;DynamicObj&gt;: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
+    ///
+    /// - System.ICloneable: If the property implements ICloneable, the Clone() method is called on the property.
+    ///
+    /// - DynamicObj (and derived classes): properties that are themselves DynamicObj instances are deep copied recursively.
+    ///   if a derived class has static properties (e.g. instance properties), these will be copied as dynamic properties on the new instance.
+    ///
+    /// Note on Classes that inherit from DynamicObj:
+    ///
+    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
+    /// The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
+    /// and then passing them to the class constructor if needed.
+    /// </summary>
+    /// <param name="o">The object that should be deep copied</param>
+    /// <param name="includeInstanceProperties">Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance for matched DynamicObj.</param>
+    let tryDeepCopyObj (includeInstanceProperties:bool) (o:DynamicObj) =
+        CopyUtils.tryDeepCopyObj(o, includeInstanceProperties)
