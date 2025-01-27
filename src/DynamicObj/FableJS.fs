@@ -168,4 +168,11 @@ module FableJS =
         let cloneICloneable (o:obj) : obj =
             jsNative
 
+    module Dictionaries =
+        [<Emit("""$0 instanceof Map""")>]
+        let isMap (o:obj) : bool =
+            jsNative
+        [<Emit("""$0 instanceof Dictionary""")>]
+        let isDict (o:obj) : bool =
+            jsNative
 #endif

@@ -13,18 +13,10 @@
 open Fable.Pyxpecto
 open DynamicObj
 
-type T(dyn:string, stat:string) as this=
-    inherit DynamicObj()
+let r1 = ResizeArray([1; 2])
+let r2 = ResizeArray([1; 2])
+let r3 = r1
 
-    do 
-        this.SetProperty("Dyn", dyn)
-
-    member this.Stat = stat
-
-let first = T("dyn1", "stat1")
-let second = T("dyn2", "stat2")
-
-let _ = second.ShallowCopyDynamicPropertiesTo(first)
-
-first |> DynObj.print
-second |> DynObj.print
+printfn "%A" (LanguagePrimitives.PhysicalEquality r1 r2)
+printfn "%A" (LanguagePrimitives.PhysicalEquality r2 r2)
+printfn "%A" (LanguagePrimitives.PhysicalEquality r3 r1)

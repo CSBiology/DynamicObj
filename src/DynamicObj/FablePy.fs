@@ -220,4 +220,10 @@ module FablePy =
         [<Emit("""$0.System_ICloneable_Clone()""")>]
         let cloneICloneable (o:obj) : obj =
             nativeOnly
+
+    module Dictionaries =
+        [<Emit("""isinstance($0, dict)""")>]
+        let isDict (o:obj) : bool =
+            nativeOnly
+
 #endif

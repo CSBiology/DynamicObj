@@ -1,30 +1,25 @@
-﻿// For more information see https://aka.ms/fsharp-console-apps
+﻿open DynamicObj
 
-open DynamicObj
+let constructDeepCopiedClone<'T> (props: seq<string*obj>) =
+    let original = DynamicObj()
+    props
+    |> Seq.iter (fun (propertyName, propertyValue) -> original.SetProperty(propertyName, propertyValue))
+    let clone : 'T = original.DeepCopyProperties() |> unbox<'T>
+    original, clone 
 
-type Inner() =
-    inherit DynamicObj()
-    static member init(
-        ?inner_value: string
-    ) =
-        Inner()
-        |> DynObj.withOptionalProperty "inner_value" inner_value
+let item1 = DynamicObj() |> DynObj.withProperty "item" 1
+let item2 = DynamicObj() |> DynObj.withProperty "item" 2
+let item3 = DynamicObj() |> DynObj.withProperty "item" 3
+let arr = [|item1; item2; item3|]
+let original, clone = constructDeepCopiedClone<DynamicObj> ["arr", box arr]
+item1.SetProperty("item", -1)
+item2.SetProperty("item", -1)
+item3.SetProperty("item", -1)
 
-type Outer() =
-    inherit DynamicObj()
-    static member init(
-        ?A: int,
-        ?B: string,
-        ?Inner: Inner
-    ) =
-        Outer()
-        |> DynObj.withOptionalProperty "A" A
-        |> DynObj.withOptionalProperty "B" B
-        |> DynObj.withOptionalProperty "Inner" Inner
+original 
+|> DynObj.tryGetTypedPropertyValue<DynamicObj []> "arr"
+|> Option.iter (Seq.iter DynObj.print)
 
-
-let outer1 = Outer.init(A = 1, B = "first", Inner = Inner.init(inner_value = "inner_first"))
-let outer2 = Outer.init(A = 2, B = "second", Inner = Inner.init(inner_value = "inner_second"))
-let expected = Outer.init(A = 2, B = "second", Inner = Inner.init(inner_value = "inner_second"))
-
-printfn "%A" ((DynObj.combine outer1 outer2) = expected)
+clone
+|> DynObj.tryGetTypedPropertyValue<DynamicObj []> "arr"
+|> Option.iter (Seq.iter DynObj.print)
