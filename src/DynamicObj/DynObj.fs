@@ -229,7 +229,7 @@ module DynObj =
     /// 
     /// - `Dictionaries` containing `DynamicObj` as keys or values in any combination with `DynamicObj` or basic F# types as keys or values
     /// 
-    /// - `array<DynamicObj>`, `list<DynamicObj>`, `ResizeArray<DynamicObj>`: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
+    /// - `array&lt;DynamicObj&gt;`, `list&lt;DynamicObj&gt;`, `ResizeArray&lt;DynamicObj&gt;`: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
     /// 
     /// - `System.ICloneable`: If the property implements `ICloneable`, the `Clone()` method is called on the property.
     /// 
