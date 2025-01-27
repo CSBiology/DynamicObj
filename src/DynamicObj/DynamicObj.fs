@@ -267,23 +267,23 @@ type DynamicObj() =
     ///
     /// The following cases are handled (in this precedence):
     ///
-    /// - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
-    ///
-    /// - ResizeArrays and Dictionaries containing any combination of basic F# types
-    ///
-    /// - Dictionaries containing DynamicObj as keys or values in any combination with DynamicObj or basic F# types as keys or values
-    ///
-    /// - array&lt;DynamicObj&gt;, list&lt;DynamicObj&gt;, ResizeArray&lt;DynamicObj&gt;: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
-    ///
-    /// - System.ICloneable: If the property implements ICloneable, the Clone() method is called on the property.
-    ///
-    /// - DynamicObj (and derived classes): properties that are themselves DynamicObj instances are deep copied recursively.
-    ///   if a derived class has static properties (e.g. instance properties), these will be copied as dynamic properties on the new instance.
-    ///
-    /// Note on Classes that inherit from DynamicObj:
-    ///
-    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
-    /// The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// - Basic F# types (`bool`, `byte`, `sbyte`, `int16`, `uint16`, `int`, `uint`, `int64`, `uint64`, `nativeint`, `unativeint`, `float`, `float32`, `char`, `string`, `unit`, `decimal`)
+    /// 
+    /// - `ResizeArrays` and `Dictionaries` containing any combination of basic F# types
+    /// 
+    /// - `Dictionaries` containing `DynamicObj` as keys or values in any combination with `DynamicObj` or basic F# types as keys or values
+    /// 
+    /// - `array<DynamicObj>`, `list<DynamicObj>`, `ResizeArray<DynamicObj>`: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
+    /// 
+    /// - `System.ICloneable`: If the property implements `ICloneable`, the `Clone()` method is called on the property.
+    /// 
+    /// - `DynamicObj` (and derived classes): properties that are themselves `DynamicObj` instances are deep copied recursively.
+    ///   if a derived class has static properties (e.g. instance properties), these can be copied as dynamic properties on the new instance or ignored.
+    /// 
+    /// Note on Classes that inherit from `DynamicObj`:
+    /// 
+    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement `ICloneable`.
+    /// The deep copied instances will be cast to `DynamicObj` with deep copied dynamic properties. Staic/instance properties can be copied as dynamic properties on the new instance or be ignored.
     /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
     /// and then passing them to the class constructor if needed.
     /// </summary>
@@ -316,23 +316,23 @@ type DynamicObj() =
     ///
     /// The following cases are handled (in this precedence):
     ///
-    /// - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
-    ///
-    /// - ResizeArrays and Dictionaries containing any combination of basic F# types
-    ///
-    /// - Dictionaries containing DynamicObj as keys or values in any combination with DynamicObj or basic F# types as keys or values
-    ///
-    /// - array&lt;DynamicObj&gt;, list&lt;DynamicObj&gt;, ResizeArray&lt;DynamicObj&gt;: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
-    ///
-    /// - System.ICloneable: If the property implements ICloneable, the Clone() method is called on the property.
-    ///
-    /// - DynamicObj (and derived classes): properties that are themselves DynamicObj instances are deep copied recursively.
-    ///   if a derived class has static properties (e.g. instance properties), these will be copied as dynamic properties on the new instance.
-    ///
-    /// Note on Classes that inherit from DynamicObj:
-    ///
-    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
-    /// The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// - Basic F# types (`bool`, `byte`, `sbyte`, `int16`, `uint16`, `int`, `uint`, `int64`, `uint64`, `nativeint`, `unativeint`, `float`, `float32`, `char`, `string`, `unit`, `decimal`)
+    /// 
+    /// - `ResizeArrays` and `Dictionaries` containing any combination of basic F# types
+    /// 
+    /// - `Dictionaries` containing `DynamicObj` as keys or values in any combination with `DynamicObj` or basic F# types as keys or values
+    /// 
+    /// - `array<DynamicObj>`, `list<DynamicObj>`, `ResizeArray<DynamicObj>`: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
+    /// 
+    /// - `System.ICloneable`: If the property implements `ICloneable`, the `Clone()` method is called on the property.
+    /// 
+    /// - `DynamicObj` (and derived classes): properties that are themselves `DynamicObj` instances are deep copied recursively.
+    ///   if a derived class has static properties (e.g. instance properties), these can be copied as dynamic properties on the new instance or ignored.
+    /// 
+    /// Note on Classes that inherit from `DynamicObj`:
+    /// 
+    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement `ICloneable`.
+    /// The deep copied instances will be cast to `DynamicObj` with deep copied dynamic properties. Staic/instance properties can be copied as dynamic properties on the new instance or be ignored.
     /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
     /// and then passing them to the class constructor if needed.
     /// </summary>
@@ -407,23 +407,23 @@ and CopyUtils =
 
     /// The following cases are handled (in this precedence):
     ///
-    /// - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
-    ///
-    /// - ResizeArrays and Dictionaries containing any combination of basic F# types
-    ///
-    /// - Dictionaries containing DynamicObj as keys or values in any combination with DynamicObj or basic F# types as keys or values
-    ///
-    /// - array&lt;DynamicObj&gt;, list&lt;DynamicObj&gt;, ResizeArray&lt;DynamicObj&gt;: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
-    ///
-    /// - System.ICloneable: If the property implements ICloneable, the Clone() method is called on the property.
-    ///
-    /// - DynamicObj (and derived classes): properties that are themselves DynamicObj instances are deep copied recursively.
-    ///   if a derived class has static properties (e.g. instance properties), these will be copied as dynamic properties on the new instance.
-    ///
-    /// Note on Classes that inherit from DynamicObj:
-    ///
-    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
-    /// The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+    /// - Basic F# types (`bool`, `byte`, `sbyte`, `int16`, `uint16`, `int`, `uint`, `int64`, `uint64`, `nativeint`, `unativeint`, `float`, `float32`, `char`, `string`, `unit`, `decimal`)
+    /// 
+    /// - `ResizeArrays` and `Dictionaries` containing any combination of basic F# types
+    /// 
+    /// - `Dictionaries` containing `DynamicObj` as keys or values in any combination with `DynamicObj` or basic F# types as keys or values
+    /// 
+    /// - `array<DynamicObj>`, `list<DynamicObj>`, `ResizeArray<DynamicObj>`: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
+    /// 
+    /// - `System.ICloneable`: If the property implements `ICloneable`, the `Clone()` method is called on the property.
+    /// 
+    /// - `DynamicObj` (and derived classes): properties that are themselves `DynamicObj` instances are deep copied recursively.
+    ///   if a derived class has static properties (e.g. instance properties), these can be copied as dynamic properties on the new instance or ignored.
+    /// 
+    /// Note on Classes that inherit from `DynamicObj`:
+    /// 
+    /// Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement `ICloneable`.
+    /// The deep copied instances will be cast to `DynamicObj` with deep copied dynamic properties. Staic/instance properties can be copied as dynamic properties on the new instance or be ignored.
     /// It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
     /// and then passing them to the class constructor if needed.
     /// </summary>
