@@ -1,4 +1,9 @@
 # DynamicObj
+
+[![Build and test](https://github.com/CSBiology/DynamicObj/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/CSBiology/DynamicObj/actions/workflows/build-and-test.yml)
+[![](https://img.shields.io/nuget/vpre/DynamicObj)](https://www.nuget.org/packages/DynamicObj/)
+[![](https://img.shields.io/nuget/dt/DynamicObj)](https://www.nuget.org/packages/DynamicObj/)
+
 F# library supporting Dynamic Objects including inheritance in functional style.
 
 The library is compatible with [Fable](https://github.com/fable-compiler/Fable), allowing transpilation to `javascript` and `python`.
