@@ -199,8 +199,8 @@ ID: 1337
         <div class="fsdocs-tip" id="fs1">Multiple items<br />namespace DynamicObj<br /><br />--------------------<br />type DynamicObj =
   inherit DynamicObject
   new: unit -&gt; DynamicObj
-  member DeepCopyProperties: unit -&gt; obj
-  member DeepCopyPropertiesTo: target: #DynamicObj * ?overWrite: bool -&gt; unit
+  member DeepCopyProperties: ?includeInstanceProperties: bool -&gt; obj
+  member DeepCopyPropertiesTo: target: #DynamicObj * ?overWrite: bool * ?includeInstanceProperties: bool -&gt; unit
   override Equals: o: obj -&gt; bool
   override GetDynamicMemberNames: unit -&gt; IEnumerable&lt;string&gt;
   override GetHashCode: unit -&gt; int

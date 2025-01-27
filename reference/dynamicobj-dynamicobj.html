@@ -145,7 +145,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
+              <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
                 <p>
                   <a id="``.ctor``">
                     <a href="#``.ctor``">
@@ -154,7 +154,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="103">
+              <div class="fsdocs-tip" id="107">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>DynamicObj<span>()</span></span></code>
@@ -203,7 +203,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+              <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
                 <p>
                   <a id="DeepCopyProperties">
                     <a href="#DeepCopyProperties">
@@ -212,11 +212,25 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="104">
+              <div class="fsdocs-tip" id="108">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.DeepCopyProperties</span></code>
                   <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        ?includeInstanceProperties
+                      </b>
+                      :
+                      <code>bool</code>
+                       - 
+                      Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance. Default is true
+                    </span>
+                    <br/>
+                  </ul>
                   <br/>
                   <span>
                     Returns: 
@@ -237,7 +251,7 @@
                   <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.DeepCopyProperties\'/>')">
                     <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
                   </div>
-                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L328-328" class="fsdocs-source-link" title="Source on GitHub">
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L340-340" class="fsdocs-source-link" title="Source on GitHub">
                     <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
                   </a>
                   <p class="fsdocs-summary">
@@ -252,7 +266,11 @@
 
  The following cases are handled (in this precedence):
 
- - Basic F# types (int, float, bool, string, char, byte, sbyte, int16, uint16, int32, uint32, int64, uint64, single, decimal)
+ - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
+
+ - ResizeArrays and Dictionaries containing any combination of basic F# types
+
+ - Dictionaries containing DynamicObj as keys or values in any combination with DynamicObj or basic F# types as keys or values
 
  - array<DynamicObj>, list<DynamicObj>, ResizeArray<DynamicObj>: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
 
@@ -264,13 +282,27 @@
  Note on Classes that inherit from DynamicObj:
 
  Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
- The deep coopied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+ The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
  It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
  and then passing them to the class constructor if needed.
  
                   </p>
                 </div>
               </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ?includeInstanceProperties
+                  </span>
+                  :
+                  <code>bool</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance. Default is true
+                  </p>
+                </dd>
+              </dl>
               <dl class="fsdocs-returns">
                 <dt>
                   <span class="fsdocs-return-name">
@@ -286,7 +318,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
+              <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
                 <p>
                   <a id="DeepCopyPropertiesTo">
                     <a href="#DeepCopyPropertiesTo">
@@ -295,7 +327,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="105">
+              <div class="fsdocs-tip" id="109">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.DeepCopyPropertiesTo</span></code>
@@ -320,7 +352,17 @@
                       :
                       <code>bool</code>
                        - 
-                      Whether existing properties on the target object will be overwritten
+                      Whether existing properties on the target object will be overwritten. Default is false
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?includeInstanceProperties
+                      </b>
+                      :
+                      <code>bool</code>
+                       - 
+                      Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance. Default is true
                     </span>
                     <br/>
                   </ul>
@@ -339,7 +381,7 @@
                   <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.DeepCopyPropertiesTo``1\'/>')">
                     <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
                   </div>
-                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L288-288" class="fsdocs-source-link" title="Source on GitHub">
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L293-293" class="fsdocs-source-link" title="Source on GitHub">
                     <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
                   </a>
                   <p class="fsdocs-summary">
@@ -354,7 +396,11 @@
 
  The following cases are handled (in this precedence):
 
- - Basic F# types (int, float, bool, string, char, byte, sbyte, int16, uint16, int32, uint32, int64, uint64, single, decimal)
+ - Basic F# types (bool, byte, sbyte, int16, uint16, int, uint, int64, uint64, nativeint, unativeint, float, float32, char, string, unit, decimal)
+
+ - ResizeArrays and Dictionaries containing any combination of basic F# types
+
+ - Dictionaries containing DynamicObj as keys or values in any combination with DynamicObj or basic F# types as keys or values
 
  - array<DynamicObj>, list<DynamicObj>, ResizeArray<DynamicObj>: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
 
@@ -366,7 +412,7 @@
  Note on Classes that inherit from DynamicObj:
 
  Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement ICloneable.
- The deep coopied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
+ The deep copied instances will be cast to DynamicObj with static/instance properties AND dynamic properties all set as dynamic properties.
  It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
  and then passing them to the class constructor if needed.
  
@@ -395,7 +441,19 @@
                 </dt>
                 <dd class="fsdocs-param-docs">
                   <p>
-                    Whether existing properties on the target object will be overwritten
+                    Whether existing properties on the target object will be overwritten. Default is false
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ?includeInstanceProperties
+                  </span>
+                  :
+                  <code>bool</code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance. Default is true
                   </p>
                 </dd>
               </dl>
@@ -405,7 +463,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
+              <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
                 <p>
                   <a id="GetProperties">
                     <a href="#GetProperties">
@@ -414,7 +472,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="106">
+              <div class="fsdocs-tip" id="110">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.GetProperties</span></code>
@@ -494,7 +552,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
+              <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
                 <p>
                   <a id="GetPropertyHelpers">
                     <a href="#GetPropertyHelpers">
@@ -503,7 +561,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="107">
+              <div class="fsdocs-tip" id="111">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.GetPropertyHelpers</span></code>
@@ -583,7 +641,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
+              <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
                 <p>
                   <a id="GetPropertyNames">
                     <a href="#GetPropertyNames">
@@ -592,7 +650,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="108">
+              <div class="fsdocs-tip" id="112">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.GetPropertyNames</span></code>
@@ -672,7 +730,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
+              <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
                 <p>
                   <a id="GetPropertyValue">
                     <a href="#GetPropertyValue">
@@ -681,7 +739,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="109">
+              <div class="fsdocs-tip" id="113">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.GetPropertyValue</span></code>
@@ -771,7 +829,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
+              <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
                 <p>
                   <a id="Properties">
                     <a href="#Properties">
@@ -780,7 +838,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="110">
+              <div class="fsdocs-tip" id="114">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.Properties</span></code>
@@ -810,7 +868,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
+              <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
                 <p>
                   <a id="RemoveProperty">
                     <a href="#RemoveProperty">
@@ -819,7 +877,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="111">
+              <div class="fsdocs-tip" id="115">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.RemoveProperty</span></code>
@@ -911,7 +969,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
+              <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
                 <p>
                   <a id="SetProperty">
                     <a href="#SetProperty">
@@ -920,7 +978,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="112">
+              <div class="fsdocs-tip" id="116">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.SetProperty</span></code>
@@ -1006,7 +1064,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
+              <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
                 <p>
                   <a id="ShallowCopyDynamicProperties">
                     <a href="#ShallowCopyDynamicProperties">
@@ -1015,7 +1073,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="113">
+              <div class="fsdocs-tip" id="117">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.ShallowCopyDynamicProperties</span></code>
@@ -1067,7 +1125,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
+              <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
                 <p>
                   <a id="ShallowCopyDynamicPropertiesTo">
                     <a href="#ShallowCopyDynamicPropertiesTo">
@@ -1076,7 +1134,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="114">
+              <div class="fsdocs-tip" id="118">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.ShallowCopyDynamicPropertiesTo</span></code>
@@ -1168,7 +1226,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
+              <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
                 <p>
                   <a id="TryGetDynamicPropertyHelper">
                     <a href="#TryGetDynamicPropertyHelper">
@@ -1177,7 +1235,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="115">
+              <div class="fsdocs-tip" id="119">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.TryGetDynamicPropertyHelper</span></code>
@@ -1255,7 +1313,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
+              <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
                 <p>
                   <a id="TryGetPropertyHelper">
                     <a href="#TryGetPropertyHelper">
@@ -1264,7 +1322,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="116">
+              <div class="fsdocs-tip" id="120">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.TryGetPropertyHelper</span></code>
@@ -1342,7 +1400,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
+              <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
                 <p>
                   <a id="TryGetPropertyValue">
                     <a href="#TryGetPropertyValue">
@@ -1351,7 +1409,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="117">
+              <div class="fsdocs-tip" id="121">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.TryGetPropertyValue</span></code>
@@ -1423,7 +1481,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
+              <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
                 <p>
                   <a id="TryGetStaticPropertyHelper">
                     <a href="#TryGetStaticPropertyHelper">
@@ -1432,7 +1490,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="118">
+              <div class="fsdocs-tip" id="122">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.TryGetStaticPropertyHelper</span></code>
@@ -1510,7 +1568,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
+              <code onmouseout="hideTip(event, '123', 123)" onmouseover="showTip(event, '123', 123)">
                 <p>
                   <a id="TryGetTypedPropertyValue">
                     <a href="#TryGetTypedPropertyValue">
@@ -1519,7 +1577,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="119">
+              <div class="fsdocs-tip" id="123">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>this.TryGetTypedPropertyValue</span></code>
@@ -1621,7 +1679,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+              <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
                 <p>
                   <a id="(?)">
                     <a href="#(?)">
@@ -1630,7 +1688,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="120">
+              <div class="fsdocs-tip" id="124">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>lookup&#32;?&#32;name</span></code>
@@ -1675,7 +1733,7 @@
                   <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.op_Dynamic``1\'/>')">
                     <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
                   </div>
-                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L363-363" class="fsdocs-source-link" title="Source on GitHub">
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L377-377" class="fsdocs-source-link" title="Source on GitHub">
                     <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
                   </a>
                   <p class="fsdocs-summary">
@@ -1723,7 +1781,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
+              <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
                 <p>
                   <a id="(?<-)">
                     <a href="#(?<-)">
@@ -1732,7 +1790,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="121">
+              <div class="fsdocs-tip" id="125">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>(?<-)&#32;<span><span>(<span>lookup,&#32;name,&#32;value</span>)</span></span></span></code>
@@ -1780,7 +1838,7 @@
                   <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.DynamicObj.op_DynamicAssignment``2\'/>')">
                     <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
                   </div>
-                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L374-374" class="fsdocs-source-link" title="Source on GitHub">
+                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L388-388" class="fsdocs-source-link" title="Source on GitHub">
                     <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
                   </a>
                   <p class="fsdocs-summary">
@@ -1827,7 +1885,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
+              <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
                 <p>
                   <a id="ofDict">
                     <a href="#ofDict">
@@ -1836,7 +1894,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="122">
+              <div class="fsdocs-tip" id="126">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>DynamicObj.ofDict&#32;<span>dynamicProperties</span></span></code>

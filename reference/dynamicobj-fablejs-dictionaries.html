@@ -7,15 +7,15 @@
     <meta content="Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors" name="author">
     <!-- Opengraph properties (https://ogp.me/) -->
     <meta property="og:site_name" content="DynamicObj">
-    <meta property="og:title" content="PropertyObject (DynamicObj)" />
+    <meta property="og:title" content="Dictionaries (DynamicObj)" />
     <meta property="og:url" content="https://csbiology.github.io/DynamicObj/{{fsdocs-source-basename}}.html">
     <meta property="og:type" content="website" />
     <!-- Twitter cards (https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="https://csbiology.github.io/DynamicObj/">
-    <meta name="twitter:title" content="PropertyObject (DynamicObj)">
+    <meta name="twitter:title" content="Dictionaries (DynamicObj)">
     
-    <title>PropertyObject (DynamicObj) | DynamicObj</title>
+    <title>Dictionaries (DynamicObj) | DynamicObj</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
     <div id="content">
         <div>
   <h2>
-    PropertyObject Type
+    Dictionaries Module
   </h2>
   <dl class="fsdocs-metadata">
     <dt>
@@ -106,17 +106,9 @@
     </dt>
     <dt>
       Parent Module: 
-      <a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-fablepy.html">
-        FablePy
+      <a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-fablejs.html">
+        FableJS
       </a>
-    </dt>
-    <dt>
-      Base Type: 
-      <code>obj</code>
-    </dt>
-    <dt>
-      All Interfaces: 
-      <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-fablepy-propertyobject.html">PropertyObject</a></code>
     </dt>
   </dl>
   <div class="fsdocs-xmldoc">
@@ -126,22 +118,15 @@
       </p>
     </div>
   </div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
   <div>
     <h3>
-      Instance members
+      Functions and values
     </h3>
     <table class="table outer-list fsdocs-member-list">
       <thead>
         <tr>
           <td class="fsdocs-member-list-header">
-            Instance member
+            Function or value
           </td>
           <td class="fsdocs-member-list-header">
             Description
@@ -152,40 +137,59 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+              <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
                 <p>
-                  <a id="fget">
-                    <a href="#fget">
-                      <code><span>this.fget&#32;</span></code>
+                  <a id="isDict">
+                    <a href="#isDict">
+                      <code><span>isDict&#32;<span>o</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="104">
+              <div class="fsdocs-tip" id="42">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.fget&#32;</span></code>
+                  <code><span>isDict&#32;<span>o</span></span></code>
                   <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        o
+                      </b>
+                      :
+                      <code>obj</code>
+                    </span>
+                    <br/>
+                  </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code>obj</code>
+                    <code>bool</code>
                   </span>
-                  <br/>
-                  Modifiers: 
-                  abstract
                   <br/>
                 </div>
               </div>
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code>obj</code>
+                <code>bool</code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -194,40 +198,59 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
+              <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
                 <p>
-                  <a id="fset">
-                    <a href="#fset">
-                      <code><span>this.fset&#32;</span></code>
+                  <a id="isMap">
+                    <a href="#isMap">
+                      <code><span>isMap&#32;<span>o</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="105">
+              <div class="fsdocs-tip" id="43">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>this.fset&#32;</span></code>
+                  <code><span>isMap&#32;<span>o</span></span></code>
                   <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        o
+                      </b>
+                      :
+                      <code>obj</code>
+                    </span>
+                    <br/>
+                  </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code>obj</code>
+                    <code>bool</code>
                   </span>
-                  <br/>
-                  Modifiers: 
-                  abstract
                   <br/>
                 </div>
               </div>
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code>obj</code>
+                <code>bool</code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -236,6 +259,13 @@
       </tbody>
     </table>
   </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
   <div></div>
 </div>
         
