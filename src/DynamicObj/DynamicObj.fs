@@ -389,16 +389,43 @@ type DynamicObj() =
         lookup.SetProperty (name,value)
 
     override this.GetHashCode () =
-        this.GetProperties(true)
-        |> Seq.sortBy (fun pair -> pair.Key)
-        |> HashCodes.boxHashKeyValSeq
-        |> fun x -> x :?> int
+        HashUtils.deepHash this
 
     override this.Equals o =
         match o with
         | :? DynamicObj as other ->
             this.GetHashCode() = other.GetHashCode()
         | _ -> false
+
+and HashUtils = 
+
+    static member deepHash (o:obj) =
+        match o with
+        | :? DynamicObj as o ->
+            o.GetProperties(true)
+            |> Seq.sortBy (fun pair -> pair.Key)
+            |> HashCodes.boxHashKeyValSeqBy HashUtils.deepHash
+            |> fun x -> x :?> int
+        | :? string as s -> DynamicObj.HashCodes.hash s
+        #if !FABLE_COMPILER
+        | :? System.Collections.IDictionary as d -> 
+            let mutable en = d.GetEnumerator()
+            [
+                while en.MoveNext() do 
+                    let c = en.Current :?> System.Collections.DictionaryEntry
+                    HashCodes.mergeHashes (hash c.Key) (HashUtils.deepHash c.Value)
+            ]
+            |> List.fold (fun acc h -> HashCodes.mergeHashes acc h) 0
+        #endif
+        | :? System.Collections.IEnumerable as e ->
+            let en = e.GetEnumerator()
+            [
+                while en.MoveNext() do 
+               
+                    HashUtils.deepHash en.Current
+            ]
+            |> List.fold (fun acc h -> HashCodes.mergeHashes acc h) 0
+        | _ -> DynamicObj.HashCodes.hash o
 
 and CopyUtils =
 

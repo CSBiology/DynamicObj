@@ -47,3 +47,11 @@ let boxHashKeyValSeq (a: seq<System.Collections.Generic.KeyValuePair<'a,'b>>) : 
         mergeHashes (hash o.Key) (hash o.Value)
         |> mergeHashes acc) 0
     |> box
+
+let boxHashKeyValSeqBy (f : 'b -> int) (a: seq<System.Collections.Generic.KeyValuePair<'a,'b>>) : obj =
+    a 
+    // from https://stackoverflow.com/a/53507559
+    |> Seq.fold (fun acc o -> 
+        mergeHashes (hash o.Key) (hash o.Value)
+        |> mergeHashes acc) 0
+    |> box
