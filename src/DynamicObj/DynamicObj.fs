@@ -388,13 +388,18 @@ type DynamicObj() =
     static member (?<-) (lookup:#DynamicObj,name:string,value:'v) =
         lookup.SetProperty (name,value)
 
+    member this.ReferenceEquals (other: DynamicObj) = System.Object.ReferenceEquals(this,other)
+
+    member this.StructurallyEquals (other: DynamicObj) =
+        this.GetHashCode() = other.GetHashCode()
+
     override this.GetHashCode () =
         HashUtils.deepHash this
 
     override this.Equals o =
         match o with
         | :? DynamicObj as other ->
-            this.GetHashCode() = other.GetHashCode()
+            this.StructurallyEquals(other)
         | _ -> false
 
 and HashUtils = 
