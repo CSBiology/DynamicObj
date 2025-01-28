@@ -415,16 +415,15 @@ and HashUtils =
                     let c = en.Current :?> System.Collections.DictionaryEntry
                     HashCodes.mergeHashes (hash c.Key) (HashUtils.deepHash c.Value)
             ]
-            |> List.fold (fun acc h -> HashCodes.mergeHashes acc h) 0
+            |> List.reduce HashCodes.mergeHashes
         #endif
         | :? System.Collections.IEnumerable as e ->
             let en = e.GetEnumerator()
             [
                 while en.MoveNext() do 
-               
                     HashUtils.deepHash en.Current
             ]
-            |> List.fold (fun acc h -> HashCodes.mergeHashes acc h) 0
+            |> List.reduce HashCodes.mergeHashes
         | _ -> DynamicObj.HashCodes.hash o
 
 and CopyUtils =
