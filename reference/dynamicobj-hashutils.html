@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Timo Mühlhaus, Kevin Schneider, F# open source contributors" name="author">
+    <meta content="Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors" name="author">
     <!-- Opengraph properties (https://ogp.me/) -->
     <meta property="og:site_name" content="DynamicObj">
-    <meta property="og:title" content="ImmutableDynamicObjJsonConverter (DynamicObj)" />
+    <meta property="og:title" content="HashUtils (DynamicObj)" />
     <meta property="og:url" content="https://csbiology.github.io/DynamicObj/{{fsdocs-source-basename}}.html">
     <meta property="og:type" content="website" />
     <!-- Twitter cards (https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="https://csbiology.github.io/DynamicObj/">
-    <meta name="twitter:title" content="ImmutableDynamicObjJsonConverter (DynamicObj)">
+    <meta name="twitter:title" content="HashUtils (DynamicObj)">
     
-    <title>ImmutableDynamicObjJsonConverter (DynamicObj) | DynamicObj</title>
+    <title>HashUtils (DynamicObj) | DynamicObj</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
     <div id="content">
         <div>
   <h2>
-    ImmutableDynamicObjJsonConverter Type
+    HashUtils Type
   </h2>
   <dl class="fsdocs-metadata">
     <dt>
@@ -102,11 +102,11 @@
       </a>
     </dt>
     <dt>
-      Assembly: DynamicObj.Immutable.dll
+      Assembly: DynamicObj.dll
     </dt>
     <dt>
       Base Type: 
-      <code><a href="https://learn.microsoft.com/dotnet/api/newtonsoft.json.jsonconverter">JsonConverter</a></code>
+      <code>obj</code>
     </dt>
   </dl>
   <div class="fsdocs-xmldoc">
@@ -122,15 +122,17 @@
   <div></div>
   <div></div>
   <div></div>
+  <div></div>
+  <div></div>
   <div>
     <h3>
-      Constructors
+      Static members
     </h3>
     <table class="table outer-list fsdocs-member-list">
       <thead>
         <tr>
           <td class="fsdocs-member-list-header">
-            Constructor
+            Static member
           </td>
           <td class="fsdocs-member-list-header">
             Description
@@ -141,24 +143,36 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '157', 157)" onmouseover="showTip(event, '157', 157)">
+              <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
                 <p>
-                  <a id="``.ctor``">
-                    <a href="#``.ctor``">
-                      <code><span>ImmutableDynamicObjJsonConverter<span>()</span></span></code>
+                  <a id="deepHash">
+                    <a href="#deepHash">
+                      <code><span>HashUtils.deepHash&#32;<span>o</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="157">
+              <div class="fsdocs-tip" id="130">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ImmutableDynamicObjJsonConverter<span>()</span></span></code>
+                  <code><span>HashUtils.deepHash&#32;<span>o</span></span></code>
                   <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        o
+                      </b>
+                      :
+                      <code>obj</code>
+                    </span>
+                    <br/>
+                  </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobjjsonconverter.html">ImmutableDynamicObjJsonConverter</a></code>
+                    <code>int</code>
                   </span>
                   <br/>
                 </div>
@@ -166,12 +180,22 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-immutabledynamicobjjsonconverter.html">ImmutableDynamicObjJsonConverter</a></code>
+                <code>int</code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -180,8 +204,6 @@
       </tbody>
     </table>
   </div>
-  <div></div>
-  <div></div>
 </div>
         
     </div>
