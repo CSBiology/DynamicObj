@@ -1,3 +1,17 @@
+### 7.0.0+30aea47 (Released 2025-1-28)
+
+Breaking changes.
+
+Improve `DynamicObj` `GetHashCode` and by extension `Equals` methods with recursive deephash function.
+
+DeepHash covers the following types:
+
+- Primitive types
+- `DynamicObj`
+- IDictionary
+- Other IEnumerables (List, Array, Seq, ResizeArray...)
+- Option
+
 ### 6.0.0+c77be4c (Released 2025-01-27)
 
 Breaking changes.
