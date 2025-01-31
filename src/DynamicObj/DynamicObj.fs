@@ -21,7 +21,7 @@ type DynamicObj() =
     /// </summary>
     member this.Properties
         with get() = properties
-        and internal set(value) = properties <- value           
+        and set(value) = properties <- value           
 
     /// <summary>
     /// Creates a new DynamicObj from a Dictionary containing dynamic properties.
