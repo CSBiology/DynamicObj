@@ -35,7 +35,7 @@
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="HashUtils.fs" />
     <Compile Include="InheritanceView.fs" />
-    <Compile Include="InheritanceStatic.fs" />
+    <Compile Include="Inheritance.fs" />
     <Compile Include="Interface.fs" />
     <Compile Include="DynObj.fs" />
     <Compile Include="Serialization.fs" />

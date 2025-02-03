@@ -158,9 +158,6 @@ module FableJS =
         getPropertyHelpers o 
         |> Array.map (fun h -> h.Name)
 
-    [<Emit("return $0")>]
-    let baseObjectOn (o:obj) : unit = jsNative
-
 
     module Interfaces = 
         

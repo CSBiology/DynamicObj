@@ -18,7 +18,7 @@ let lastName = "lastName"
 [<AttachMembers>]
 type BaseType(?baseOn : BaseType) 
     #if !FABLE_COMPILER
-    as self     
+    as self 
     #endif
     =
 
@@ -29,10 +29,14 @@ type BaseType(?baseOn : BaseType)
         match baseOn with
         | Some dynOb -> 
             #if !FABLE_COMPILER
-                self.Properties <- dynOb.Properties
+                DynamicObj.Helper.setProperties self dynOb.Properties
             #endif
             #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT
-                FableJS.baseObjectOn dynOb
+                do Fable.Core.JsInterop.emitJsStatement "" """
+                    const protoType = Object.getPrototypeOf(this);
+                    Object.setPrototypeOf(baseOn, protoType);
+                    return baseOn;
+                """
             #endif
             #if FABLE_COMPILER_PYTHON
                 ()
@@ -42,23 +46,16 @@ type BaseType(?baseOn : BaseType)
     #if FABLE_COMPILER_PYTHON
     do Fable.Core.PyInterop.emitPyStatement "" """
     def __new__(cls, base_on: "BaseType | None" = None):
-        if base_on is not None:
+        if base_on is not None and isinstance(base_on, cls):
             return base_on  
+
+        if base_on is not None:
+            base_on.__class__ = cls
+            return base_on
 
         return super().__new__(cls)
     """
     #endif
-
-
-    //#if FABLE_COMPILER_PYTHON
-    //member this.__new__(cls, baseOn : BaseType) =
-    //    Fable.Core.PyInterop.emitPyStatement (cls,baseOn) """if $1 is not None:
-    //        return $1
-        
-    //    return super().__new__($0)
-    //    """
-        
-    //#endif
 
     member this.GetID() = this.GetPropertyValue(id)
 
@@ -106,7 +103,40 @@ let tests_baseType = testList "BaseType" [
 
 let tests_derivedType = testList "DerivedType" [
 
-    testCase "AnotherPerson" <| fun _ ->
+    testCase "OnBase_AnotherPerson" <| fun _ ->
+        let p1 = BaseType()
+        let name = "John"       
+        p1.SetFirstName(name)
+        let id = "123"
+        p1.SetID(id)
+        let lN = "Doe"
+        p1.SetProperty(lastName,lN)
+        Expect.equal (p1.GetFirstName()) name "P1: First name should be set"
+        Expect.equal (p1.GetID()) id "P1: ID should be set"
+        Expect.equal (p1.GetPropertyValue(lastName)) lN "P1: Last name should be set"
+        let p2 = DerivedType(baseOn = p1)
+        Expect.equal (p2.GetFirstName()) name "P2: First name should be set"
+        Expect.equal (p2.GetID()) id "P2: ID should be set"
+        Expect.equal (p2.GetLastName()) lN "P2: Last name should be set"
+        
+    testCase "OnBase_InheritedMutability" <| fun _ ->
+        let p1 = BaseType()
+        let name = "John"
+        p1.SetFirstName(name)
+        let lN = "Doe"
+        p1.SetProperty(lastName,lN)
+
+        let p2 = DerivedType(baseOn = p1)
+        let newName = "Jane"
+        p2.SetFirstName(newName)
+        let newLastName = "Smith"
+        p2.SetLastName(newLastName)
+        Expect.equal (p2.GetFirstName()) newName "P2: First name should be set"
+        Expect.equal (p2.GetLastName()) newLastName "P2: Last name should be set"
+        Expect.equal (p1.GetFirstName()) newName "P1: First name should be set"
+        Expect.equal (p1.GetPropertyValue(lastName)) newLastName "P1: Last name should be set"
+
+    testCase "OnDerived_AnotherPerson" <| fun _ ->
         let p1 = DerivedType()
         let name = "John"
         p1.SetFirstName(name)
@@ -122,7 +152,7 @@ let tests_derivedType = testList "DerivedType" [
         Expect.equal (p2.GetID()) id "P2: ID should be set"
         Expect.equal (p2.GetLastName()) lastName "P2: Last name should be set"
 
-    testCase "InheritedMutability" <| fun _ ->
+    testCase "OnDerived_InheritedMutability" <| fun _ ->
         let p1 = DerivedType()
         let firstName = "John"
         p1.SetFirstName(firstName)

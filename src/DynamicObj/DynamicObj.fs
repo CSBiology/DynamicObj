@@ -12,7 +12,7 @@ type DynamicObj() =
     
     #if !FABLE_COMPILER
     inherit DynamicObject()
-    #endif
+    
     
     let mutable properties = new Dictionary<string, obj>()
 
@@ -21,15 +21,30 @@ type DynamicObj() =
     /// </summary>
     member this.Properties
         with get() = properties
-        and set(value) = properties <- value           
+        and internal set(value) = properties <- value           
 
     /// <summary>
-    /// Creates a new DynamicObj from a Dictionary containing dynamic properties.
+    /// Creates a new DynamicObj from a Dictionary containing dynamic properties. This method is not Fable-compatible.
+    /// </summary>
+    /// <param name="dynamicProperties">The dictionary with the dynamic properties</param>
+    static member ofDictInPlace (dynamicProperties: Dictionary<string,obj>) = 
+        let obj = DynamicObj()
+        obj.Properties <- dynamicProperties
+        obj
+
+    #endif
+
+    /// <summary>
+    /// Creates a new DynamicObj from a Dictionary by deep copying the fields of the dictionary.
     /// </summary>
     /// <param name="dynamicProperties">The dictionary with the dynamic properties</param>
     static member ofDict (dynamicProperties: Dictionary<string,obj>) = 
         let obj = DynamicObj()
-        obj.Properties <- dynamicProperties
+        dynamicProperties
+        |> Seq.iter (fun kv -> 
+            let copy = CopyUtils.tryDeepCopyObj(kv.Value,true)
+            obj.SetProperty(kv.Key,copy)      
+        )
         obj
 
     /// <summary>
@@ -1023,3 +1038,12 @@ and CopyUtils =
             | _ -> o
 
         tryDeepCopyObj o
+
+
+#if !FABLE_COMPILER
+[<RequireQualifiedAccess>]
+module Helper =
+    
+    let setProperties (dynObj: DynamicObj) (properties: Dictionary<string,obj>) =
+        dynObj.Properties <- properties
+#endif

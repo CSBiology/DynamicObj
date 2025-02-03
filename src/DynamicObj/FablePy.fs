@@ -211,9 +211,6 @@ module FablePy =
         getPropertyHelpers o 
         |> Array.map (fun h -> h.Name)
 
-    [<Emit("return $0")>]
-    let baseObjectOn (o:obj) : unit = nativeOnly
-
     module Interfaces = 
         
         [<Emit("""hasattr($0, 'System_ICloneable_Clone') and callable($0.System_ICloneable_Clone)""")>]

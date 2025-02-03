@@ -150,7 +150,7 @@ let tests_print = testList "Print" [
         Expect.isTrue print "Print failed for issue 14"
 ]
 
-let main = testList "InheritanceStatic" [
+let main = testList "Inheritance" [
     tests_set
     tests_remove
     tests_getProperties
