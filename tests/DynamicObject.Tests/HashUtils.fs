@@ -146,6 +146,8 @@ let tests_Dictionary =
 
 let tests_Lists = 
     testList "Lists" [
+        testCase "Empty" <| fun _ ->               
+            Expect.equal (HashUtils.deepHash []) (HashUtils.deepHash []) "Empty List should return consistent Hash"       
         testList "Shuffled Int" [
             testCase "1v1" <| fun _ ->               
                 Expect.equal (HashUtils.deepHash intList1) (HashUtils.deepHash intList1) "Same List should return consistent Hash"
@@ -167,6 +169,8 @@ let tests_Lists =
 
 let tests_Array = 
     testList "Array" [
+        testCase "Empty" <| fun _ ->               
+            Expect.equal (HashUtils.deepHash [||]) (HashUtils.deepHash [||]) "Empty Array should return consistent Hash"
         testList "Shuffled Int" [
             testCase "1v1" <| fun _ ->               
                 Expect.equal (HashUtils.deepHash intArray1) (HashUtils.deepHash intArray1) "Same Array should return consistent Hash"
@@ -179,6 +183,8 @@ let tests_Array =
 
 let tests_Seq = 
     testList "Seq" [
+        testCase "Empty" <| fun _ ->               
+            Expect.equal (HashUtils.deepHash Seq.empty) (HashUtils.deepHash Seq.empty) "Empty Seq should return consistent Hash"
         testList "Shuffled Int" [
             testCase "1v1" <| fun _ ->               
                 Expect.equal (HashUtils.deepHash intSeq1) (HashUtils.deepHash intSeq1) "Same Seq should return consistent Hash"
@@ -191,6 +197,8 @@ let tests_Seq =
 
 let tests_ResizeArray = 
     testList "ResizeArray" [
+        testCase "Empty" <| fun _ ->               
+            Expect.equal (HashUtils.deepHash (ResizeArray [])) (HashUtils.deepHash (ResizeArray [])) "Empty ResizeArray should return consistent Hash"
         testList "Shuffled Int" [
             testCase "1v1" <| fun _ ->
                 

@@ -420,7 +420,7 @@ and HashUtils =
                     let c = en.Current :?> System.Collections.DictionaryEntry
                     HashCodes.mergeHashes (hash c.Key) (HashUtils.deepHash c.Value)
             ]
-            |> List.reduce HashCodes.mergeHashes
+            |> fun l -> if l.IsEmpty then 0 else l |> List.reduce HashCodes.mergeHashes
         #endif
         | :? System.Collections.IEnumerable as e ->
             let en = e.GetEnumerator()
@@ -428,7 +428,7 @@ and HashUtils =
                 while en.MoveNext() do 
                     HashUtils.deepHash en.Current
             ]
-            |> List.reduce HashCodes.mergeHashes
+            |> fun l -> if l.IsEmpty then 0 else l |> List.reduce HashCodes.mergeHashes
         | _ -> DynamicObj.HashCodes.hash o
 
 and CopyUtils =
