@@ -1,3 +1,9 @@
+### 7.0.1+98fb467 (Released 2025-2-17)
+
+Hotfixed `DynamicObj` `GetHashCode` and `Equals` methods with recursive deephash function.
+
+It was failing for properties containing empty collections (e.g. `list<DynamicObj>`).
+
 ### 7.0.0+30aea47 (Released 2025-1-28)
 
 Breaking changes.
