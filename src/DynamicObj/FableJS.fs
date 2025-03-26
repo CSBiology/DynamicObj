@@ -158,6 +158,7 @@ module FableJS =
         getPropertyHelpers o 
         |> Array.map (fun h -> h.Name)
 
+
     module Interfaces = 
         
         [<Emit("""$0["System.ICloneable.Clone"] != undefined && (typeof $0["System.ICloneable.Clone"]) === 'function'""")>]

@@ -10,6 +10,7 @@ let tests_TryGetStaticPropertyHelper = testList "TryGetStaticPropertyHelper" [
         let b = a.TryGetStaticPropertyHelper("a")
         Expect.isNone b "Value should not exist"
 
+    #if !FABLE_COMPILER // Properties field is dotnet only as js and py use native properties
     testCase "Properties dictionary is static property" <| fun _ -> 
         let a = DynamicObj()
         let b =  Expect.wantSome (a.TryGetStaticPropertyHelper("Properties")) "Value should exist"
@@ -17,6 +18,7 @@ let tests_TryGetStaticPropertyHelper = testList "TryGetStaticPropertyHelper" [
         Expect.isFalse b.IsDynamic "Properties should not be dynamic"
         Expect.isTrue b.IsMutable "Properties should be mutable"
         Expect.isFalse b.IsImmutable "Properties should not be immutable"
+    #endif
 
     testCase "dynamic property not retrieved as static" <| fun _ -> 
         let a = DynamicObj()

@@ -34,6 +34,7 @@
     <Compile Include="DynamicObj\Main.fs" />
     <Compile Include="ReflectionUtils.fs" />
     <Compile Include="HashUtils.fs" />
+    <Compile Include="InheritanceView.fs" />
     <Compile Include="Inheritance.fs" />
     <Compile Include="Interface.fs" />
     <Compile Include="DynObj.fs" />
