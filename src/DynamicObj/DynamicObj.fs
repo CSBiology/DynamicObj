@@ -421,6 +421,8 @@ and HashUtils =
                     HashCodes.mergeHashes (hash c.Key) (HashUtils.deepHash c.Value)
             ]
             |> fun l -> if l.IsEmpty then 0 else l |> List.reduce HashCodes.mergeHashes
+        | ReflectionUtils.SomeObj s ->
+            HashUtils.deepHash s
         #endif
         | :? System.Collections.IEnumerable as e ->
             let en = e.GetEnumerator()
