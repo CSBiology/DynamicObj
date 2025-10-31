@@ -1,3 +1,8 @@
+### 7.1.0+96eef97 (Released 2025-10-31)
+
+Extend and test deepHash through guard handling option values. FSharp did not correctly calculate hash codes for equal option values.
+
+
 ### 7.0.1+98fb467 (Released 2025-2-17)
 
 Hotfixed `DynamicObj` `GetHashCode` and `Equals` methods with recursive deephash function.
