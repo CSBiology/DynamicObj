@@ -60,6 +60,15 @@ let resizeArray1 = ResizeArray [int1;int2;int3;int4]
 let resizeArray1' = ResizeArray [int1;int2;int3;int4]
 let resizeArray2 = ResizeArray [int1;int4;int3;int2]
 
+let option1 = Some int1
+let option2 = Some int2
+let option1' = Some int1
+let optionNone : obj option = None
+
+let optionResizeArray1 = Some resizeArray1
+let optionResizeArray1' = Some resizeArray1'
+let optionResizeArray2 = Some resizeArray2
+let optionResizeArrayNone : ResizeArray<obj> option = None
 
 let dynamicObjectWithInt1 =
 
@@ -122,6 +131,25 @@ let dynamicObjectWithDynamicObject2 =
     d.SetProperty("b", dynamicObjectWithDict1)
     d
 
+let dynamicObjectWithOption1 =
+    let d = DynamicObj()
+    d.SetProperty("a", option1)
+    d
+
+let dynamicObjectWithOption1' =
+    let d = DynamicObj()
+    d.SetProperty("a", option1')
+    d
+
+let dynamicObjectWithOption2 =
+    let d = DynamicObj()
+    d.SetProperty("a", option2)
+    d
+
+let dynamicObjectWithOptionNone =
+    let d = DynamicObj()
+    d.SetProperty("a", optionNone)
+    d
 
 let tests_Dictionary =
     testList "Dictionary" [
@@ -210,6 +238,29 @@ let tests_ResizeArray =
         ]
     ]
 
+let tests_Option =
+    testList "Option" [
+        testList "Int" [
+            testCase "Some vs Some" <| fun _ ->
+                Expect.equal (HashUtils.deepHash option1) (HashUtils.deepHash option1') "Structurally equal Some should return consistent Hash"
+            testCase "Some vs Some Different" <| fun _ ->
+                Expect.notEqual (HashUtils.deepHash option1) (HashUtils.deepHash option2) "Different Some should return different Hash"
+            testCase "Some vs None" <| fun _ ->
+                Expect.notEqual (HashUtils.deepHash option1) (HashUtils.deepHash optionNone) "Some vs None should return different Hash"
+            testCase "None vs None" <| fun _ ->
+                Expect.equal (HashUtils.deepHash optionNone) (HashUtils.deepHash optionNone) "None vs None should return consistent Hash"
+        ]
+        testList "ResizeArray" [
+            testCase "Some vs Some" <| fun _ ->
+                Expect.equal (HashUtils.deepHash optionResizeArray1) (HashUtils.deepHash optionResizeArray1') "Structurally equal Some ResizeArray should return consistent Hash"
+            testCase "Some vs Some Different" <| fun _ ->
+                Expect.notEqual (HashUtils.deepHash optionResizeArray1) (HashUtils.deepHash optionResizeArray2) "Different Some ResizeArray should return different Hash"
+            testCase "Some vs None" <| fun _ ->
+                Expect.notEqual (HashUtils.deepHash optionResizeArray1) (HashUtils.deepHash optionResizeArrayNone) "Some ResizeArray vs None should return different Hash"
+            testCase "None vs None" <| fun _ ->
+                Expect.equal (HashUtils.deepHash optionResizeArrayNone) (HashUtils.deepHash optionResizeArrayNone) "None ResizeArray vs None ResizeArray should return consistent Hash"
+        ]
+    ]
 
 let tests_DynamicObject = 
     testList "DynamicObj" [
@@ -252,6 +303,16 @@ let tests_DynamicObject =
                 Expect.notEqual (HashUtils.deepHash (Some dynamicObjectWithInt1)) (HashUtils.deepHash None) "Different DynamicObject should return different Hash"
             
         ]
+        testList "Option" [
+            testCase "Some vs Some" <| fun _ ->
+                Expect.equal (HashUtils.deepHash dynamicObjectWithOption1) (HashUtils.deepHash dynamicObjectWithOption1') "Structurally equal Some should return consistent Hash"
+            testCase "Some vs Some Different" <| fun _ ->
+                Expect.notEqual (HashUtils.deepHash dynamicObjectWithOption1) (HashUtils.deepHash dynamicObjectWithOption2) "Different Some should return different Hash"
+            testCase "Some vs None" <| fun _ ->
+                Expect.notEqual (HashUtils.deepHash dynamicObjectWithOption1) (HashUtils.deepHash dynamicObjectWithOptionNone) "Some vs None should return different Hash"
+            testCase "None vs None" <| fun _ ->
+                Expect.equal (HashUtils.deepHash dynamicObjectWithOptionNone) (HashUtils.deepHash dynamicObjectWithOptionNone) "None vs None should return consistent Hash"
+        ]
         testList "Mixed" [
             testCase "Int vs Dict" <| fun _ ->               
                 Expect.notEqual (HashUtils.deepHash dynamicObjectWithInt1) (HashUtils.deepHash dynamicObjectWithDict1) "Int vs Dict with same values should return different Hash"
@@ -278,6 +339,7 @@ let main = testList "DeepHash" [
     tests_Array
     tests_Seq
     tests_ResizeArray
+    tests_Option
     tests_DynamicObject
     tests_Mixed
 ]

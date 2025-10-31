@@ -70,3 +70,24 @@ module ReflectionUtils =
             property.RemoveValue(o)
             true
         | _ -> false
+
+    #if !FABLE_COMPILER
+    /// matches if the matched object can be parsed to Some 'a and returns it.
+    let internal (|SomeObj|_|) =
+        /// create generalized option type
+        let ty = typedefof<option<_>>
+        fun (a:obj) ->
+            /// Check for nulls otherwise 'a.GetType()' would fail
+            if isNull a 
+            then 
+                None 
+            else
+                let aty = a.GetType()
+                /// Get option'.Value
+                let v = aty.GetProperty("Value")
+                if aty.IsGenericType && aty.GetGenericTypeDefinition() = ty then
+                    /// return value if existing
+                    Some(v.GetValue(a, [| |]))
+                else 
+                    None
+    #endif
