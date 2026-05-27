@@ -1,0 +1,7 @@
+[project]
+name = "DynamicObj"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fable-library==5.0.0",
+]
