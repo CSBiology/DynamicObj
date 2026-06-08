@@ -43,6 +43,12 @@ jobs:
         python-version: '3.12'
     - name: Setup Virtual Environment
       run: python -m venv .venv
+    - name: Install Python dependencies Windows
+      if: matrix.os == 'windows-latest'
+      run: .\.venv\Scripts\python.exe -m pip install --disable-pip-version-check .
+    - name: Install Python dependencies Unix
+      if: matrix.os == 'ubuntu-latest'
+      run: ./.venv/bin/python -m pip install --disable-pip-version-check .
 
     # BUILD
     - name: make script executable
