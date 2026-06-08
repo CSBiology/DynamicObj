@@ -202,7 +202,7 @@ ID: 1337
   member DeepCopyProperties: ?includeInstanceProperties: bool -&gt; obj
   member DeepCopyPropertiesTo: target: #DynamicObj * ?overWrite: bool * ?includeInstanceProperties: bool -&gt; unit
   override Equals: o: obj -&gt; bool
-  override GetDynamicMemberNames: unit -&gt; IEnumerable&lt;string&gt;
+  override GetDynamicMemberNames: unit -&gt; string seq
   override GetHashCode: unit -&gt; int
   member GetProperties: includeInstanceProperties: bool -&gt; KeyValuePair&lt;string,obj&gt; seq
   member GetPropertyHelpers: includeInstanceProperties: bool -&gt; PropertyHelper seq
@@ -213,8 +213,10 @@ ID: 1337
 <div class="fsdocs-tip" id="fs4">Multiple items<br />type AttachMembersAttribute =
   inherit Attribute
   new: unit -&gt; AttachMembersAttribute<br /><em>&lt;summary&gt;
- Used on a class to attach all members, useful when you want to use the class from JS.
-&lt;/summary&gt;</em><br /><br />--------------------<br />new: unit -&gt; AttachMembersAttribute</div>
+ Used on a class to attach all members without mangling.
+ &lt;/summary&gt;<br />&lt;remarks&gt;
+ Be aware that overloads won&#39;t work.
+ &lt;/remarks&gt;</em><br /><br />--------------------<br />new: unit -&gt; AttachMembersAttribute</div>
 <div class="fsdocs-tip" id="fs5">Multiple items<br />type Person =
   inherit DynamicObj
   new: id: int * name: string -&gt; Person

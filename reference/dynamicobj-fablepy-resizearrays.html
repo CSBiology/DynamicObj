@@ -7,15 +7,15 @@
     <meta content="Timo Mühlhaus, Kevin Schneider, Heinrich Lukas Weil, F# open source contributors" name="author">
     <!-- Opengraph properties (https://ogp.me/) -->
     <meta property="og:site_name" content="DynamicObj">
-    <meta property="og:title" content="CopyUtils (DynamicObj)" />
+    <meta property="og:title" content="ResizeArrays (DynamicObj)" />
     <meta property="og:url" content="https://csbiology.github.io/DynamicObj/{{fsdocs-source-basename}}.html">
     <meta property="og:type" content="website" />
     <!-- Twitter cards (https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="https://csbiology.github.io/DynamicObj/">
-    <meta name="twitter:title" content="CopyUtils (DynamicObj)">
+    <meta name="twitter:title" content="ResizeArrays (DynamicObj)">
     
-    <title>CopyUtils (DynamicObj) | DynamicObj</title>
+    <title>ResizeArrays (DynamicObj) | DynamicObj</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
     <div id="content">
         <div>
   <h2>
-    CopyUtils Type
+    ResizeArrays Module
   </h2>
   <dl class="fsdocs-metadata">
     <dt>
@@ -105,8 +105,10 @@
       Assembly: DynamicObj.dll
     </dt>
     <dt>
-      Base Type: 
-      <code>obj</code>
+      Parent Module: 
+      <a href="https://csbiology.github.io/DynamicObj/reference/dynamicobj-fablepy.html">
+        FablePy
+      </a>
     </dt>
   </dl>
   <div class="fsdocs-xmldoc">
@@ -116,23 +118,15 @@
       </p>
     </div>
   </div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
   <div>
     <h3>
-      Static members
+      Functions and values
     </h3>
     <table class="table outer-list fsdocs-member-list">
       <thead>
         <tr>
           <td class="fsdocs-member-list-header">
-            Static member
+            Function or value
           </td>
           <td class="fsdocs-member-list-header">
             Description
@@ -143,19 +137,19 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
+              <code onmouseout="hideTip(event, '88', 88)" onmouseover="showTip(event, '88', 88)">
                 <p>
-                  <a id="tryDeepCopyObj">
-                    <a href="#tryDeepCopyObj">
-                      <code><span>CopyUtils.tryDeepCopyObj&#32;<span><span>(<span>o,&#32;?includeInstanceProperties</span>)</span></span></span></code>
+                  <a id="isResizeArray">
+                    <a href="#isResizeArray">
+                      <code><span>isResizeArray&#32;<span>o</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="109">
+              <div class="fsdocs-tip" id="88">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>CopyUtils.tryDeepCopyObj&#32;<span><span>(<span>o,&#32;?includeInstanceProperties</span>)</span></span></span></code>
+                  <code><span>isResizeArray&#32;<span>o</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -166,25 +160,13 @@
                       </b>
                       :
                       <code>obj</code>
-                       - 
-                      The object that should be deep copied
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        ?includeInstanceProperties
-                      </b>
-                      :
-                      <code>bool</code>
-                       - 
-                      Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance for matched DynamicObj. Default is true
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code>obj</code>
+                    <code>bool</code>
                   </span>
                   <br/>
                 </div>
@@ -192,87 +174,38 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <details>
-              <summary>
-                <div class="fsdocs-summary">
-                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:M:DynamicObj.CopyUtils.tryDeepCopyObj`')">
-                    <iconify-icon icon="bi:filetype-md" height="24" width="24"></iconify-icon>
-                  </div>
-                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:DynamicObj.CopyUtils.tryDeepCopyObj\'/>')">
-                    <iconify-icon icon="bi:filetype-xml" height="24" width="24"></iconify-icon>
-                  </div>
-                  <a href="https://github.com/CSBiology/DynamicObj/tree/master/src/DynamicObj/DynamicObj.fs#L447-447" class="fsdocs-source-link" title="Source on GitHub">
-                    <iconify-icon icon="ri:github-fill" height="24" width="24"></iconify-icon>
-                  </a>
-                  <p class="fsdocs-summary">
-                    
- function to deep copy a boxed object (if possible)
- The following cases are handled (in this precedence):
-
- - Basic F# types (`bool`, `byte`, `sbyte`, `int16`, `uint16`, `int`, `uint`, `int64`, `uint64`, `nativeint`, `unativeint`, `float`, `float32`, `char`, `string`, `unit`, `decimal`)
- 
- - `ResizeArrays` and `Dictionaries` containing any combination of basic F# types
- 
- - `Dictionaries` containing `DynamicObj` as keys or values in any combination with `DynamicObj` or basic F# types as keys or values
- 
- - `array<DynamicObj>`, `list<DynamicObj>`, `ResizeArray<DynamicObj>`: These collections of DynamicObj are copied as a new collection with recursively deep copied elements.
- 
- - `System.ICloneable`: If the property implements `ICloneable`, the `Clone()` method is called on the property.
- 
- - `DynamicObj` (and derived classes): properties that are themselves `DynamicObj` instances are deep copied recursively.
-   if a derived class has static properties (e.g. instance properties), these can be copied as dynamic properties on the new instance or ignored.
- 
- Note on Classes that inherit from `DynamicObj`:
- 
- Classes that inherit from DynamicObj will match the `DynamicObj` typecheck if they do not implement `ICloneable`.
- The deep copied instances will be cast to `DynamicObj` with deep copied dynamic properties. Staic/instance properties can be copied as dynamic properties on the new instance or be ignored.
- It should be possible to 'recover' the original type by checking if the needed properties exist as dynamic properties,
- and then passing them to the class constructor if needed.
- 
-                  </p>
-                </div>
-              </summary>
-              <dl class="fsdocs-params">
-                <dt class="fsdocs-param">
-                  <span class="fsdocs-param-name">
-                    o
-                  </span>
-                  :
-                  <code>obj</code>
-                </dt>
-                <dd class="fsdocs-param-docs">
-                  <p>
-                    The object that should be deep copied
-                  </p>
-                </dd>
-                <dt class="fsdocs-param">
-                  <span class="fsdocs-param-name">
-                    ?includeInstanceProperties
-                  </span>
-                  :
-                  <code>bool</code>
-                </dt>
-                <dd class="fsdocs-param-docs">
-                  <p>
-                    Whether to include instance properties (= 'static' properties on the class) as dynamic properties on the new instance for matched DynamicObj. Default is true
-                  </p>
-                </dd>
-              </dl>
-              <dl class="fsdocs-returns">
-                <dt>
-                  <span class="fsdocs-return-name">
-                    Returns: 
-                  </span>
-                  <code>obj</code>
-                </dt>
-                <dd class="fsdocs-return-docs"></dd>
-              </dl>
-            </details>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  o
+                </span>
+                :
+                <code>obj</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
         
     </div>
