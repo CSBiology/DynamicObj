@@ -1,3 +1,13 @@
+### 8.0.0 (Unreleased)
+
+Breaking changes.
+
+- Update Fable tooling and test dependencies to Fable 5.1.0, `fable-library` 5.1.0, and `Fable.Pyxpecto` 2.0.0.
+- JavaScript and Python builds now store dynamic members through the internal `Properties` dictionary instead of mirroring them as native object attributes. Use `SetProperty`, `TryGetDynamicPropertyHelper`, `GetPropertyHelpers`, or `GetProperties` to work with dynamic members.
+- Fix JavaScript and Python dynamic-property enumeration so compiler-generated backing fields are not returned as dynamic members.
+- Fix Python deep copy for `ResizeArray` values by handling native Python lists before the DynamicObj-only collection cases.
+- Fix Python native `==` and `hash()` interop so it matches `DynamicObj` structural equality and hashing.
+
 ### 7.1.0+96eef97 (Released 2025-10-31)
 
 Extend and test deepHash through guard handling option values. FSharp did not correctly calculate hash codes for equal option values.
