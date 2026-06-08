@@ -7,6 +7,10 @@ open Fable.Core
 open System.Collections.Generic
 
 module FablePy =
+
+    [<Emit("int($0)")>]
+    let toPythonInt (value:int) : int =
+        nativeOnly
     
     module Dictionary = 
         
@@ -88,17 +92,19 @@ module FablePy =
 
 
     [<Emit("vars($0).items()")>]
-    let getOwnMemberObjects (o:obj) : Dictionary<string,obj> =
+    let getOwnMemberObjects (o:obj) : seq<string * obj> =
         nativeOnly
 
     [<Emit("$0.__class__")>]
     let getClass (o:obj) : obj =
         nativeOnly
 
-    let getStaticPropertyObjects (o:obj) : Dictionary<string,PropertyObject> =
+    let getStaticPropertyObjects (o:obj) : seq<string * PropertyObject> =
         getClass o
         |> getOwnMemberObjects
-        |> Dictionary.choose PropertyObject.tryProperty
+        |> Seq.choose (fun (name, value) ->
+            PropertyObject.tryProperty value
+            |> Option.map (fun property -> name, property))
 
     let removeStaticPropertyValue (o:obj) (propName:string) =
         setPropertyValue o propName null
@@ -165,8 +171,7 @@ module FablePy =
 
     let getDynamicPropertyHelpers (o:obj) : PropertyHelper [] =
         getOwnMemberObjects o
-        |> Seq.choose (fun kv -> 
-            let n = kv.Key
+        |> Seq.choose (fun (n, _) -> 
             if isTranspiledPropertyHelper n then 
                 None
             else
@@ -187,9 +192,7 @@ module FablePy =
 
     let getStaticPropertyHelpers (o:obj) : PropertyHelper [] =
         getStaticPropertyObjects o
-        |> Seq.map (fun kv -> 
-            let n = kv.Key
-            let po = kv.Value
+        |> Seq.map (fun (n, po) -> 
             {
                 Name = n
                 IsStatic = true
@@ -224,6 +227,11 @@ module FablePy =
     module Dictionaries =
         [<Emit("""isinstance($0, dict)""")>]
         let isDict (o:obj) : bool =
+            nativeOnly
+
+    module ResizeArrays =
+        [<Emit("""isinstance($0, list)""")>]
+        let isResizeArray (o:obj) : bool =
             nativeOnly
 
 #endif
