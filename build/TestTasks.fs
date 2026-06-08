@@ -9,11 +9,6 @@ open Fake.Core
 
 module RunTests = 
 
-    let private restorePythonDeps () =
-        let installProjectDeps =
-            "import subprocess, sys, tomllib; deps = tomllib.load(open('pyproject.toml', 'rb')).get('project', {}).get('dependencies', []); sys.exit(subprocess.call([sys.executable, '-m', 'pip', 'install', '--disable-pip-version-check', *deps]) if deps else 0)"
-
-        run python $"-c \"{installProjectDeps}\"" ""
 
     //let runTestsJsNative = BuildTask.create "runTestsJSNative" [clean; build] {
     //    Trace.traceImportant "Start native JavaScript tests"
@@ -43,7 +38,6 @@ module RunTests =
     //}
 
     let runTestsPy = BuildTask.create "runTestsPy" [clean; build] {
-        restorePythonDeps ()
         for path in ProjectInfo.fableTestProjects do
             //transpile py files from fsharp code
             run dotnet $"fable {path} -o {path}/py --lang python --noCache" ""
