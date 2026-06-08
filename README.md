@@ -31,8 +31,9 @@ Documentation is hosted at https://csbiology.github.io/DynamicObj/
     - verify with `npm --version` (Tested with v9.2.0)
 - [.NET SDK](https://dotnet.microsoft.com/en-us/download)
     - verify with `dotnet --version` (Tested with 7.0.306)
-- [Python](https://www.python.org/downloads/)
+- [Python](https://www.python.org/downloads/) and [uv](https://docs.astral.sh/uv/getting-started/installation/)
     - verify with `py --version` (Tested with 3.12.2, known to work only for >=3.11)
+    - verify with `uv --version` (Tested with 0.11.15)
 
 #### Local Setup
 
@@ -50,5 +51,10 @@ On windows you can use the `setup.cmd` to run the following steps automatically!
 3. Setup python environment
     
     `py -m venv .venv`
+
+4. Install python dependencies
+
+    `uv pip install -r pyproject.toml`
+
 
 Verify correct setup with `./build.cmd runtests` ✨

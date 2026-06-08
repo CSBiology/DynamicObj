@@ -1,4 +1,4 @@
-### 8.0.0 (Unreleased)
+### 8.0.0 (Released 2026-06-08)
 
 Breaking changes.
 
