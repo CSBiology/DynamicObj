@@ -44,13 +44,6 @@ type DynamicObj() =
     /// </summary>
     /// <param name="propertyName">The name of the property to get the PropertyHelper for</param>
     member this.TryGetDynamicPropertyHelper (propertyName: string) : PropertyHelper option =
-        #if FABLE_COMPILER_JAVASCRIPT  || FABLE_COMPILER_TYPESCRIPT
-        FableJS.tryGetDynamicPropertyHelper this propertyName
-        #endif
-        #if FABLE_COMPILER_PYTHON
-        FablePy.tryGetDynamicPropertyHelper this propertyName
-        #endif
-        #if !FABLE_COMPILER
         match properties.TryGetValue propertyName with            
         | true,_ -> 
             Some {
@@ -64,7 +57,6 @@ type DynamicObj() =
                 RemoveValue = fun o -> properties.Remove(propertyName) |> ignore
             }
         | _      -> None
-        #endif
         
     /// <summary>
     /// Returns Some(PropertyHelper) if a property (static or dynamic) with the given name exists, otherwise None.
@@ -131,18 +123,10 @@ type DynamicObj() =
             else
                 failwith $"Cannot set value for static, immutable property \"{propertyName}\""
         | None -> 
-            #if FABLE_COMPILER_JAVASCRIPT  || FABLE_COMPILER_TYPESCRIPT
-            FableJS.setPropertyValue this propertyName propertyValue
-            #endif
-            #if FABLE_COMPILER_PYTHON
-            FablePy.setPropertyValue this propertyName propertyValue
-            #endif
-            #if !FABLE_COMPILER
             // Next check the Properties collection for member
             match properties.TryGetValue propertyName with            
             | true,_ -> properties.[propertyName] <- propertyValue
             | _      -> properties.Add(propertyName,propertyValue)
-            #endif
 
     /// <summary>
     /// Removes any dynamic property with the given name from the input DynamicObj.
@@ -167,19 +151,6 @@ type DynamicObj() =
     /// </summary>
     /// <param name="includeInstanceProperties">whether to include instance properties (= 'static' properties on the class)</param>
     member this.GetPropertyHelpers (includeInstanceProperties: bool) =
-        #if FABLE_COMPILER_JAVASCRIPT || FABLE_COMPILER_TYPESCRIPT           
-        FableJS.getPropertyHelpers this
-        |> Seq.filter (fun pd ->  
-            includeInstanceProperties || pd.IsDynamic
-        )
-        #endif
-        #if FABLE_COMPILER_PYTHON
-        FablePy.getPropertyHelpers this
-        |> Seq.filter (fun pd ->  
-            includeInstanceProperties || pd.IsDynamic
-        )
-        #endif
-        #if !FABLE_COMPILER
         seq [
             if includeInstanceProperties then                
                 yield! ReflectionUtils.getStaticProperties (this)
@@ -195,7 +166,6 @@ type DynamicObj() =
                     RemoveValue = fun o -> properties.Remove(key) |> ignore
                 }
         ]
-        #endif
         |> Seq.filter (fun p -> p.Name.ToLower() <> "properties")
 
     /// <summary>
@@ -401,6 +371,18 @@ type DynamicObj() =
         | :? DynamicObj as other ->
             this.StructurallyEquals(other)
         | _ -> false
+
+    #if FABLE_COMPILER_PYTHON
+    // Python calls these dunder methods for native `hash(x)` and `x == y`.
+    member this.``__hash__``() =
+        HashUtils.deepHash this
+        |> FablePy.toPythonInt
+
+    member this.``__eq__``(o: obj) =
+        match o with
+        | :? DynamicObj as other -> this.StructurallyEquals(other)
+        | _ -> false
+    #endif
 
 and HashUtils = 
 
@@ -995,6 +977,12 @@ and CopyUtils =
             #endif
 
             // These collections of DynamicObj can be cloned recursively
+            #if FABLE_COMPILER_PYTHON
+            | o when FablePy.ResizeArrays.isResizeArray o ->
+                let o = o |> unbox<ResizeArray<obj>>
+                ResizeArray([for item in o -> tryDeepCopyObj item])
+                |> box
+            #endif
             | :? ResizeArray<DynamicObj> as dyns ->
                 box (ResizeArray([for dyn in dyns -> tryDeepCopyObj dyn :?> DynamicObj]))
             #if !FABLE_COMPILER
